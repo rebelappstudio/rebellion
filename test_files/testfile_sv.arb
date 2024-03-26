@@ -1,0 +1,3 @@
+{
+  "pageHomeInboxCount": "{count, plural, zero{You have no new messages} one{You have 1 new message} other{You have {count} new messages}}"
+}
