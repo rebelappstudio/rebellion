@@ -2,6 +2,12 @@
 
 Analyze ARB files for possible issues. Find missing translations. Translate missing items using ChatGPT. Add it to your CI job to make sure all strings are translated and have no problems.
 
+# Installation
+
+```sh
+todo
+```
+
 # Usage
 
 ### Analyze
@@ -46,6 +52,12 @@ rebellion translate ./l10n/
 ```
 
 Providing a description for keys in the main file could make translations better.
+
+### Sort
+
+```sh
+rebellion sort ./l10n/
+```
 
 # Configuration
 

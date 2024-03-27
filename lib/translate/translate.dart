@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:args/command_runner.dart';
 import 'package:collection/collection.dart';
-import 'package:rebellion/checks/missing_translations.dart';
+import 'package:rebellion/analyze/checks/missing_translations.dart';
 import 'package:rebellion/translate/translator.dart';
 import 'package:rebellion/utils/file_utils.dart';
 import 'package:rebellion/utils/logger.dart';
@@ -28,6 +28,7 @@ class TranslateCommand extends Command {
   TranslateCommand() {
     argParser
       ..addOption(mainLocaleParam, defaultsTo: defaultMainLocale)
+      // TODO alternatively get this from environment variable
       ..addOption(_accessKey, mandatory: true)
       ..addOption(
         _provider,

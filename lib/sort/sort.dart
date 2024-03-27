@@ -48,6 +48,7 @@ class SortCommand extends Command {
     }
 
     // TODO implement sorting
+    // TODO sort main keys first then rest should follow (in case of follow-main-file option no need to sort main file)
     // TODO at-keys should be sorted after the string (option to change it?)
   }
 }

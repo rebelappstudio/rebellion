@@ -1,5 +1,5 @@
 extension StringX on String {
-  bool get isLocaleDefinition => startsWith('@@');
+  bool get isLocaleDefinition => startsWith('@@locale');
 
   bool get isAtKey => startsWith('@') && !isLocaleDefinition;
 
