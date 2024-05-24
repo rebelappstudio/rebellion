@@ -8,14 +8,14 @@ import 'package:rebellion/utils/file_utils.dart';
 /// Check if there are unnecessary translations (translation files contain
 /// keys not present in the main file)
 class RedundantTranslations extends CheckBase {
-  const RedundantTranslations()
-      : super(
-          optionName: 'redundant-translations',
-          defaultsTo: true,
-        );
+  const RedundantTranslations();
 
   @override
-  int run(IcuParser parser, List<ParsedArbFile> files) {
+  int run(
+    IcuParser parser,
+    List<ParsedArbFile> files,
+    RebellionOptions options,
+  ) {
     var issues = 0;
 
     final mainFile = files.firstWhereOrNull((file) => file.file.isMainFile);

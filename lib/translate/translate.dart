@@ -55,7 +55,8 @@ class TranslateCommand extends Command {
       exit(1);
     }
 
-    final parsedFiles = getFilesAndFolders(argResults);
+    final options = loadOptionsYaml();
+    final parsedFiles = getFilesAndFolders(options, argResults);
     final mainFile = parsedFiles.firstWhereOrNull((e) => e.file.isMainFile);
     if (mainFile == null) {
       logError("No main file found");

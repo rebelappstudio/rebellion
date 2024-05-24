@@ -14,6 +14,7 @@ dependencies:
   path: ^1.9.0
   petitparser: ^6.0.2
   dart_openai: ^5.0.0
+  yaml: ^3.1.2
 
 dev_dependencies:
   lints: ^2.1.0

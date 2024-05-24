@@ -1,6 +1,6 @@
 # Rebellion
 
-Analyze ARB files for possible issues. Find missing translations. Translate missing items using ChatGPT. Add it to your CI job to make sure all strings are translated and have no problems.
+Analyze ARB files for possible issues. Find missing translations. Translate missing items using ChatGPT. Add it to your CI job to make sure all strings are translated and have no issues.
 
 # Installation
 

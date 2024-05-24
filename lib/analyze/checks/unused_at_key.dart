@@ -6,14 +6,14 @@ import 'package:rebellion/utils/file_utils.dart';
 
 /// Check if there are @-keys without corresponding key
 class UnusedAtKey extends CheckBase {
-  const UnusedAtKey()
-      : super(
-          optionName: 'unused-at-key',
-          defaultsTo: true,
-        );
+  const UnusedAtKey();
 
   @override
-  int run(IcuParser parser, List<ParsedArbFile> files) {
+  int run(
+    IcuParser parser,
+    List<ParsedArbFile> files,
+    RebellionOptions options,
+  ) {
     var issues = 0;
 
     for (final file in files) {

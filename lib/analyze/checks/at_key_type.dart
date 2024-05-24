@@ -7,10 +7,14 @@ import 'package:rebellion/utils/file_utils.dart';
 /// Check that @-key is a valid JSON object, e.g.
 /// "@homePageTitle": {"description": "This is a title"}
 class AtKeyType extends CheckBase {
-  const AtKeyType() : super(optionName: 'at-key-type', defaultsTo: false);
+  const AtKeyType();
 
   @override
-  int run(IcuParser parser, List<ParsedArbFile> files) {
+  int run(
+    IcuParser parser,
+    List<ParsedArbFile> files,
+    RebellionOptions options,
+  ) {
     int issues = 0;
 
     for (final file in files) {

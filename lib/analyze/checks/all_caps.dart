@@ -7,10 +7,14 @@ import 'package:rebellion/utils/logger.dart';
 /// Check if there are all caps strings. This considered to be a bad practice.
 /// It's better to convert to all caps programmatically
 class AllCaps extends CheckBase {
-  const AllCaps() : super(optionName: 'all-caps', defaultsTo: false);
+  const AllCaps();
 
   @override
-  int run(IcuParser parser, List<ParsedArbFile> files) {
+  int run(
+    IcuParser parser,
+    List<ParsedArbFile> files,
+    RebellionOptions options,
+  ) {
     // TODO also check selects and plurals
     int issues = 0;
 
@@ -18,16 +22,19 @@ class AllCaps extends CheckBase {
       final keys = file.keys;
       for (final key in keys) {
         final value = file.content[key];
-        final parseResult = parser.parse(value);
 
-        if (parseResult is PluralElement) {
-          (parseResult as PluralElement)
-              .options
-              .any((element) => _isAllCapsString(element.value.toString()));
-          // TODO
-        } else {
-          // TODO other types
-        }
+        // if (value is String) {
+        //   final parseResult = parser.parse(value);
+
+        //   if (parseResult is PluralElement) {
+        //     (parseResult as PluralElement)
+        //         .options
+        //         .any((element) => _isAllCapsString(element.value.toString()));
+        //     // TODO
+        //   } else {
+        //     // TODO other types
+        //   }
+        // }
 
         if (value is String && _isAllCapsString(value)) {
           issues++;

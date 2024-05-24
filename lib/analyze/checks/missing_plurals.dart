@@ -9,21 +9,20 @@ import 'package:rebellion/utils/plurals.dart';
 
 /// Check if there are missing plurals in main file and translations
 class MissingPlurals extends CheckBase {
-  const MissingPlurals()
-      : super(
-          optionName: 'missing-plurals',
-          defaultsTo: true,
-        );
+  const MissingPlurals();
 
   @override
-  int run(IcuParser parser, List<ParsedArbFile> files) {
+  int run(
+    IcuParser parser,
+    List<ParsedArbFile> files,
+    RebellionOptions options,
+  ) {
     int issues = 0;
 
     // TODO check if gender, select and plurals can be parsed by intl
     // TODO check plural placeholder (one, =1 etc)
     // TODO check redundant plurals for this language
 
-    final parser = IcuParser();
     for (final file in files) {
       for (final key in file.keys) {
         if (key.isAtKey) continue;

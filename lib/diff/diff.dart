@@ -33,7 +33,8 @@ class DiffCommand extends Command {
 
   @override
   void run() {
-    final parsedFiles = getFilesAndFolders(argResults);
+    final options = loadOptionsYaml();
+    final parsedFiles = getFilesAndFolders(options, argResults);
     final outputType = OutputType.values.firstWhere(
       (e) => e.optionName == argResults?[_outputType] as String?,
     );

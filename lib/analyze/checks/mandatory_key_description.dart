@@ -9,14 +9,14 @@ import 'package:rebellion/utils/file_utils.dart';
 ///
 /// This check is off by default
 class MandatoryKeyDescription extends CheckBase {
-  const MandatoryKeyDescription()
-      : super(
-          optionName: 'mandatory-at-key-description',
-          defaultsTo: false,
-        );
+  const MandatoryKeyDescription();
 
   @override
-  int run(IcuParser parser, List<ParsedArbFile> files) {
+  int run(
+    IcuParser parser,
+    List<ParsedArbFile> files,
+    RebellionOptions options,
+  ) {
     int issues = 0;
 
     for (final file in files) {

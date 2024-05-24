@@ -3,7 +3,25 @@ import 'dart:io';
 
 import 'package:args/args.dart';
 import 'package:path/path.dart' as path;
+import 'package:rebellion/analyze/checks/all_caps.dart';
+import 'package:rebellion/analyze/checks/at_key_type.dart';
+import 'package:rebellion/analyze/checks/check_base.dart';
+import 'package:rebellion/analyze/checks/duplicate_keys.dart';
+import 'package:rebellion/analyze/checks/empty_at_key.dart';
+import 'package:rebellion/analyze/checks/locale_definition.dart';
+import 'package:rebellion/analyze/checks/mandatory_key_description.dart';
+import 'package:rebellion/analyze/checks/missing_placeholders.dart';
+import 'package:rebellion/analyze/checks/missing_plurals.dart';
+import 'package:rebellion/analyze/checks/naming_convention.dart';
+import 'package:rebellion/analyze/checks/redundant_at_key.dart';
+import 'package:rebellion/analyze/checks/redundant_translations.dart';
+import 'package:rebellion/analyze/checks/unused_at_key.dart';
+import 'package:rebellion/sort/sort.dart';
+import 'package:rebellion/translate/translate.dart';
 import 'package:rebellion/utils/logger.dart';
+import 'package:yaml/yaml.dart';
+
+import '../analyze/checks/missing_translations.dart';
 
 // TODO move to a separate file
 class ArbFile {
@@ -112,8 +130,11 @@ List<File> _getAllFiles(List<String> filesAndFolders) {
 const mainLocaleParam = 'main-locale';
 const defaultMainLocale = 'en';
 
-List<ParsedArbFile> getFilesAndFolders(ArgResults? argResults) {
-  final mainLocale = argResults?[mainLocaleParam] as String;
+List<ParsedArbFile> getFilesAndFolders(
+  RebellionOptions options,
+  ArgResults? argResults,
+) {
+  final mainLocale = options.mainLocale;
   final filesAndFolders = argResults?.rest ?? const [];
   _ensureFilesAndFoldersExist(filesAndFolders);
 
@@ -165,5 +186,108 @@ void _ensureArbFilesValid(List<ArbFile> arbFiles) {
 
   if (!arbFilesValid) {
     exit(1);
+  }
+}
+
+RebellionOptions loadOptionsYaml() {
+  final fileContent = File('rebellion_options.yaml').readAsStringSync();
+  final yaml = loadYaml(fileContent) as YamlMap;
+
+  final rules = yaml.nodes['rules'] as YamlList?;
+  final options = yaml.nodes['options'] as YamlMap?;
+  return RebellionOptions.fromYaml(rules, options);
+}
+
+class RebellionOptions {
+  final bool allCapsCheckEnabled;
+  final bool atKeyTypeCheckEnabled;
+  final bool duplicatedKeysCheckEnabled;
+  final bool emptyAtKeyCheckEnabled;
+  final bool localeDefinitionCheckEnabled;
+  final bool mandatoryAtKeyDescriptionCheckEnabled;
+  final bool missingPlaceholdersCheckEnabled;
+  final bool missingPluralsCheckEnabled;
+  final bool missingTranslationsCheckEnabled;
+  final bool namingConventionCheckEnabled;
+  final bool redundantAtKeyCheckEnabled;
+  final bool redundantTranslationsCheckEnabled;
+  final bool unusedAtKeyCheckEnabled;
+
+  final String mainLocale;
+  final NamingConvention namingConvention;
+  final TranslationProvider provider;
+  final Sorting sorting;
+
+  const RebellionOptions._({
+    required this.allCapsCheckEnabled,
+    required this.atKeyTypeCheckEnabled,
+    required this.duplicatedKeysCheckEnabled,
+    required this.emptyAtKeyCheckEnabled,
+    required this.localeDefinitionCheckEnabled,
+    required this.mandatoryAtKeyDescriptionCheckEnabled,
+    required this.missingPlaceholdersCheckEnabled,
+    required this.missingPluralsCheckEnabled,
+    required this.missingTranslationsCheckEnabled,
+    required this.namingConventionCheckEnabled,
+    required this.redundantAtKeyCheckEnabled,
+    required this.redundantTranslationsCheckEnabled,
+    required this.unusedAtKeyCheckEnabled,
+    required this.mainLocale,
+    required this.namingConvention,
+    required this.provider,
+    required this.sorting,
+  });
+
+  factory RebellionOptions.fromYaml(
+    YamlList? rules,
+    YamlMap? options,
+  ) {
+    return RebellionOptions._(
+      allCapsCheckEnabled: rules?.contains('all_caps') ?? true,
+      atKeyTypeCheckEnabled: rules?.contains('at_key_type') ?? true,
+      duplicatedKeysCheckEnabled: rules?.contains('duplicated_keys') ?? true,
+      emptyAtKeyCheckEnabled: rules?.contains('empty_at_key') ?? true,
+      localeDefinitionCheckEnabled:
+          rules?.contains('locale_definition') ?? true,
+      mandatoryAtKeyDescriptionCheckEnabled:
+          rules?.contains('mandatory_at_key_description') ?? false,
+      missingPlaceholdersCheckEnabled:
+          rules?.contains('missing_placeholders') ?? true,
+      missingPluralsCheckEnabled: rules?.contains('missing_plurals') ?? true,
+      missingTranslationsCheckEnabled:
+          rules?.contains('missing_translations') ?? true,
+      namingConventionCheckEnabled:
+          rules?.contains('naming_convention') ?? true,
+      redundantAtKeyCheckEnabled: rules?.contains('redundant_at_key') ?? true,
+      redundantTranslationsCheckEnabled:
+          rules?.contains('redundant_translations') ?? true,
+      unusedAtKeyCheckEnabled: rules?.contains('unused_at_key') ?? true,
+      mainLocale: options?['main_locale'] as String? ?? defaultMainLocale,
+      namingConvention: NamingConvention.fromOptionName(
+              options?['naming_convention'] as String) ??
+          NamingConvention.camel,
+      provider: TranslationProvider.gpt4,
+      sorting:
+          Sorting.fromOptionName(options?['sorting']) ?? Sorting.alphabetical,
+    );
+  }
+
+  List<CheckBase> enabledChecks() {
+    return <CheckBase>[
+      if (atKeyTypeCheckEnabled) const AtKeyType(),
+      if (allCapsCheckEnabled) const AllCaps(),
+      if (duplicatedKeysCheckEnabled) const DuplicatedKeys(),
+      if (emptyAtKeyCheckEnabled) const EmptyAtKeys(),
+      if (localeDefinitionCheckEnabled) const LocaleDefinitionPresent(),
+      if (mandatoryAtKeyDescriptionCheckEnabled)
+        const MandatoryKeyDescription(),
+      if (missingPlaceholdersCheckEnabled) const MissingPlaceholders(),
+      if (missingPluralsCheckEnabled) const MissingPlurals(),
+      if (missingTranslationsCheckEnabled) const MissingTranslations(),
+      if (redundantAtKeyCheckEnabled) const RedundantAtKey(),
+      if (redundantTranslationsCheckEnabled) const RedundantTranslations(),
+      if (unusedAtKeyCheckEnabled) const UnusedAtKey(),
+      if (namingConventionCheckEnabled) const NamingConventionCheck(),
+    ];
   }
 }

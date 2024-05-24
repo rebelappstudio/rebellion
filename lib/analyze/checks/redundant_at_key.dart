@@ -6,14 +6,14 @@ import 'package:rebellion/utils/file_utils.dart';
 
 /// Translation files contain @-keys with data already present in the main file
 class RedundantAtKey extends CheckBase {
-  const RedundantAtKey()
-      : super(
-          optionName: 'redundant-at-key',
-          defaultsTo: true,
-        );
+  const RedundantAtKey();
 
   @override
-  int run(IcuParser parser, List<ParsedArbFile> files) {
+  int run(
+    IcuParser parser,
+    List<ParsedArbFile> files,
+    RebellionOptions options,
+  ) {
     var issues = 0;
 
     for (final file in files) {

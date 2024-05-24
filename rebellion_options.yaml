@@ -1,0 +1,20 @@
+rules:
+  - all_caps
+  - at_key_type
+  - duplicated_keys
+  - empty_at_key
+  - locale_definition
+  - mandatory_at_key_description
+  - missing_placeholders
+  - missing_plurals
+  - missing_translations
+  - naming_convention
+  - redundant_at_key
+  - redundant_translations
+  - unused_at_key
+
+options:
+  main_locale: en
+  naming_convention: snake_case
+  translation_provider: gpt4
+  sorting: alphabetical

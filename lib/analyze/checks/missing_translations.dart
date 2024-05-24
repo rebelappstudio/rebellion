@@ -10,14 +10,14 @@ import 'package:rebellion/utils/file_utils.dart';
 /// Check if there are missing translations (translation files miss some keys
 /// present in the main file)
 class MissingTranslations extends CheckBase {
-  const MissingTranslations()
-      : super(
-          optionName: 'missing-translations',
-          defaultsTo: true,
-        );
+  const MissingTranslations();
 
   @override
-  int run(IcuParser parser, List<ParsedArbFile> files) {
+  int run(
+    IcuParser parser,
+    List<ParsedArbFile> files,
+    RebellionOptions options,
+  ) {
     final filesWithMissingTranslations = getMissingTranslations(files);
     for (final file in filesWithMissingTranslations) {
       final missingItems = file.untranslatedKeys.map((e) => '"$e"').join(', ');

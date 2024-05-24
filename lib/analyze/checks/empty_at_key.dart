@@ -6,14 +6,14 @@ import 'package:rebellion/utils/file_utils.dart';
 
 /// Check that there are no @-keys without content
 class EmptyAtKeys extends CheckBase {
-  const EmptyAtKeys()
-      : super(
-          optionName: 'empty-at-key',
-          defaultsTo: true,
-        );
+  const EmptyAtKeys();
 
   @override
-  int run(IcuParser parser, List<ParsedArbFile> files) {
+  int run(
+    IcuParser parser,
+    List<ParsedArbFile> files,
+    RebellionOptions options,
+  ) {
     int issues = 0;
 
     for (final file in files) {

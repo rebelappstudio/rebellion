@@ -5,14 +5,14 @@ import 'package:rebellion/utils/file_utils.dart';
 
 /// Translation file contains @@locale key with locale definition
 class LocaleDefinitionPresent extends CheckBase {
-  const LocaleDefinitionPresent()
-      : super(
-          optionName: 'locale-definition',
-          defaultsTo: true,
-        );
+  const LocaleDefinitionPresent();
 
   @override
-  int run(IcuParser parser, List<ParsedArbFile> files) {
+  int run(
+    IcuParser parser,
+    List<ParsedArbFile> files,
+    RebellionOptions options,
+  ) {
     int issues = 0;
 
     for (final file in files) {

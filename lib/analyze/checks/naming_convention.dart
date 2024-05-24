@@ -1,8 +1,8 @@
-import 'package:args/args.dart';
+import 'package:collection/collection.dart';
 import 'package:rebellion/analyze/checks/check_base.dart';
 import 'package:rebellion/icu_parser/icu_parser.dart';
-import 'package:rebellion/utils/logger.dart';
 import 'package:rebellion/utils/file_utils.dart';
+import 'package:rebellion/utils/logger.dart';
 
 final _camelCaseRe = RegExp(r'^[a-z]+((\d)|([A-Z0-9][a-z0-9]+))*([A-Z])?$');
 final _snakeCaseRe = RegExp(r'^[a-z]+((\d)|(_[a-z0-9]+))*(_)?$');
@@ -16,9 +16,9 @@ enum NamingConvention {
 
   const NamingConvention(this.optionName, this.englishName);
 
-  static NamingConvention fromOptionName(String optionName) {
+  static NamingConvention? fromOptionName(String? optionName) {
     return NamingConvention.values
-        .firstWhere((e) => e.optionName == optionName);
+        .firstWhereOrNull((e) => e.optionName == optionName);
   }
 
   bool hasMatch(String input) {
@@ -29,24 +29,23 @@ enum NamingConvention {
   }
 }
 
-/// Check that keys are camelCase or snake_case
-class NamingConventionCheck extends OptionCheckBase {
-  NamingConventionCheck()
-      : super(
-          optionName: 'naming-convention',
-          defaultsTo: NamingConvention.camel.optionName,
-          allowedValues:
-              NamingConvention.values.map((e) => e.optionName).toList(),
-        );
+/// Check that keys are camelCase or snake_case. In addition this checks that
+/// keys use latin characters only
+class NamingConventionCheck extends CheckBase {
+  const NamingConventionCheck();
 
   @override
-  int run(IcuParser parser, List<ParsedArbFile> files, ArgResults? args) {
+  int run(
+    IcuParser parser,
+    List<ParsedArbFile> files,
+    RebellionOptions options,
+  ) {
     int issues = 0;
 
-    final convention = NamingConvention.fromOptionName(args?[optionName]);
+    final convention = options.namingConvention;
     for (final file in files) {
       for (final key in file.keys) {
-        if (!convention.hasMatch(key)) {
+        if (convention.hasMatch(key) == false) {
           issues++;
           logError(
             '${file.file.filepath}: key "$key" does not match selected naming convention (${convention.englishName})',

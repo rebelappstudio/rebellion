@@ -11,6 +11,10 @@ enum Sorting {
   final String optionName;
 
   const Sorting(this.optionName);
+
+  static Sorting? fromOptionName(String? optionName) {
+    return Sorting.values.firstWhere((e) => e.optionName == optionName);
+  }
 }
 
 /// TODO sort keys:
@@ -36,11 +40,12 @@ class SortCommand extends Command {
 
   @override
   void run() {
+    final options = loadOptionsYaml();
     final sorting = Sorting.values.firstWhere(
       (e) => e.optionName == argResults?[_sortingParam] as String,
     );
 
-    final parsedFiles = getFilesAndFolders(argResults);
+    final parsedFiles = getFilesAndFolders(options, argResults);
     switch (sorting) {
       case Sorting.alphabetical:
       case Sorting.alphabeticalReverse:
