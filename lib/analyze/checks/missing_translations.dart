@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:collection/collection.dart';
 import 'package:rebellion/analyze/checks/check_base.dart';
-import 'package:rebellion/icu_parser/icu_parser.dart';
 import 'package:rebellion/utils/extensions.dart';
 import 'package:rebellion/utils/logger.dart';
 import 'package:rebellion/utils/file_utils.dart';
@@ -13,11 +12,7 @@ class MissingTranslations extends CheckBase {
   const MissingTranslations();
 
   @override
-  int run(
-    IcuParser parser,
-    List<ParsedArbFile> files,
-    RebellionOptions options,
-  ) {
+  int run(List<ParsedArbFile> files, RebellionOptions options) {
     final filesWithMissingTranslations = getMissingTranslations(files);
     for (final file in filesWithMissingTranslations) {
       final missingItems = file.untranslatedKeys.map((e) => '"$e"').join(', ');

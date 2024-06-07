@@ -1,4 +1,3 @@
-import 'package:rebellion/icu_parser/icu_parser.dart';
 import 'package:rebellion/utils/file_utils.dart';
 
 /// Simple flag-like check that can be enabled or disabled
@@ -10,9 +9,5 @@ abstract class CheckBase {
   /// [parser] - instance of [IcuParser] that can be used to parse strings
   /// [files] - list of files to analyze
   /// [params] - parameters for the check
-  int run(
-    IcuParser parser,
-    List<ParsedArbFile> files,
-    RebellionOptions options,
-  );
+  int run(List<ParsedArbFile> files, RebellionOptions options);
 }

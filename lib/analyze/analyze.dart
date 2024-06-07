@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:args/command_runner.dart';
 import 'package:collection/collection.dart';
-import 'package:rebellion/icu_parser/icu_parser.dart';
 import 'package:rebellion/utils/file_utils.dart';
 import 'package:rebellion/utils/logger.dart';
 
@@ -31,10 +30,8 @@ class AnalyzeCommand extends Command {
     final parsedFiles = getFilesAndFolders(options, argResults);
     final enabledChecks = options.enabledChecks();
 
-    final icuParser = IcuParser();
-    final issuesFound = enabledChecks
-        .map((check) => check.run(icuParser, parsedFiles, options))
-        .sum;
+    final issuesFound =
+        enabledChecks.map((check) => check.run(parsedFiles, options)).sum;
 
     if (issuesFound > 0) {
       logError(

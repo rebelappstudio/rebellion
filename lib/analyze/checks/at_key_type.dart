@@ -1,5 +1,4 @@
 import 'package:rebellion/analyze/checks/check_base.dart';
-import 'package:rebellion/icu_parser/icu_parser.dart';
 import 'package:rebellion/utils/extensions.dart';
 import 'package:rebellion/utils/logger.dart';
 import 'package:rebellion/utils/file_utils.dart';
@@ -14,11 +13,7 @@ class AtKeyType extends CheckBase {
   const AtKeyType();
 
   @override
-  int run(
-    IcuParser parser,
-    List<ParsedArbFile> files,
-    RebellionOptions options,
-  ) {
+  int run(List<ParsedArbFile> files, RebellionOptions options) {
     int issues = 0;
 
     for (final file in files) {

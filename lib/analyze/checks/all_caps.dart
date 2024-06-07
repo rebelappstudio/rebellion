@@ -1,6 +1,12 @@
+import 'package:collection/collection.dart';
 import 'package:rebellion/analyze/checks/check_base.dart';
-import 'package:rebellion/icu_parser/icu_parser.dart';
-import 'package:rebellion/icu_parser/message_format.dart';
+import 'package:rebellion/message_parser.dart';
+import 'package:rebellion/messages/composite_message.dart';
+import 'package:rebellion/messages/literal_string_message.dart';
+import 'package:rebellion/messages/message.dart';
+import 'package:rebellion/messages/submessages/gender.dart';
+import 'package:rebellion/messages/submessages/plural.dart';
+import 'package:rebellion/messages/submessages/select.dart';
 import 'package:rebellion/utils/file_utils.dart';
 import 'package:rebellion/utils/logger.dart';
 
@@ -10,35 +16,29 @@ class AllCaps extends CheckBase {
   const AllCaps();
 
   @override
-  int run(
-    IcuParser parser,
-    List<ParsedArbFile> files,
-    RebellionOptions options,
-  ) {
-    // TODO also check selects and plurals
+  int run(List<ParsedArbFile> files, RebellionOptions options) {
     int issues = 0;
 
     for (final file in files) {
+      final fileLocation = file.file.filepath;
       final keys = file.keys;
       for (final key in keys) {
         final value = file.content[key];
 
-        // if (value is String) {
-        //   final parseResult = parser.parse(value);
+        final result = MessageParser(value).pluralGenderSelectParse();
 
-        //   if (parseResult is PluralElement) {
-        //     (parseResult as PluralElement)
-        //         .options
-        //         .any((element) => _isAllCapsString(element.value.toString()));
-        //     // TODO
-        //   } else {
-        //     // TODO other types
-        //   }
-        // }
-
-        if (value is String && _isAllCapsString(value)) {
-          issues++;
-          logError('${file.file.filepath}: all caps string key "$key"');
+        final location = '$fileLocation key $key';
+        if (result is Plural) {
+          issues += _checkPlural(location, result);
+        } else if (result is Gender) {
+          issues += _checkGender(location, result);
+        } else if (result is Select) {
+          issues += _checkSelect(location, result);
+        } else {
+          if (_checkAllLiterals(result)) {
+            issues++;
+            logError('$fileLocation: all caps string key "$key"');
+          }
         }
       }
     }
@@ -49,4 +49,101 @@ class AllCaps extends CheckBase {
   bool _isAllCapsString(String value) {
     return value == value.toUpperCase();
   }
+
+  int _checkPlural(String location, Plural plural) {
+    int issues = 0;
+    final zero = plural.zero;
+    final one = plural.one;
+    final two = plural.two;
+    final few = plural.few;
+    final many = plural.many;
+    final other = plural.other;
+
+    if (_checkAllLiterals(zero)) {
+      issues++;
+      logError('$location: all caps string in case "zero"');
+    }
+
+    if (_checkAllLiterals(one)) {
+      issues++;
+      logError('$location: all caps string in case "one"');
+    }
+
+    if (_checkAllLiterals(two)) {
+      issues++;
+      logError('$location: all caps string in case "two"');
+    }
+
+    if (_checkAllLiterals(few)) {
+      issues++;
+      logError('$location: all caps string in case "few"');
+    }
+
+    if (_checkAllLiterals(many)) {
+      issues++;
+      logError('$location: all caps string in case "many"');
+    }
+
+    if (_checkAllLiterals(other)) {
+      issues++;
+      logError('$location: all caps string in case "other"');
+    }
+
+    return issues;
+  }
+
+  int _checkGender(String location, Gender gender) {
+    int issues = 0;
+    final female = gender.female;
+    final male = gender.male;
+    final other = gender.other;
+
+    if (_checkAllLiterals(female)) {
+      issues++;
+      logError('$location: all caps string in case "female"');
+    }
+
+    if (_checkAllLiterals(male)) {
+      issues++;
+      logError('$location: all caps string in case "male"');
+    }
+
+    if (_checkAllLiterals(other)) {
+      issues++;
+      logError('$location: all caps string in case "other"');
+    }
+
+    return issues;
+  }
+
+  int _checkSelect(String location, Select select) {
+    int issues = 0;
+    for (final key in select.cases.keys) {
+      final value = select.cases[key];
+      if (_checkAllLiterals(value)) {
+        issues++;
+        logError('$location: all caps string in case "$key"');
+      }
+    }
+
+    return issues;
+  }
+
+  bool _checkAllLiterals(Message? message) {
+    if (message == null) return false;
+
+    final literals = allMessageLiterals(message);
+    return literals.any(_isAllCapsString);
+  }
+}
+
+/// Returns all message literals in a message and its children
+List<String> allMessageLiterals(Message message) {
+  if (message is LiteralString) {
+    return [message.string];
+  } else if (message is CompositeMessage) {
+    return message.pieces.map(allMessageLiterals).flattened.toList();
+  }
+
+  return const [];
 }
