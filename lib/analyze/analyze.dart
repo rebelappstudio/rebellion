@@ -17,6 +17,7 @@ import 'package:rebellion/utils/logger.dart';
 // TODO new check: hardcoded strings (l10nization_cli)
 // TODO new check: unused translations (string_literal_finder lib)
 // TODO topics
+// TODO check if it's plurals but not parsed as plurals. It means intl won't be able to parse it as plural
 class AnalyzeCommand extends Command {
   @override
   String get description => 'Analyze ARB file(s)';

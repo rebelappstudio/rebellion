@@ -24,9 +24,7 @@ class AllCaps extends CheckBase {
       final keys = file.keys;
       for (final key in keys) {
         final value = file.content[key];
-
         final result = MessageParser(value).pluralGenderSelectParse();
-
         final location = '$fileLocation key $key';
         if (result is Plural) {
           issues += _checkPlural(location, result);
