@@ -4,14 +4,15 @@ import 'package:args/command_runner.dart';
 import 'package:collection/collection.dart';
 import 'package:rebellion/analyze/checks/missing_translations.dart';
 import 'package:rebellion/translate/translator.dart';
+import 'package:rebellion/utils/extensions.dart';
 import 'package:rebellion/utils/file_utils.dart';
 import 'package:rebellion/utils/logger.dart';
 
 const _provider = 'provider';
-const _accessKey = 'access-key';
 
 enum TranslationProvider {
-  gpt4('gpt-4-1106-preview');
+  gpt4turbo('gpt-4-turbo'),
+  gpt3_5turbo('gpt-3.5-turbo');
 
   final String optionName;
 
@@ -19,7 +20,8 @@ enum TranslationProvider {
 
   Translator get translator {
     return switch (this) {
-      gpt4 => OpenAiTranslator(model: 'gpt-4-1106-preview'),
+      gpt4turbo => OpenAiTranslator(model: 'gpt-4-turbo'),
+      gpt3_5turbo => OpenAiTranslator(model: 'gpt-3.5-turbo'),
     };
   }
 }
@@ -28,11 +30,9 @@ class TranslateCommand extends Command {
   TranslateCommand() {
     argParser
       ..addOption(mainLocaleParam, defaultsTo: defaultMainLocale)
-      // TODO alternatively get this from environment variable
-      ..addOption(_accessKey, mandatory: true)
       ..addOption(
         _provider,
-        defaultsTo: TranslationProvider.gpt4.optionName,
+        defaultsTo: TranslationProvider.gpt4turbo.optionName,
         allowed: TranslationProvider.values.map((e) => e.optionName),
       );
   }
@@ -45,15 +45,9 @@ class TranslateCommand extends Command {
 
   @override
   Future<void> run() async {
-    final accessKey = argResults?[_accessKey] as String?;
     final translator = TranslationProvider.values
         .firstWhere((e) => e.optionName == argResults?[_provider] as String?)
         .translator;
-
-    if (accessKey == null || accessKey.isEmpty) {
-      logError('Access key must be provided');
-      exit(1);
-    }
 
     final options = loadOptionsYaml();
     final parsedFiles = getFilesAndFolders(options, argResults);
@@ -70,12 +64,14 @@ class TranslateCommand extends Command {
       final targetLanguage = file.sourceFile.file.locale;
 
       for (final key in file.untranslatedKeys) {
+        if (key.isAtKey) continue;
+        if (key.isLocaleDefinition) continue;
+
         final translation = await translator.translate(
-          accessKey,
           sourceLanguage,
           targetLanguage,
           mainFile.content[key]!,
-          null, // TODO provide context for better translations
+          mainFile.atKeyDescription(key),
         );
         translations[key] = translation;
       }

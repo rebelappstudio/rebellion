@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dart_openai/dart_openai.dart';
 import 'package:rebellion/utils/logger.dart';
 
@@ -5,7 +7,6 @@ abstract class Translator {
   const Translator();
 
   Future<String> translate(
-    String accessKey,
     String sourceLanguage,
     String targetLanguage,
     String value,
@@ -15,17 +16,25 @@ abstract class Translator {
 
 class OpenAiTranslator extends Translator {
   final String model;
+  static const _accessTokenEnvVariable = 'REBELLION_OPEN_AI';
 
   const OpenAiTranslator({required this.model});
 
   @override
   Future<String> translate(
-    String accessKey,
     String sourceLanguage,
     String targetLanguage,
     String value,
     String? valueDescription,
   ) async {
+    final accessKey = Platform.environment[_accessTokenEnvVariable];
+    if (accessKey == null || accessKey.isEmpty) {
+      logError(
+        'Access key must be provided using the environment variable $_accessTokenEnvVariable',
+      );
+      exit(1);
+    }
+
     OpenAI.apiKey = accessKey;
 
     // The system message that will be sent to the request

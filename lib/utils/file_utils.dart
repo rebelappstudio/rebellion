@@ -62,6 +62,17 @@ class ParsedArbFile {
       rawKeys: rawKeys,
     );
   }
+
+  /// Get 'description' field of an at-key if available
+  String? atKeyDescription(String key) {
+    final atKey = key.startsWith('@') ? key : '@$key';
+    final value = content[atKey];
+    if (value is Map<String, dynamic>) {
+      return value['description'] as String?;
+    }
+
+    return null;
+  }
 }
 
 /// Get all strings from [filename] file
@@ -272,7 +283,7 @@ class RebellionOptions {
       namingConvention: NamingConvention.fromOptionName(
               options?['naming_convention'] as String) ??
           NamingConvention.camel,
-      provider: TranslationProvider.gpt4,
+      provider: TranslationProvider.gpt4turbo,
       sorting:
           Sorting.fromOptionName(options?['sorting']) ?? Sorting.alphabetical,
     );
