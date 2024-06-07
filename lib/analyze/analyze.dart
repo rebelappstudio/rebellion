@@ -18,7 +18,8 @@ import 'package:rebellion/utils/logger.dart';
 // TODO topics
 // TODO check if it's plurals but not parsed as plurals. It means intl won't be able to parse it as plural
 // TODO check that file's locale matches the @@locale
-// TODO missing gender
+// TODO check missing gender
+// TODO option to ignore some checks for selected keys
 class AnalyzeCommand extends Command {
   @override
   String get description => 'Analyze ARB file(s)';

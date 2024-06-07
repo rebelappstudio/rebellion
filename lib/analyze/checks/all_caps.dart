@@ -22,10 +22,17 @@ class AllCaps extends CheckBase {
     for (final file in files) {
       final fileLocation = file.file.filepath;
       final keys = file.keys;
+
       for (final key in keys) {
         final value = file.content[key];
+
+        // Ignore unparsable strings, they're likely to be caused by
+        // other checks like StringType or AtKeyType
+        if (value is! String) continue;
+
         final result = MessageParser(value).pluralGenderSelectParse();
         final location = '$fileLocation key $key';
+
         if (result is Plural) {
           issues += _checkPlural(location, result);
         } else if (result is Gender) {
@@ -46,7 +53,7 @@ class AllCaps extends CheckBase {
   }
 
   bool _isAllCapsString(String value) {
-    return value == value.toUpperCase();
+    return value.isNotEmpty && value == value.toUpperCase();
   }
 
   int _checkPlural(String location, Plural plural) {

@@ -21,7 +21,11 @@ class MissingPlurals extends CheckBase {
         if (key.isAtKey) continue;
         if (key.isLocaleDefinition) continue;
 
-        final value = file.content[key] as String;
+        final value = file.content[key];
+        // Ignore unparsable strings, they're likely to be caused by
+        // other checks like StringType or AtKeyType
+        if (value is! String) continue;
+
         final result = MessageParser(value).pluralGenderSelectParse();
         if (result is! Plural) continue;
 

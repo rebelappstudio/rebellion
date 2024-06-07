@@ -15,6 +15,7 @@ import 'package:rebellion/analyze/checks/missing_plurals.dart';
 import 'package:rebellion/analyze/checks/naming_convention.dart';
 import 'package:rebellion/analyze/checks/redundant_at_key.dart';
 import 'package:rebellion/analyze/checks/redundant_translations.dart';
+import 'package:rebellion/analyze/checks/string_type.dart';
 import 'package:rebellion/analyze/checks/unused_at_key.dart';
 import 'package:rebellion/sort/sort.dart';
 import 'package:rebellion/translate/translate.dart';
@@ -217,6 +218,7 @@ RebellionOptions loadOptionsYaml() {
 
 class RebellionOptions {
   final bool allCapsCheckEnabled;
+  final bool stringTypeCheckEnabled;
   final bool atKeyTypeCheckEnabled;
   final bool duplicatedKeysCheckEnabled;
   final bool emptyAtKeyCheckEnabled;
@@ -237,6 +239,7 @@ class RebellionOptions {
 
   const RebellionOptions._({
     required this.allCapsCheckEnabled,
+    required this.stringTypeCheckEnabled,
     required this.atKeyTypeCheckEnabled,
     required this.duplicatedKeysCheckEnabled,
     required this.emptyAtKeyCheckEnabled,
@@ -261,6 +264,7 @@ class RebellionOptions {
   ) {
     return RebellionOptions._(
       allCapsCheckEnabled: rules?.contains('all_caps') ?? true,
+      stringTypeCheckEnabled: rules?.contains('string_type') ?? true,
       atKeyTypeCheckEnabled: rules?.contains('at_key_type') ?? true,
       duplicatedKeysCheckEnabled: rules?.contains('duplicated_keys') ?? true,
       emptyAtKeyCheckEnabled: rules?.contains('empty_at_key') ?? true,
@@ -291,6 +295,7 @@ class RebellionOptions {
 
   List<CheckBase> enabledChecks() {
     return <CheckBase>[
+      if (stringTypeCheckEnabled) const StringType(),
       if (atKeyTypeCheckEnabled) const AtKeyType(),
       if (allCapsCheckEnabled) const AllCaps(),
       if (duplicatedKeysCheckEnabled) const DuplicatedKeys(),

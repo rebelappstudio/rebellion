@@ -1,5 +1,6 @@
 rules:
   - all_caps
+  - string_type
   - at_key_type
   - duplicated_keys
   - empty_at_key
