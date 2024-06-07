@@ -6,6 +6,10 @@ import 'package:rebellion/utils/file_utils.dart';
 
 /// Check that @-key is a valid JSON object, e.g.
 /// "@homePageTitle": {"description": "This is a title"}
+///
+/// Fails in cases like this:
+/// * "@homePageTitle": null,
+/// * "@homePageTitle": "not a JSON object",
 class AtKeyType extends CheckBase {
   const AtKeyType();
 
