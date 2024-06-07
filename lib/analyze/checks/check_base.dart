@@ -5,9 +5,7 @@ import 'package:rebellion/utils/file_utils.dart';
 abstract class CheckBase {
   const CheckBase();
 
-  /// Perform check and return the number of issues found
-  ///
-  /// Returns number of errors found
+  /// Check [files] and return number of found issues
   ///
   /// [parser] - instance of [IcuParser] that can be used to parse strings
   /// [files] - list of files to analyze

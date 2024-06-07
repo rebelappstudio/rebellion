@@ -1,4 +1,6 @@
 import 'package:args/command_runner.dart';
+import 'package:collection/collection.dart';
+import 'package:rebellion/utils/extensions.dart';
 import 'package:rebellion/utils/file_utils.dart';
 
 const _sortingParam = 'sorting';
@@ -17,10 +19,6 @@ enum Sorting {
   }
 }
 
-/// TODO sort keys:
-/// -alphabetical
-/// -alphabetical-reverse
-/// -follow-main-file
 class SortCommand extends Command {
   SortCommand() {
     argParser
@@ -46,14 +44,63 @@ class SortCommand extends Command {
     );
 
     final parsedFiles = getFilesAndFolders(options, argResults);
-    switch (sorting) {
-      case Sorting.alphabetical:
-      case Sorting.alphabeticalReverse:
-      case Sorting.followMainFile:
+    final sortedFiles = switch (sorting) {
+      Sorting.alphabetical => _sortAlphabetically(parsedFiles, reverse: false),
+      Sorting.alphabeticalReverse =>
+        _sortAlphabetically(parsedFiles, reverse: true),
+      Sorting.followMainFile => _sortFollowingMainFile(parsedFiles),
+    };
+    writeArbFiles(sortedFiles);
+  }
+
+  List<ParsedArbFile> _sortAlphabetically(
+    List<ParsedArbFile> files, {
+    required bool reverse,
+  }) {
+    final result = <ParsedArbFile>[];
+
+    for (final file in files) {
+      var sortedKeys = file.keys.sortedBy((e) {
+        // Place at-keys near the original string.
+        // This may not be ideal as it keeps the original order of at-keys, e.g.
+        // at-key is placed before the key if it's placed like that in the
+        // original unsorted file
+        if (e.isAtKey) return e.atKeyToRegularKey;
+
+        return e;
+      });
+      sortedKeys = reverse ? sortedKeys.reversed.toList() : sortedKeys;
+
+      final fileContent = {
+        for (final key in sortedKeys) key: file.content[key],
+      };
+      result.add(
+        file.copyWith(content: fileContent),
+      );
     }
 
-    // TODO implement sorting
-    // TODO sort main keys first then rest should follow (in case of follow-main-file option no need to sort main file)
-    // TODO at-keys should be sorted after the string (option to change it?)
+    return result;
+  }
+
+  List<ParsedArbFile> _sortFollowingMainFile(List<ParsedArbFile> files) {
+    final mainFile = files.firstWhere((e) => e.file.isMainFile);
+    final mainKeys = mainFile.keys;
+
+    final result = <ParsedArbFile>[];
+    for (final file in files) {
+      if (file.file.isMainFile) {
+        result.add(file);
+        continue;
+      }
+
+      final fileContent = {
+        for (final key in mainKeys) key: file.content[key],
+      };
+      result.add(
+        file.copyWith(content: fileContent),
+      );
+    }
+
+    return result;
   }
 }

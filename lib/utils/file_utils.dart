@@ -151,6 +151,12 @@ void writeArbFile(Map<String, dynamic> content, String filename) {
   file.writeAsStringSync(jsonContent);
 }
 
+void writeArbFiles(List<ParsedArbFile> files) {
+  for (final file in files) {
+    writeArbFile(file.content, file.file.filepath);
+  }
+}
+
 void _ensureFilesAndFoldersExist(List<String> filesAndFolders) {
   if (filesAndFolders.isEmpty) {
     // TODO fall back to current directory and let user know about it
