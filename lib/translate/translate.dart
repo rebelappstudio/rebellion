@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:args/command_runner.dart';
 import 'package:collection/collection.dart';
-import 'package:rebellion/analyze/checks/missing_translations.dart';
 import 'package:rebellion/translate/translator.dart';
+import 'package:rebellion/utils/diff_utils.dart';
 import 'package:rebellion/utils/extensions.dart';
 import 'package:rebellion/utils/file_utils.dart';
 import 'package:rebellion/utils/logger.dart';

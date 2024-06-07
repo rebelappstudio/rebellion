@@ -5,7 +5,6 @@ import 'package:collection/collection.dart';
 import 'package:rebellion/utils/file_utils.dart';
 import 'package:rebellion/utils/logger.dart';
 
-// TODO yaml configuration file (which checks to run). Or use analysis_options.yaml
 // TODO lint using custom_lint or similar
 // TODO tests
 // TODO CI
@@ -18,6 +17,8 @@ import 'package:rebellion/utils/logger.dart';
 // TODO new check: unused translations (string_literal_finder lib)
 // TODO topics
 // TODO check if it's plurals but not parsed as plurals. It means intl won't be able to parse it as plural
+// TODO check that file's locale matches the @@locale
+// TODO missing gender
 class AnalyzeCommand extends Command {
   @override
   String get description => 'Analyze ARB file(s)';
