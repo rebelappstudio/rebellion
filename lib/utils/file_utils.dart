@@ -18,7 +18,6 @@ import 'package:rebellion/analyze/checks/redundant_translations.dart';
 import 'package:rebellion/analyze/checks/string_type.dart';
 import 'package:rebellion/analyze/checks/unused_at_key.dart';
 import 'package:rebellion/sort/sort.dart';
-import 'package:rebellion/translate/translate.dart';
 import 'package:rebellion/utils/logger.dart';
 import 'package:yaml/yaml.dart';
 
@@ -234,7 +233,6 @@ class RebellionOptions {
 
   final String mainLocale;
   final NamingConvention namingConvention;
-  final TranslationProvider provider;
   final Sorting sorting;
 
   const RebellionOptions._({
@@ -254,7 +252,6 @@ class RebellionOptions {
     required this.unusedAtKeyCheckEnabled,
     required this.mainLocale,
     required this.namingConvention,
-    required this.provider,
     required this.sorting,
   });
 
@@ -287,7 +284,6 @@ class RebellionOptions {
       namingConvention: NamingConvention.fromOptionName(
               options?['naming_convention'] as String) ??
           NamingConvention.camel,
-      provider: TranslationProvider.gpt4turbo,
       sorting:
           Sorting.fromOptionName(options?['sorting']) ?? Sorting.alphabetical,
     );
