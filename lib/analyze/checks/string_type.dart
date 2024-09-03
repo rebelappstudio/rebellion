@@ -1,4 +1,5 @@
 import 'package:rebellion/analyze/checks/check_base.dart';
+import 'package:rebellion/utils/extensions.dart';
 import 'package:rebellion/utils/file_utils.dart';
 import 'package:rebellion/utils/logger.dart';
 
@@ -20,6 +21,8 @@ class StringType extends CheckBase {
       final keys = file.keys;
 
       for (final key in keys) {
+        if (key.isAtKey || key.isLocaleDefinition) continue;
+
         final value = file.content[key];
         if (value is! String) {
           issues++;

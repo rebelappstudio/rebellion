@@ -26,7 +26,7 @@ class AllCaps extends CheckBase {
       for (final key in keys) {
         final value = file.content[key];
 
-        // Ignore unparsable strings, they're likely to be caused by
+        // Ignore unparsable strings, they're likely to be caught by
         // other checks like StringType or AtKeyType
         if (value is! String) continue;
 

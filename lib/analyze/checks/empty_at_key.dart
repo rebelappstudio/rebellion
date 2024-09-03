@@ -1,4 +1,5 @@
 import 'package:rebellion/analyze/checks/check_base.dart';
+import 'package:rebellion/utils/arb_parser.dart';
 import 'package:rebellion/utils/extensions.dart';
 import 'package:rebellion/utils/logger.dart';
 import 'package:rebellion/utils/file_utils.dart';
@@ -17,9 +18,12 @@ class EmptyAtKeys extends CheckBase {
         if (!key.isAtKey) continue;
 
         final value = file.content[key];
-        if (value is Map && value.isEmpty) {
-          issues++;
-          logError('${file.file.filepath}: empty @-key "$key"');
+        if (value is AtKeyMeta) {
+          if ((value.description?.isEmpty ?? true) &&
+              value.placeholders.isEmpty) {
+            issues++;
+            logError('${file.file.filepath}: empty @-key "$key"');
+          }
         }
       }
     }

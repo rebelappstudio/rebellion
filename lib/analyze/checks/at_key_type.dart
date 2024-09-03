@@ -1,4 +1,5 @@
 import 'package:rebellion/analyze/checks/check_base.dart';
+import 'package:rebellion/utils/arb_parser.dart';
 import 'package:rebellion/utils/extensions.dart';
 import 'package:rebellion/utils/logger.dart';
 import 'package:rebellion/utils/file_utils.dart';
@@ -22,7 +23,7 @@ class AtKeyType extends CheckBase {
         if (!key.isAtKey) continue;
 
         final value = file.content[key];
-        if (value is! Map) {
+        if (value is! AtKeyMeta) {
           issues++;
           logError(
             '${file.file.filepath}: @-key "$key" must be a JSON object. Instead "${value.runtimeType}" was found',

@@ -1,4 +1,5 @@
 import 'package:rebellion/analyze/checks/check_base.dart';
+import 'package:rebellion/utils/arb_parser.dart';
 import 'package:rebellion/utils/extensions.dart';
 import 'package:rebellion/utils/logger.dart';
 import 'package:rebellion/utils/file_utils.dart';
@@ -20,7 +21,7 @@ class MandatoryKeyDescription extends CheckBase {
         if (!key.isAtKey) continue;
 
         final value = file.content[key];
-        if (value is Map && !value.containsKey('description')) {
+        if (value is AtKeyMeta && (value.description?.isEmpty ?? true)) {
           issues++;
           logError(
             '${file.file.filepath}: @-key "$key" must have a description',

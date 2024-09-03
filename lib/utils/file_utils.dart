@@ -18,6 +18,7 @@ import 'package:rebellion/analyze/checks/redundant_translations.dart';
 import 'package:rebellion/analyze/checks/string_type.dart';
 import 'package:rebellion/analyze/checks/unused_at_key.dart';
 import 'package:rebellion/sort/sort.dart';
+import 'package:rebellion/utils/arb_parser.dart';
 import 'package:rebellion/utils/logger.dart';
 import 'package:yaml/yaml.dart';
 
@@ -62,64 +63,30 @@ class ParsedArbFile {
       rawKeys: rawKeys,
     );
   }
-
-  /// Get 'description' field of an at-key if available
-  String? atKeyDescription(String key) {
-    final atKey = key.startsWith('@') ? key : '@$key';
-    final value = content[atKey];
-    if (value is Map<String, dynamic>) {
-      return value['description'] as String?;
-    }
-
-    return null;
-  }
-}
-
-/// Get all strings from [filename] file
-/// dynamic type is used because ARB files can contain placeholders as JSON
-/// structures
-ParsedArbFile loadStrings(ArbFile file) {
-  final filepath = path.join(file.filepath);
-  final arbContent = File(filepath).readAsStringSync();
-  final rawKeys = <String>[];
-  final content = json.decode(arbContent, reviver: (key, value) {
-    if (key is String) rawKeys.add(key);
-    return value;
-  });
-
-  return ParsedArbFile(
-    file: file,
-    content: content as Map<String, dynamic>,
-    rawKeys: rawKeys,
-  );
 }
 
 /// Get list of all .arb files except the main file
 /// Returns list of tuples (Target language, ARB filename)
 List<ArbFile> getArbFiles(List<String> filesAndFolders, String mainLocale) {
   final files = _getAllFiles(filesAndFolders);
-  return files.map((file) {
-    // TODO ignore ".diff.arb" files
-    // TODO this could be improved: e.g. en_US will not work
-    final filename = path.basenameWithoutExtension(file.path);
-    final locale = filename.substring(filename.lastIndexOf('_') + 1);
+  return files
+      .map((file) {
+        final filename = path.basenameWithoutExtension(file.path);
 
-    return ArbFile(
-      filepath: file.path,
-      locale: locale,
-      isMainFile: locale == mainLocale,
-    );
-  }).toList();
+        // Ignore diff files
+        if (filename.endsWith('_diff')) return null;
 
-  // .where((file) {
-  //   final baseName = path.basename(file.path);
-  //   return baseName.toLowerCase() != _mainFile &&
-  //       baseName.toLowerCase().endsWith('.arb');
-  // }).map((e) {
-  //   final filename = path.basename(e.path);
-  //   // return (TargetLanguage.fromFilename(filename), filename);
-  //   return ArbFile(path: path);
-  // }).toList();
+        // TODO this could be improved: e.g. 'en_US' doesn't work
+        final locale = filename.substring(filename.lastIndexOf('_') + 1);
+
+        return ArbFile(
+          filepath: file.path,
+          locale: locale,
+          isMainFile: locale == mainLocale,
+        );
+      })
+      .nonNulls
+      .toList();
 }
 
 List<File> _getAllFiles(List<String> filesAndFolders) {
@@ -149,10 +116,7 @@ List<ParsedArbFile> getFilesAndFolders(
   final filesAndFolders = argResults?.rest ?? const [];
   _ensureFilesAndFoldersExist(filesAndFolders);
 
-  final arbFiles = getArbFiles(filesAndFolders, mainLocale);
-  _ensureArbFilesValid(arbFiles);
-
-  return arbFiles.map(loadStrings).toList();
+  return getArbFiles(filesAndFolders, mainLocale).map(parseArbFile).toList();
 }
 
 void writeArbFile(Map<String, dynamic> content, String filename) {
@@ -182,27 +146,6 @@ void _ensureFilesAndFoldersExist(List<String> filesAndFolders) {
       logError('$item does not exist');
       exit(1);
     }
-  }
-}
-
-/// Make sure all ARB files are valid JSON files. Other checks may not work
-/// unless this one passes
-void _ensureArbFilesValid(List<ArbFile> arbFiles) {
-  bool arbFilesValid = true;
-  for (final arbFile in arbFiles) {
-    try {
-      loadStrings(arbFile);
-    } catch (error, stackTrace) {
-      print(error);
-      print(stackTrace);
-
-      arbFilesValid = false;
-      logError('${arbFile.filepath}: file content is not a valid JSON');
-    }
-  }
-
-  if (!arbFilesValid) {
-    exit(1);
   }
 }
 
