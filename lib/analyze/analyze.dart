@@ -1,9 +1,8 @@
-import 'dart:io';
-
 import 'package:args/command_runner.dart';
 import 'package:collection/collection.dart';
 import 'package:rebellion/utils/file_utils.dart';
 import 'package:rebellion/utils/logger.dart';
+import 'package:rebellion/utils/exit_exception.dart';
 
 class AnalyzeCommand extends Command {
   @override
@@ -25,7 +24,7 @@ class AnalyzeCommand extends Command {
       logError(
         issuesFound == 1 ? '1 issue found' : '$issuesFound issues found',
       );
-      exit(1);
+      throw ExitException();
     } else {
       logMessage('No issues found');
     }

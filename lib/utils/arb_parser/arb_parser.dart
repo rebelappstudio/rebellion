@@ -1,16 +1,14 @@
-import 'dart:io';
-
 import 'package:json_events/json_events.dart';
-import 'package:path/path.dart' as path;
 import 'package:rebellion/utils/arb_parser/arb_file.dart';
 import 'package:rebellion/utils/arb_parser/at_key_meta.dart';
 import 'package:rebellion/utils/arb_parser/parsed_arb_file.dart';
+import 'package:rebellion/utils/file_reader.dart';
 import 'package:rebellion/utils/logger.dart';
+import 'package:rebellion/utils/exit_exception.dart';
 
 /// Get all strings from [filename] file
 ParsedArbFile parseArbFile(ArbFile file) {
-  final filepath = path.join(file.filepath);
-  final arbContent = File(filepath).readAsStringSync();
+  final arbContent = fileReader.readFile(file.filepath);
 
   // All ARB keys including at-keys and duplicated keys
   final rawKeys = <String>[];
@@ -41,7 +39,7 @@ ParsedArbFile parseArbFile(ArbFile file) {
       case JsonEventType.endArray:
       case JsonEventType.arrayElement:
         logError('${file.filepath}: ARB files must not contain arrays');
-        exit(1);
+        throw ExitException();
       case JsonEventType.beginObject:
         level++;
 

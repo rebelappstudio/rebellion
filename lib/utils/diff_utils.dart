@@ -1,9 +1,8 @@
-import 'dart:io';
-
 import 'package:collection/collection.dart';
 import 'package:rebellion/utils/arb_parser/parsed_arb_file.dart';
 import 'package:rebellion/utils/extensions.dart';
 import 'package:rebellion/utils/logger.dart';
+import 'package:rebellion/utils/exit_exception.dart';
 
 class DiffArbFile {
   final ParsedArbFile sourceFile;
@@ -19,7 +18,7 @@ List<DiffArbFile> getMissingTranslations(List<ParsedArbFile> files) {
   final mainFile = files.firstWhereOrNull((file) => file.file.isMainFile);
   if (mainFile == null) {
     logError("No main file found");
-    exit(1);
+    throw ExitException();
   }
 
   final result = <DiffArbFile>[];

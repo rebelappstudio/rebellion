@@ -1,7 +1,9 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:args/args.dart';
+import 'package:equatable/equatable.dart';
+import 'package:file/file.dart';
+import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
 import 'package:rebellion/analyze/checks/all_caps.dart';
 import 'package:rebellion/analyze/checks/at_key_type.dart';
@@ -22,9 +24,14 @@ import 'package:rebellion/sort/sort.dart';
 import 'package:rebellion/utils/arb_parser/arb_file.dart';
 import 'package:rebellion/utils/arb_parser/arb_parser.dart';
 import 'package:rebellion/utils/arb_parser/parsed_arb_file.dart';
+import 'package:rebellion/utils/file_reader.dart';
 import 'package:rebellion/utils/logger.dart';
 import 'package:rebellion/utils/main_locale.dart';
+import 'package:rebellion/utils/exit_exception.dart';
 import 'package:yaml/yaml.dart';
+
+@visibleForTesting
+const configFilename = 'rebellion_options.yaml';
 
 /// Get list of all .arb files except the main file
 /// Returns list of tuples (Target language, ARB filename)
@@ -52,11 +59,11 @@ List<ArbFile> getArbFiles(List<String> filesAndFolders, String mainLocale) {
 List<File> _getAllFiles(List<String> filesAndFolders) {
   final files = <File>[];
   for (final item in filesAndFolders) {
-    final isFile = FileSystemEntity.isFileSync(item);
+    final isFile = fileReader.isFileSync(item);
     if (isFile) {
-      files.add(File(item));
+      files.add(fileReader.file(item));
     } else {
-      final directory = Directory(item);
+      final directory = fileReader.directory(item);
       files.addAll(directory.listSync().whereType<File>());
     }
   }
@@ -78,7 +85,7 @@ List<ParsedArbFile> getFilesAndFolders(
 void writeArbFile(Map<String, dynamic> content, String filename) {
   final encoder = JsonEncoder.withIndent('  ');
   final jsonContent = encoder.convert(content);
-  final file = File(filename);
+  final file = fileReader.file(filename);
   file.writeAsStringSync(jsonContent);
 }
 
@@ -91,21 +98,25 @@ void writeArbFiles(List<ParsedArbFile> files) {
 void _ensureFilesAndFoldersExist(List<String> filesAndFolders) {
   if (filesAndFolders.isEmpty) {
     logError('No files or folders to analyze');
-    exit(1);
+    throw ExitException();
   }
 
   for (final item in filesAndFolders) {
-    final itemExist = FileSystemEntity.isDirectorySync(item) ||
-        FileSystemEntity.isFileSync(item);
+    final itemExist =
+        fileReader.isDirectorySync(item) || fileReader.isFileSync(item);
     if (!itemExist) {
       logError('$item does not exist');
-      exit(1);
+      throw ExitException();
     }
   }
 }
 
 RebellionOptions loadOptionsYaml() {
-  final fileContent = File('rebellion_options.yaml').readAsStringSync();
+  if (!fileReader.file(configFilename).existsSync()) {
+    return RebellionOptions.empty();
+  }
+
+  final fileContent = fileReader.readFile(configFilename);
   final yaml = loadYaml(fileContent) as YamlMap;
 
   final rules = yaml.nodes['rules'] as YamlList?;
@@ -113,7 +124,7 @@ RebellionOptions loadOptionsYaml() {
   return RebellionOptions.fromYaml(rules, options);
 }
 
-class RebellionOptions {
+class RebellionOptions extends Equatable {
   final bool allCapsCheckEnabled;
   final bool stringTypeCheckEnabled;
   final bool atKeyTypeCheckEnabled;
@@ -152,6 +163,28 @@ class RebellionOptions {
     required this.namingConvention,
     required this.sorting,
   });
+
+  factory RebellionOptions.empty() {
+    return RebellionOptions._(
+      allCapsCheckEnabled: true,
+      stringTypeCheckEnabled: true,
+      atKeyTypeCheckEnabled: true,
+      duplicatedKeysCheckEnabled: true,
+      emptyAtKeyCheckEnabled: true,
+      localeDefinitionCheckEnabled: true,
+      mandatoryAtKeyDescriptionCheckEnabled: false,
+      missingPlaceholdersCheckEnabled: true,
+      missingPluralsCheckEnabled: true,
+      missingTranslationsCheckEnabled: true,
+      namingConventionCheckEnabled: true,
+      redundantAtKeyCheckEnabled: true,
+      redundantTranslationsCheckEnabled: true,
+      unusedAtKeyCheckEnabled: true,
+      mainLocale: defaultMainLocale,
+      namingConvention: NamingConvention.camel,
+      sorting: Sorting.alphabetical,
+    );
+  }
 
   factory RebellionOptions.fromYaml(
     YamlList? rules,
@@ -206,4 +239,25 @@ class RebellionOptions {
       if (namingConventionCheckEnabled) const NamingConventionCheck(),
     ];
   }
+
+  @override
+  List<Object?> get props => [
+        allCapsCheckEnabled,
+        stringTypeCheckEnabled,
+        atKeyTypeCheckEnabled,
+        duplicatedKeysCheckEnabled,
+        emptyAtKeyCheckEnabled,
+        localeDefinitionCheckEnabled,
+        mandatoryAtKeyDescriptionCheckEnabled,
+        missingPlaceholdersCheckEnabled,
+        missingPluralsCheckEnabled,
+        missingTranslationsCheckEnabled,
+        namingConventionCheckEnabled,
+        redundantAtKeyCheckEnabled,
+        redundantTranslationsCheckEnabled,
+        unusedAtKeyCheckEnabled,
+        mainLocale,
+        namingConvention,
+        sorting,
+      ];
 }

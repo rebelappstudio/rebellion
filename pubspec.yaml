@@ -19,6 +19,9 @@ dependencies:
   xml: ^6.5.0
   analyzer: ^6.5.0
   json_events: ^1.2.2
+  file: ^7.0.0
+  meta: ^1.15.0
+  equatable: ^2.0.5
 
 dev_dependencies:
   lints: ^2.1.0

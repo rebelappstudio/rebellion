@@ -16,6 +16,5 @@ rules:
 
 options:
   main_locale: en
-  naming_convention: snake_case
-  translation_provider: gpt4
+  naming_convention: snake
   sorting: alphabetical
