@@ -1,11 +1,41 @@
+import 'dart:convert';
+
 import 'package:rebellion/analyze/checks/naming_convention.dart';
 import 'package:rebellion/sort/sort.dart';
+import 'package:rebellion/utils/file_reader.dart';
 import 'package:rebellion/utils/file_utils.dart';
 import 'package:test/test.dart';
 
 import '../infrastructure/app_tester.dart';
 
 void main() {
+  test('getArbFiles returns all available files', () {
+    final tester = AppTester.create();
+    tester.populateFileSystem({
+      'strings_en.arb': '{}',
+      'strings_fi.arb': '{}',
+      'strings_fi_diff.arb': '{}',
+      'strings.arb': '{}',
+    });
+
+    var files = getArbFiles(['./strings_en.arb'], 'en');
+    expect(files.length, 1);
+    expect(files.first.isMainFile, isTrue);
+    expect(files.first.filepath, './strings_en.arb');
+    expect(files.first.locale, 'en');
+
+    files = getArbFiles(['./strings_en.arb', './strings_fi.arb'], 'en');
+    expect(files.length, 2);
+
+    // Diffs and other files are ignored
+    files = getArbFiles(['.'], 'en');
+    expect(files.length, 2);
+    expect(files[0].isMainFile, isTrue);
+    expect(files[0].locale, 'en');
+    expect(files[1].isMainFile, isFalse);
+    expect(files[1].locale, 'fi');
+  });
+
   test('Uses default options when no yaml file provided', () async {
     final tester = AppTester.create();
     var options = loadOptionsYaml();
@@ -40,5 +70,24 @@ options:
     expect(options.mainLocale, 'fi');
     expect(options.namingConvention, NamingConvention.snake);
     expect(options.sorting, Sorting.alphabetical);
+  });
+
+  test('Writing ARB file writes valid JSON file', () {
+    AppTester.create();
+    final content = {
+      '@@locale': 'en',
+      '@key': 'value',
+    };
+    writeArbFile(content, 'strings_en.arb');
+
+    final files = getArbFiles(['./strings_en.arb'], 'en');
+    expect(files.length, equals(1));
+    expect(files.first.isMainFile, isTrue);
+    expect(files.first.filepath, './strings_en.arb');
+    expect(files.first.locale, 'en');
+
+    final readFileContent = fileReader.readFile('./strings_en.arb');
+    final readFile = json.decode(readFileContent);
+    expect(readFile, content);
   });
 }

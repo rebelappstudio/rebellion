@@ -44,8 +44,10 @@ List<ArbFile> getArbFiles(List<String> filesAndFolders, String mainLocale) {
         // Ignore diff files
         if (filename.endsWith('_diff')) return null;
 
-        final locale = filename.substring(filename.lastIndexOf('_') + 1);
+        final underscoreIndex = filename.lastIndexOf('_');
+        if (underscoreIndex == -1) return null;
 
+        final locale = filename.substring(underscoreIndex + 1);
         return ArbFile(
           filepath: file.path,
           locale: locale,
