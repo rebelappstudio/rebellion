@@ -6,7 +6,6 @@ import 'package:rebellion/utils/logger.dart';
 
 // Note: these regexps are quite strict and no latin extended characters are
 // allowed
-// FIXME '@key' doesn't match this regexp
 final _camelCaseRe = RegExp(r'^[a-z]+((\d)|([A-Z0-9][a-z0-9]+))*([A-Z])?$');
 final _snakeCaseRe = RegExp(r'^[a-z]+((\d)|(_[a-z0-9]+))*(_)?$');
 

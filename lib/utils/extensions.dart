@@ -1,6 +1,6 @@
 extension StringX on String {
   /// Return true if the string is a locale definition
-  bool get isLocaleDefinition => toLowerCase().startsWith('@@locale');
+  bool get isLocaleDefinition => toLowerCase() == '@@locale';
 
   /// Return true if the string is an at-key, e.g. "@homePageTitle"
   bool get isAtKey => startsWith('@') && !isLocaleDefinition;
