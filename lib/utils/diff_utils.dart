@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:collection/collection.dart';
+import 'package:rebellion/utils/arb_parser/parsed_arb_file.dart';
 import 'package:rebellion/utils/extensions.dart';
-import 'package:rebellion/utils/file_utils.dart';
 import 'package:rebellion/utils/logger.dart';
 
 class DiffArbFile {

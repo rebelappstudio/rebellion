@@ -1,3 +1,4 @@
+import 'package:rebellion/utils/arb_parser/parsed_arb_file.dart';
 import 'package:rebellion/utils/file_utils.dart';
 
 /// Simple flag-like check that can be enabled or disabled

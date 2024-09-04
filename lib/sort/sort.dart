@@ -1,5 +1,6 @@
 import 'package:args/command_runner.dart';
 import 'package:collection/collection.dart';
+import 'package:rebellion/utils/arb_parser/parsed_arb_file.dart';
 import 'package:rebellion/utils/extensions.dart';
 import 'package:rebellion/utils/file_utils.dart';
 

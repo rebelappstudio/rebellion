@@ -1,4 +1,5 @@
 import 'package:rebellion/analyze/checks/check_base.dart';
+import 'package:rebellion/utils/arb_parser/parsed_arb_file.dart';
 import 'package:rebellion/utils/file_utils.dart';
 
 /// Translation file contains @-keys without specifying the data type of the

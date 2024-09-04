@@ -7,6 +7,7 @@ import 'package:rebellion/messages/message.dart';
 import 'package:rebellion/messages/submessages/gender.dart';
 import 'package:rebellion/messages/submessages/plural.dart';
 import 'package:rebellion/messages/submessages/select.dart';
+import 'package:rebellion/utils/arb_parser/parsed_arb_file.dart';
 import 'package:rebellion/utils/file_utils.dart';
 import 'package:rebellion/utils/logger.dart';
 

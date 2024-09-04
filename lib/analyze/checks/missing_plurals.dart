@@ -2,6 +2,7 @@ import 'package:rebellion/analyze/checks/check_base.dart';
 import 'package:rebellion/generated/plural_rules.dart';
 import 'package:rebellion/message_parser.dart';
 import 'package:rebellion/messages/submessages/plural.dart';
+import 'package:rebellion/utils/arb_parser/parsed_arb_file.dart';
 import 'package:rebellion/utils/extensions.dart';
 import 'package:rebellion/utils/file_utils.dart';
 import 'package:rebellion/utils/logger.dart';

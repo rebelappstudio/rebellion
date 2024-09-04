@@ -18,52 +18,13 @@ import 'package:rebellion/analyze/checks/redundant_translations.dart';
 import 'package:rebellion/analyze/checks/string_type.dart';
 import 'package:rebellion/analyze/checks/unused_at_key.dart';
 import 'package:rebellion/sort/sort.dart';
-import 'package:rebellion/utils/arb_parser.dart';
+import 'package:rebellion/utils/arb_parser/arb_file.dart';
+import 'package:rebellion/utils/arb_parser/arb_parser.dart';
+import 'package:rebellion/utils/arb_parser/parsed_arb_file.dart';
 import 'package:rebellion/utils/logger.dart';
 import 'package:yaml/yaml.dart';
 
 import '../analyze/checks/missing_translations.dart';
-
-// TODO move to a separate file
-class ArbFile {
-  final String filepath;
-  final String locale;
-  final bool isMainFile;
-
-  const ArbFile({
-    required this.filepath,
-    required this.locale,
-    required this.isMainFile,
-  });
-}
-
-// TODO move to a separate file
-class ParsedArbFile {
-  final ArbFile file;
-  final Map<String, dynamic> content;
-
-  /// All keys including duplicates if any
-  final List<String> rawKeys;
-
-  const ParsedArbFile({
-    required this.file,
-    required this.content,
-    required this.rawKeys,
-  });
-
-  List<String> get keys => content.keys.toList();
-
-  List<dynamic> get atKeys =>
-      content.keys.where((key) => key.startsWith('@')).toList();
-
-  ParsedArbFile copyWith({Map<String, dynamic>? content}) {
-    return ParsedArbFile(
-      file: file,
-      content: content ?? this.content,
-      rawKeys: rawKeys,
-    );
-  }
-}
 
 /// Get list of all .arb files except the main file
 /// Returns list of tuples (Target language, ARB filename)

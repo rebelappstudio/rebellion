@@ -1,16 +1,8 @@
 {
+  "@@locale": "en",
   "key": "value",
-  "allCaps": "ALL CAPS",
-  "@allCaps": {},
-  "@kеy": "wrong-type",
-  "@atKeyWithoutKey": {},
-  "pluralExample1": "{count, plural, one {{count} book} other {{counts} books}}",
-  "pluralExample2": "{count, plural, one {{count} book} other {{count} books}}",
-  "commonVehicleType": "{vehicleType, select, sedan{Sedan} cabriolet{Solid roof cabriolet} truck{16 wheel truck} other{Other}}",
-  "@commonVehicleType": {
-    "description": "Vehicle type",
-    "placeholders": {
-      "vehicleType": {}
-    }
+  "@key": {
+    "description": "foo"
   }
+  
 }
