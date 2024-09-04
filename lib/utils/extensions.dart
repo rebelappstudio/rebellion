@@ -29,4 +29,15 @@ extension StringX on String {
       return this;
     }
   }
+
+  String get toAtKey {
+    if (isAtKey) {
+      throw Exception('Key must not be an at-key');
+    }
+    if (isLocaleDefinition) {
+      throw Exception('Key must not be a locale definition');
+    }
+
+    return '@$this';
+  }
 }

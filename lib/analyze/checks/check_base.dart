@@ -7,7 +7,6 @@ abstract class CheckBase {
 
   /// Check [files] and return number of found issues
   ///
-  /// [parser] - instance of [IcuParser] that can be used to parse strings
   /// [files] - list of files to analyze
   /// [params] - parameters for the check
   int run(List<ParsedArbFile> files, RebellionOptions options);

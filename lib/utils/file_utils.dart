@@ -95,7 +95,6 @@ void writeArbFiles(List<ParsedArbFile> files) {
 
 void _ensureFilesAndFoldersExist(List<String> filesAndFolders) {
   if (filesAndFolders.isEmpty) {
-    // TODO fall back to current directory and let user know about it
     logError('No files or folders to analyze');
     exit(1);
   }

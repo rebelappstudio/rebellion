@@ -1,6 +1,14 @@
+import 'package:collection/collection.dart';
 import 'package:rebellion/analyze/checks/check_base.dart';
+import 'package:rebellion/message_parser.dart';
+import 'package:rebellion/messages/composite_message.dart';
+import 'package:rebellion/messages/literal_string_message.dart';
+import 'package:rebellion/messages/variable_substitution_message.dart';
+import 'package:rebellion/utils/arb_parser/at_key_meta.dart';
 import 'package:rebellion/utils/arb_parser/parsed_arb_file.dart';
+import 'package:rebellion/utils/extensions.dart';
 import 'package:rebellion/utils/file_utils.dart';
+import 'package:rebellion/utils/logger.dart';
 
 /// Translation file contains @-keys without specifying the data type of the
 /// placeholders
@@ -9,9 +17,69 @@ class MissingPlaceholders extends CheckBase {
 
   @override
   int run(List<ParsedArbFile> files, RebellionOptions options) {
-    // TODO placeholders but without data type
-    // TODO placeholders not present in other translations
-    // TODO placeholders defined but not present in the string itself
-    return 0;
+    var issues = 0;
+
+    // Use main file to get all placeholders as it should be the source of them
+    final mainFile = files.firstWhere((e) => e.file.isMainFile);
+
+    for (final file in files) {
+      for (final key in file.keys) {
+        if (key.isLocaleDefinition) continue;
+
+        // For main file check @-keys only. For other files check all keys
+        // because it's expected that @-keys are only in the main file
+        if (file.file.isMainFile && !key.isAtKey) continue;
+
+        final mainFileContent =
+            mainFile.content[key.isAtKey ? key : key.toAtKey];
+        if (mainFileContent is! AtKeyMeta) continue;
+
+        final originalString = file.content[key.cleanKey];
+        final variables = allVariableSubstitutions(originalString);
+        final definedPlaceholders = mainFileContent.placeholders;
+        final placeholderNames =
+            definedPlaceholders.map((e) => e.name).nonNulls.toList();
+
+        if (!ListEquality().equals(variables, placeholderNames)) {
+          issues++;
+          logError(
+            '${file.file.filepath}: key $key has different placeholders than the main file: $variables vs $placeholderNames',
+          );
+        }
+
+        for (final placeholder in definedPlaceholders) {
+          if (placeholder.name?.isEmpty ?? true) {
+            issues++;
+            logError(
+              '${file.file.filepath}: key $key is missing a placeholder name',
+            );
+          }
+
+          if (placeholder.type?.isEmpty ?? true) {
+            issues++;
+            logError(
+              '${file.file.filepath}: key $key is missing a placeholder type for ${placeholder.name}',
+            );
+          }
+        }
+      }
+    }
+
+    return issues;
   }
+}
+
+List<String> allVariableSubstitutions(String string) {
+  final message =
+      MessageParser(string).nonIcuMessageParse(); // FIXME other method
+  if (message is LiteralString) return const [];
+  if (message is CompositeMessage) {
+    return message.pieces
+        .whereType<VariableSubstitution>()
+        .map((e) => e.variableName)
+        .nonNulls
+        .toList();
+  }
+
+  return const [];
 }
