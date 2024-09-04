@@ -135,7 +135,6 @@ class AllCaps extends CheckBase {
     return issues;
   }
 
-  // FIXME this doesn't really work. When?
   bool _checkAllLiterals(Message? message) {
     if (message == null) return false;
 

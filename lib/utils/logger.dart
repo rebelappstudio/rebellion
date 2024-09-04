@@ -1,4 +1,3 @@
-// TODO improve
 void logError(String message) {
   print(message);
 }

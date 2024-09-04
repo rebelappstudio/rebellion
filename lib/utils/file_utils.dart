@@ -37,7 +37,6 @@ List<ArbFile> getArbFiles(List<String> filesAndFolders, String mainLocale) {
         // Ignore diff files
         if (filename.endsWith('_diff')) return null;
 
-        // TODO this could be improved: e.g. 'en_US' doesn't work
         final locale = filename.substring(filename.lastIndexOf('_') + 1);
 
         return ArbFile(
