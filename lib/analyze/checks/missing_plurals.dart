@@ -64,15 +64,3 @@ class MissingPlurals extends CheckBase {
     return issues;
   }
 }
-
-extension _PluralX on Plural {
-  /// Get a list of all plural attributes available in this plural
-  List<String> get allPluralAttributes => [
-        if (zero != null) 'zero',
-        if (one != null) 'one',
-        if (two != null) 'two',
-        if (few != null) 'few',
-        if (many != null) 'many',
-        if (other != null) 'other',
-      ];
-}

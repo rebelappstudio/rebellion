@@ -1,3 +1,6 @@
+import 'package:rebellion/messages/message.dart';
+import 'package:rebellion/messages/submessages/plural.dart';
+
 extension StringX on String {
   /// Return true if the string is a locale definition
   bool get isLocaleDefinition => toLowerCase() == '@@locale';
@@ -40,4 +43,19 @@ extension StringX on String {
 
     return '@$this';
   }
+}
+
+extension PluralX on Plural {
+  /// Get a list of all plural attributes available in this plural
+  List<String> get allPluralAttributes => [
+        if (zero != null) 'zero',
+        if (one != null) 'one',
+        if (two != null) 'two',
+        if (few != null) 'few',
+        if (many != null) 'many',
+        if (other != null) 'other',
+      ];
+
+  List<Message> get allSubmessages =>
+      [zero, one, two, few, many, other].nonNulls.toList();
 }

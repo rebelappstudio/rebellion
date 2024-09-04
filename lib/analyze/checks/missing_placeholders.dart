@@ -3,6 +3,10 @@ import 'package:rebellion/analyze/checks/check_base.dart';
 import 'package:rebellion/message_parser.dart';
 import 'package:rebellion/messages/composite_message.dart';
 import 'package:rebellion/messages/literal_string_message.dart';
+import 'package:rebellion/messages/message.dart';
+import 'package:rebellion/messages/submessages/gender.dart';
+import 'package:rebellion/messages/submessages/plural.dart';
+import 'package:rebellion/messages/submessages/select.dart';
 import 'package:rebellion/messages/variable_substitution_message.dart';
 import 'package:rebellion/utils/arb_parser/at_key_meta.dart';
 import 'package:rebellion/utils/arb_parser/parsed_arb_file.dart';
@@ -35,7 +39,7 @@ class MissingPlaceholders extends CheckBase {
         if (mainFileContent is! AtKeyMeta) continue;
 
         final originalString = file.content[key.cleanKey];
-        final variables = allVariableSubstitutions(originalString);
+        final variables = getAllVariableSubstitutions(originalString);
         final definedPlaceholders = mainFileContent.placeholders;
         final placeholderNames =
             definedPlaceholders.map((e) => e.name).nonNulls.toList();
@@ -69,17 +73,35 @@ class MissingPlaceholders extends CheckBase {
   }
 }
 
-List<String> allVariableSubstitutions(String string) {
-  final message =
-      MessageParser(string).nonIcuMessageParse(); // FIXME other method
-  if (message is LiteralString) return const [];
-  if (message is CompositeMessage) {
-    return message.pieces
-        .whereType<VariableSubstitution>()
-        .map((e) => e.variableName)
-        .nonNulls
+List<String> getAllVariableSubstitutions(String string) {
+  final parser = MessageParser(string);
+  Message message = parser.pluralGenderSelectParse();
+
+  if (message is! Plural && message is! Gender && message is! Select) {
+    message = parser.nonIcuMessageParse();
+  }
+
+  if (message is LiteralString) {
+    return const [];
+  } else if (message is CompositeMessage) {
+    return getVariableSubstitutionsFromCompositeMessage(message);
+  } else if (message is Plural) {
+    return message.allSubmessages
+        .whereType<CompositeMessage>()
+        .map((m) => getVariableSubstitutionsFromCompositeMessage(m))
+        .flattened
         .toList();
   }
 
   return const [];
+}
+
+List<String> getVariableSubstitutionsFromCompositeMessage(
+  CompositeMessage message,
+) {
+  return message.pieces
+      .whereType<VariableSubstitution>()
+      .map((e) => e.variableName)
+      .nonNulls
+      .toList();
 }

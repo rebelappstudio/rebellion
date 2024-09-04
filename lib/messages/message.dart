@@ -172,8 +172,6 @@ abstract class Message {
     String? messageName;
     String? givenName;
 
-    //TODO(alanknight): If we generalize this to messages with parameters
-    // this check will need to change.
     if (nameNamedExps.isEmpty) {
       if (!hasParameters) {
         // No name supplied, no parameters. Use the message as the name.

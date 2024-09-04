@@ -41,7 +41,6 @@ class AllCaps extends CheckBase {
         } else if (result is Select) {
           issues += _checkSelect(location, result);
         } else {
-          // FIXME this doesn't really work
           if (_checkAllLiterals(result)) {
             issues++;
             logError('$fileLocation: all caps string key "$key"');
@@ -136,6 +135,7 @@ class AllCaps extends CheckBase {
     return issues;
   }
 
+  // FIXME this doesn't really work. When?
   bool _checkAllLiterals(Message? message) {
     if (message == null) return false;
 
