@@ -12,6 +12,7 @@ import 'package:rebellion/analyze/checks/locale_definition.dart';
 import 'package:rebellion/analyze/checks/mandatory_key_description.dart';
 import 'package:rebellion/analyze/checks/missing_placeholders.dart';
 import 'package:rebellion/analyze/checks/missing_plurals.dart';
+import 'package:rebellion/analyze/checks/missing_translations.dart';
 import 'package:rebellion/analyze/checks/naming_convention.dart';
 import 'package:rebellion/analyze/checks/redundant_at_key.dart';
 import 'package:rebellion/analyze/checks/redundant_translations.dart';
@@ -22,9 +23,8 @@ import 'package:rebellion/utils/arb_parser/arb_file.dart';
 import 'package:rebellion/utils/arb_parser/arb_parser.dart';
 import 'package:rebellion/utils/arb_parser/parsed_arb_file.dart';
 import 'package:rebellion/utils/logger.dart';
+import 'package:rebellion/utils/main_locale.dart';
 import 'package:yaml/yaml.dart';
-
-import '../analyze/checks/missing_translations.dart';
 
 /// Get list of all .arb files except the main file
 /// Returns list of tuples (Target language, ARB filename)
@@ -64,10 +64,6 @@ List<File> _getAllFiles(List<String> filesAndFolders) {
 
   return files;
 }
-
-// TODO move
-const mainLocaleParam = 'main-locale';
-const defaultMainLocale = 'en';
 
 List<ParsedArbFile> getFilesAndFolders(
   RebellionOptions options,
