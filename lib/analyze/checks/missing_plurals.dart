@@ -41,10 +41,10 @@ class MissingPlurals extends CheckBase {
         // not in the file)
         final missingPlurals = pluralRulesForLocale
             .where((e) => !result.allPluralAttributes.contains(e));
-        if (missingPlurals.isNotEmpty) {
+        for (final plural in missingPlurals) {
           issues++;
           logError(
-            '${file.file.filepath} key $key: missing plural values: ${missingPlurals.join(', ')}',
+            '${file.file.filepath} key "$key" is missing a plural value "$plural"',
           );
         }
 
@@ -52,10 +52,10 @@ class MissingPlurals extends CheckBase {
         // not in plural rules)
         final redundantPlurals = result.allPluralAttributes
             .where((e) => !pluralRulesForLocale.contains(e));
-        if (redundantPlurals.isNotEmpty) {
+        for (final plural in redundantPlurals) {
           issues++;
           logError(
-            '${file.file.filepath} key $key: redundant plural values: ${redundantPlurals.join(', ')}',
+            '${file.file.filepath} key "$key" contains a redundant plural value "$plural"',
           );
         }
       }

@@ -50,7 +50,7 @@ void main() {
     expect(
       inMemoryLogger.output,
       '''
-./strings_en.arb: file has duplicate keys: "appTitle"
+./strings_en.arb: file has duplicate key "appTitle"
 ./strings_en.arb: no @@locale key found
 2 issues found'''
           .trim(),

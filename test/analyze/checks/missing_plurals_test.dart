@@ -132,13 +132,14 @@ void main() {
       ],
       RebellionOptions.empty(),
     );
-    expect(issues, 3);
+    expect(issues, 4);
     expect(
         inMemoryLogger.output,
         '''
-strings_en.arb key key: missing plural values: other
-strings_ru.arb key key: missing plural values: other
-strings_cy.arb key key: missing plural values: one, two
+strings_en.arb key "key" is missing a plural value "other"
+strings_ru.arb key "key" is missing a plural value "other"
+strings_cy.arb key "key" is missing a plural value "one"
+strings_cy.arb key "key" is missing a plural value "two"
 '''
             .trim());
   });
@@ -180,9 +181,9 @@ strings_cy.arb key key: missing plural values: one, two
     expect(
         inMemoryLogger.output,
         '''
-strings_en.arb key key: redundant plural values: two
-strings_zh.arb key key: redundant plural values: one
-strings_ru.arb key key: redundant plural values: two
+strings_en.arb key "key" contains a redundant plural value "two"
+strings_zh.arb key "key" contains a redundant plural value "one"
+strings_ru.arb key "key" contains a redundant plural value "two"
 '''
             .trim());
   });
