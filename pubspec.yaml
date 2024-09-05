@@ -3,6 +3,13 @@ description: A sample command-line application.
 version: 1.0.0
 publish: none
 # repository: https://github.com/my_org/my_repo
+# homepage: https://github.com/my_org/my_repo
+topics:
+  - localization
+  - l10n
+  - lints
+  - analysis
+  - analyzer
 
 environment:
   sdk: ^3.2.0
