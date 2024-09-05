@@ -23,19 +23,17 @@ class RedundantTranslations extends CheckBase {
     for (final file in files) {
       if (file.file.isMainFile) continue;
 
-      final redundantKeys = file.keys
-          .where(
-            (key) =>
-                !key.isLocaleDefinition &&
-                !key.isAtKey &&
-                !mainFile.keys.contains(key),
-          )
-          .map((e) => '"$e"')
-          .join(', ');
-      if (redundantKeys.isNotEmpty) {
+      final redundantKeys = file.keys.where(
+        (key) =>
+            !key.isLocaleDefinition &&
+            !key.isAtKey &&
+            !mainFile.keys.contains(key),
+      );
+
+      for (final key in redundantKeys) {
         issues++;
         logError(
-          '${file.file.filepath}: redundant translations for: $redundantKeys',
+          '${file.file.filepath}: redundant translation "$key"',
         );
       }
     }

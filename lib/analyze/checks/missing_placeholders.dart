@@ -28,11 +28,12 @@ class MissingPlaceholders extends CheckBase {
 
     for (final file in files) {
       for (final key in file.keys) {
+        final isMainFile = file.file.isMainFile;
         if (key.isLocaleDefinition) continue;
 
         // For main file check @-keys only. For other files check all keys
         // because it's expected that @-keys are only in the main file
-        if (file.file.isMainFile && !key.isAtKey) continue;
+        if (isMainFile && !key.isAtKey) continue;
 
         final mainFileContent =
             mainFile.content[key.isAtKey ? key : key.toAtKey];
@@ -41,28 +42,41 @@ class MissingPlaceholders extends CheckBase {
         final originalString = file.content[key.cleanKey];
         final variables = getAllVariableSubstitutions(originalString);
         final definedPlaceholders = mainFileContent.placeholders;
-        final placeholderNames =
-            definedPlaceholders.map((e) => e.name).nonNulls.toList();
+        final placeholderNames = definedPlaceholders
+            .map((e) => e.name)
+            .whereNot((e) => e == null || e.isEmpty)
+            .toList();
 
-        if (!ListEquality().equals(variables, placeholderNames)) {
-          issues++;
-          logError(
-            '${file.file.filepath}: key $key has different placeholders than the main file: $variables vs $placeholderNames',
-          );
-        }
-
-        for (final placeholder in definedPlaceholders) {
-          if (placeholder.name?.isEmpty ?? true) {
+        if (isMainFile) {
+          if (placeholderNames.isEmpty && variables.isNotEmpty) {
             issues++;
             logError(
-              '${file.file.filepath}: key $key is missing a placeholder name',
+              '${file.file.filepath}: key "$key" is missing placeholders definition',
             );
           }
 
-          if (placeholder.type?.isEmpty ?? true) {
+          // Check placeholder names and types for main file only
+          for (final placeholder in definedPlaceholders) {
+            if (placeholder.name?.isEmpty ?? true) {
+              issues++;
+              logError(
+                '${file.file.filepath}: key "$key" is missing a placeholder name',
+              );
+            }
+
+            if (placeholder.type?.isEmpty ?? true) {
+              issues++;
+              logError(
+                '${file.file.filepath}: key "$key" is missing a placeholder type for "${placeholder.name}"',
+              );
+            }
+          }
+        } else {
+          // Check if localized string
+          if (!ListEquality().equals(variables, placeholderNames)) {
             issues++;
             logError(
-              '${file.file.filepath}: key $key is missing a placeholder type for ${placeholder.name}',
+              '${file.file.filepath}: key "$key" has different placeholders than the main file: $variables vs $placeholderNames',
             );
           }
         }

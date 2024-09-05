@@ -19,11 +19,10 @@ class DuplicatedKeys extends CheckBase {
         allKeys.remove(uniqueKey);
       }
 
-      if (allKeys.isNotEmpty) {
+      for (final duplicate in allKeys) {
         issues++;
-        final duplicatesString = allKeys.map((e) => '"$e"').join(', ');
         logError(
-          '${file.file.filepath}: file has duplicate keys: $duplicatesString',
+          '${file.file.filepath}: file has duplicate key "$duplicate"',
         );
       }
     }

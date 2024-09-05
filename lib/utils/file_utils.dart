@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 import 'package:args/args.dart';
@@ -5,6 +6,8 @@ import 'package:equatable/equatable.dart';
 import 'package:file/file.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
+import 'package:yaml/yaml.dart';
+
 import 'package:rebellion/analyze/checks/all_caps.dart';
 import 'package:rebellion/analyze/checks/at_key_type.dart';
 import 'package:rebellion/analyze/checks/check_base.dart';
@@ -24,11 +27,10 @@ import 'package:rebellion/sort/sort.dart';
 import 'package:rebellion/utils/arb_parser/arb_file.dart';
 import 'package:rebellion/utils/arb_parser/arb_parser.dart';
 import 'package:rebellion/utils/arb_parser/parsed_arb_file.dart';
+import 'package:rebellion/utils/exit_exception.dart';
 import 'package:rebellion/utils/file_reader.dart';
 import 'package:rebellion/utils/logger.dart';
 import 'package:rebellion/utils/main_locale.dart';
-import 'package:rebellion/utils/exit_exception.dart';
-import 'package:yaml/yaml.dart';
 
 @visibleForTesting
 const configFilename = 'rebellion_options.yaml';
@@ -262,4 +264,58 @@ class RebellionOptions extends Equatable {
         namingConvention,
         sorting,
       ];
+
+  RebellionOptions copyWith({
+    bool? allCapsCheckEnabled,
+    bool? stringTypeCheckEnabled,
+    bool? atKeyTypeCheckEnabled,
+    bool? duplicatedKeysCheckEnabled,
+    bool? emptyAtKeyCheckEnabled,
+    bool? localeDefinitionCheckEnabled,
+    bool? mandatoryAtKeyDescriptionCheckEnabled,
+    bool? missingPlaceholdersCheckEnabled,
+    bool? missingPluralsCheckEnabled,
+    bool? missingTranslationsCheckEnabled,
+    bool? namingConventionCheckEnabled,
+    bool? redundantAtKeyCheckEnabled,
+    bool? redundantTranslationsCheckEnabled,
+    bool? unusedAtKeyCheckEnabled,
+    String? mainLocale,
+    NamingConvention? namingConvention,
+    Sorting? sorting,
+  }) {
+    return RebellionOptions._(
+      allCapsCheckEnabled: allCapsCheckEnabled ?? this.allCapsCheckEnabled,
+      stringTypeCheckEnabled:
+          stringTypeCheckEnabled ?? this.stringTypeCheckEnabled,
+      atKeyTypeCheckEnabled:
+          atKeyTypeCheckEnabled ?? this.atKeyTypeCheckEnabled,
+      duplicatedKeysCheckEnabled:
+          duplicatedKeysCheckEnabled ?? this.duplicatedKeysCheckEnabled,
+      emptyAtKeyCheckEnabled:
+          emptyAtKeyCheckEnabled ?? this.emptyAtKeyCheckEnabled,
+      localeDefinitionCheckEnabled:
+          localeDefinitionCheckEnabled ?? this.localeDefinitionCheckEnabled,
+      mandatoryAtKeyDescriptionCheckEnabled:
+          mandatoryAtKeyDescriptionCheckEnabled ??
+              this.mandatoryAtKeyDescriptionCheckEnabled,
+      missingPlaceholdersCheckEnabled: missingPlaceholdersCheckEnabled ??
+          this.missingPlaceholdersCheckEnabled,
+      missingPluralsCheckEnabled:
+          missingPluralsCheckEnabled ?? this.missingPluralsCheckEnabled,
+      missingTranslationsCheckEnabled: missingTranslationsCheckEnabled ??
+          this.missingTranslationsCheckEnabled,
+      namingConventionCheckEnabled:
+          namingConventionCheckEnabled ?? this.namingConventionCheckEnabled,
+      redundantAtKeyCheckEnabled:
+          redundantAtKeyCheckEnabled ?? this.redundantAtKeyCheckEnabled,
+      redundantTranslationsCheckEnabled: redundantTranslationsCheckEnabled ??
+          this.redundantTranslationsCheckEnabled,
+      unusedAtKeyCheckEnabled:
+          unusedAtKeyCheckEnabled ?? this.unusedAtKeyCheckEnabled,
+      mainLocale: mainLocale ?? this.mainLocale,
+      namingConvention: namingConvention ?? this.namingConvention,
+      sorting: sorting ?? this.sorting,
+    );
+  }
 }
