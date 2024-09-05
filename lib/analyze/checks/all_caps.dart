@@ -31,7 +31,12 @@ class AllCaps extends CheckBase {
         // other checks like StringType or AtKeyType
         if (value is! String) continue;
 
-        final result = MessageParser(value).pluralGenderSelectParse();
+        final parser = MessageParser(value);
+        var result = parser.pluralGenderSelectParse();
+        if (result is! Plural && result is! Gender && result is! Select) {
+          result = parser.nonIcuMessageParse();
+        }
+
         final location = '$fileLocation key $key';
 
         if (result is Plural) {

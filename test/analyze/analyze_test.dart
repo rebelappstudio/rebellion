@@ -30,4 +30,30 @@ void main() {
     await commandRunner.run(['analyze', '.']);
     expect(inMemoryLogger.output, 'No issues found');
   });
+
+  test('Analyze prints number of found issues', () async {
+    final tester = AppTester.create();
+    tester.populateFileSystem({
+      'strings_en.arb': '''
+{
+  "appTitle": "Rebellion",
+  "appTitle": "Rebellion"
+}
+''',
+    });
+
+    expect(
+      () async => await commandRunner.run(['analyze', '.']),
+      throwsA(isA<ExitException>()),
+    );
+
+    expect(
+      inMemoryLogger.output,
+      '''
+./strings_en.arb: file has duplicate keys: "appTitle"
+./strings_en.arb: no @@locale key found
+2 issues found'''
+          .trim(),
+    );
+  });
 }
