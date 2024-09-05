@@ -7,7 +7,8 @@ void main(List<String> arguments) {
   try {
     commandRunner.run(arguments);
   } on ExitException {
-    // Handle ExitException when running program from CLI
+    // Handle ExitException when running program from CLI and exit with the
+    // error code
     exit(2);
   }
 }
