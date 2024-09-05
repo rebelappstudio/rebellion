@@ -1,4 +1,4 @@
-import 'package:rebellion/utils/logger.dart';
+import 'package:rebellion/src/utils/logger.dart';
 
 final inMemoryLogger = InMemoryLogger();
 

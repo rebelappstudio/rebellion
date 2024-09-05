@@ -1,7 +1,7 @@
 import 'package:args/command_runner.dart';
-import 'package:rebellion/analyze/analyze.dart';
-import 'package:rebellion/diff/diff.dart';
-import 'package:rebellion/sort/sort.dart';
+import 'package:rebellion/src/analyze/analyze.dart';
+import 'package:rebellion/src/diff/diff.dart';
+import 'package:rebellion/src/sort/sort.dart';
 
 final commandRunner = CommandRunner(
   'rebellion',

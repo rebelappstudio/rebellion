@@ -1,5 +1,5 @@
-import 'package:rebellion/analyze/checks/redundant_translations.dart';
-import 'package:rebellion/utils/file_utils.dart';
+import 'package:rebellion/src/analyze/checks/redundant_translations.dart';
+import 'package:rebellion/src/utils/file_utils.dart';
 import 'package:test/test.dart';
 
 import '../../infrastructure/app_tester.dart';

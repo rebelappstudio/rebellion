@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:rebellion/command_runner.dart';
-import 'package:rebellion/utils/exit_exception.dart';
+import 'package:rebellion/src/utils/command_runner.dart';
+import 'package:rebellion/src/utils/exit_exception.dart';
 
 void main(List<String> arguments) {
   try {

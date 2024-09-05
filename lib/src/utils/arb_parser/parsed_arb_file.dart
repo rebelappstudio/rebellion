@@ -1,4 +1,4 @@
-import 'package:rebellion/utils/arb_parser/arb_file.dart';
+import 'package:rebellion/src/utils/arb_parser/arb_file.dart';
 
 class ParsedArbFile {
   final ArbFile file;

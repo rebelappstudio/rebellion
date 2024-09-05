@@ -1,5 +1,5 @@
-import 'package:rebellion/utils/arb_parser/parsed_arb_file.dart';
-import 'package:rebellion/utils/file_utils.dart';
+import 'package:rebellion/src/utils/arb_parser/parsed_arb_file.dart';
+import 'package:rebellion/src/utils/file_utils.dart';
 
 /// Simple flag-like check that can be enabled or disabled
 abstract class CheckBase {

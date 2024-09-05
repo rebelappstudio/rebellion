@@ -1,8 +1,8 @@
 import 'package:collection/collection.dart';
-import 'package:rebellion/utils/arb_parser/parsed_arb_file.dart';
-import 'package:rebellion/utils/extensions.dart';
-import 'package:rebellion/utils/logger.dart';
-import 'package:rebellion/utils/exit_exception.dart';
+import 'package:rebellion/src/utils/arb_parser/parsed_arb_file.dart';
+import 'package:rebellion/src/utils/extensions.dart';
+import 'package:rebellion/src/utils/logger.dart';
+import 'package:rebellion/src/utils/exit_exception.dart';
 
 class DiffArbFile {
   final ParsedArbFile sourceFile;

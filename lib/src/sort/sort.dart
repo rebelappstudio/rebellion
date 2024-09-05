@@ -1,9 +1,9 @@
 import 'package:args/command_runner.dart';
 import 'package:collection/collection.dart';
-import 'package:rebellion/utils/arb_parser/parsed_arb_file.dart';
-import 'package:rebellion/utils/extensions.dart';
-import 'package:rebellion/utils/file_utils.dart';
-import 'package:rebellion/utils/main_locale.dart';
+import 'package:rebellion/src/utils/arb_parser/parsed_arb_file.dart';
+import 'package:rebellion/src/utils/extensions.dart';
+import 'package:rebellion/src/utils/file_utils.dart';
+import 'package:rebellion/src/utils/main_locale.dart';
 
 const _sortingParam = 'sorting';
 

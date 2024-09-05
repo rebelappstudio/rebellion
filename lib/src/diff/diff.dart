@@ -1,8 +1,8 @@
 import 'package:args/command_runner.dart';
-import 'package:rebellion/utils/diff_utils.dart';
-import 'package:rebellion/utils/file_utils.dart';
-import 'package:rebellion/utils/logger.dart';
-import 'package:rebellion/utils/main_locale.dart';
+import 'package:rebellion/src/utils/diff_utils.dart';
+import 'package:rebellion/src/utils/file_utils.dart';
+import 'package:rebellion/src/utils/logger.dart';
+import 'package:rebellion/src/utils/main_locale.dart';
 
 const _outputType = 'output';
 

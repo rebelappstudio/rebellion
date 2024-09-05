@@ -1,18 +1,18 @@
 import 'package:collection/collection.dart';
-import 'package:rebellion/analyze/checks/check_base.dart';
-import 'package:rebellion/message_parser/message_parser.dart';
-import 'package:rebellion/message_parser/messages/composite_message.dart';
-import 'package:rebellion/message_parser/messages/literal_string_message.dart';
-import 'package:rebellion/message_parser/messages/message.dart';
-import 'package:rebellion/message_parser/messages/submessages/gender.dart';
-import 'package:rebellion/message_parser/messages/submessages/plural.dart';
-import 'package:rebellion/message_parser/messages/submessages/select.dart';
-import 'package:rebellion/message_parser/messages/variable_substitution_message.dart';
-import 'package:rebellion/utils/arb_parser/at_key_meta.dart';
-import 'package:rebellion/utils/arb_parser/parsed_arb_file.dart';
-import 'package:rebellion/utils/extensions.dart';
-import 'package:rebellion/utils/file_utils.dart';
-import 'package:rebellion/utils/logger.dart';
+import 'package:rebellion/src/analyze/checks/check_base.dart';
+import 'package:rebellion/src/message_parser/message_parser.dart';
+import 'package:rebellion/src/message_parser/messages/composite_message.dart';
+import 'package:rebellion/src/message_parser/messages/literal_string_message.dart';
+import 'package:rebellion/src/message_parser/messages/message.dart';
+import 'package:rebellion/src/message_parser/messages/submessages/gender.dart';
+import 'package:rebellion/src/message_parser/messages/submessages/plural.dart';
+import 'package:rebellion/src/message_parser/messages/submessages/select.dart';
+import 'package:rebellion/src/message_parser/messages/variable_substitution_message.dart';
+import 'package:rebellion/src/utils/arb_parser/at_key_meta.dart';
+import 'package:rebellion/src/utils/arb_parser/parsed_arb_file.dart';
+import 'package:rebellion/src/utils/extensions.dart';
+import 'package:rebellion/src/utils/file_utils.dart';
+import 'package:rebellion/src/utils/logger.dart';
 
 /// Translation file contains @-keys without specifying the data type of the
 /// placeholders

@@ -1,6 +1,6 @@
-import 'package:rebellion/analyze/checks/at_key_type.dart';
-import 'package:rebellion/utils/arb_parser/at_key_meta.dart';
-import 'package:rebellion/utils/file_utils.dart';
+import 'package:rebellion/src/analyze/checks/at_key_type.dart';
+import 'package:rebellion/src/utils/arb_parser/at_key_meta.dart';
+import 'package:rebellion/src/utils/file_utils.dart';
 import 'package:test/test.dart';
 
 import '../../infrastructure/app_tester.dart';

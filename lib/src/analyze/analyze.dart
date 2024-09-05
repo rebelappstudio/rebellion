@@ -1,8 +1,8 @@
 import 'package:args/command_runner.dart';
 import 'package:collection/collection.dart';
-import 'package:rebellion/utils/file_utils.dart';
-import 'package:rebellion/utils/logger.dart';
-import 'package:rebellion/utils/exit_exception.dart';
+import 'package:rebellion/src/utils/file_utils.dart';
+import 'package:rebellion/src/utils/logger.dart';
+import 'package:rebellion/src/utils/exit_exception.dart';
 
 class AnalyzeCommand extends Command {
   @override

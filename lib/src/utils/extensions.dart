@@ -1,5 +1,5 @@
-import 'package:rebellion/message_parser/messages/message.dart';
-import 'package:rebellion/message_parser/messages/submessages/plural.dart';
+import 'package:rebellion/src/message_parser/messages/message.dart';
+import 'package:rebellion/src/message_parser/messages/submessages/plural.dart';
 
 extension StringX on String {
   /// Return true if the string is a locale definition
