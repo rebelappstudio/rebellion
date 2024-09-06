@@ -1,4 +1,4 @@
-import 'package:rebellion/src/analyze/checks/check_base.dart';
+import 'package:rebellion/src/analyze/rules/rule.dart';
 import 'package:rebellion/src/utils/arb_parser/at_key_meta.dart';
 import 'package:rebellion/src/utils/arb_parser/parsed_arb_file.dart';
 import 'package:rebellion/src/utils/extensions.dart';
@@ -9,7 +9,7 @@ import 'package:rebellion/src/utils/rebellion_options.dart';
 /// `"@homePageTitle": {"description": "This is a title"}`
 ///
 /// This check is off by default
-class MandatoryKeyDescription extends CheckBase {
+class MandatoryKeyDescription extends Rule {
   const MandatoryKeyDescription();
 
   @override

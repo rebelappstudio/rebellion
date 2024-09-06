@@ -1,4 +1,4 @@
-import 'package:rebellion/src/analyze/checks/duplicate_keys.dart';
+import 'package:rebellion/src/analyze/rules/duplicate_keys.dart';
 import 'package:rebellion/src/utils/arb_parser/arb_file.dart';
 import 'package:rebellion/src/utils/arb_parser/parsed_arb_file.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';

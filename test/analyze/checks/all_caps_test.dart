@@ -1,4 +1,4 @@
-import 'package:rebellion/src/analyze/checks/all_caps.dart';
+import 'package:rebellion/src/analyze/rules/all_caps.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
 import 'package:test/test.dart';
 

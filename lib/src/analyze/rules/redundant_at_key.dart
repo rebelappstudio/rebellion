@@ -1,11 +1,11 @@
-import 'package:rebellion/src/analyze/checks/check_base.dart';
+import 'package:rebellion/src/analyze/rules/rule.dart';
 import 'package:rebellion/src/utils/arb_parser/parsed_arb_file.dart';
 import 'package:rebellion/src/utils/extensions.dart';
 import 'package:rebellion/src/utils/logger.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
 
 /// Translation files contain @-keys with data already present in the main file
-class RedundantAtKey extends CheckBase {
+class RedundantAtKey extends Rule {
   const RedundantAtKey();
 
   @override

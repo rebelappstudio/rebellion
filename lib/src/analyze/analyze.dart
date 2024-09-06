@@ -15,10 +15,10 @@ class AnalyzeCommand extends Command {
   void run() {
     final options = loadOptionsYaml();
     final parsedFiles = getFilesAndFolders(options, argResults);
-    final enabledChecks = options.enabledChecks();
+    final enabledRules = options.enabledRules();
 
     final issuesFound =
-        enabledChecks.map((check) => check.run(parsedFiles, options)).sum;
+        enabledRules.map((rule) => rule.run(parsedFiles, options)).sum;
 
     if (issuesFound > 0) {
       logError(

@@ -1,4 +1,4 @@
-import 'package:rebellion/src/analyze/checks/missing_translations.dart';
+import 'package:rebellion/src/analyze/rules/missing_translations.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
 import 'package:test/test.dart';
 

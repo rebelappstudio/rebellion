@@ -1,4 +1,4 @@
-import 'package:rebellion/src/analyze/checks/redundant_translations.dart';
+import 'package:rebellion/src/analyze/rules/redundant_translations.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
 import 'package:test/test.dart';
 

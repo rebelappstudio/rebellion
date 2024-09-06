@@ -1,5 +1,5 @@
 import 'package:collection/collection.dart';
-import 'package:rebellion/src/analyze/checks/check_base.dart';
+import 'package:rebellion/src/analyze/rules/rule.dart';
 import 'package:rebellion/src/message_parser/message_parser.dart';
 import 'package:rebellion/src/message_parser/messages/composite_message.dart';
 import 'package:rebellion/src/message_parser/messages/literal_string_message.dart';
@@ -13,7 +13,7 @@ import 'package:rebellion/src/utils/rebellion_options.dart';
 
 /// Check if there are all caps strings. This considered to be a bad practice.
 /// It's better to convert to all caps programmatically
-class AllCaps extends CheckBase {
+class AllCaps extends Rule {
   const AllCaps();
 
   @override

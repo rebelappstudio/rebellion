@@ -1,4 +1,4 @@
-import 'package:rebellion/src/analyze/checks/locale_definition.dart';
+import 'package:rebellion/src/analyze/rules/locale_definition.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
 import 'package:test/test.dart';
 

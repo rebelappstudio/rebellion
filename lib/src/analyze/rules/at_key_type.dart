@@ -1,18 +1,18 @@
-import 'package:rebellion/src/analyze/checks/check_base.dart';
+import 'package:rebellion/src/analyze/rules/rule.dart';
+import 'package:rebellion/src/utils/arb_parser/at_key_meta.dart';
 import 'package:rebellion/src/utils/arb_parser/parsed_arb_file.dart';
 import 'package:rebellion/src/utils/extensions.dart';
 import 'package:rebellion/src/utils/logger.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
 
-/// Checks that all strings are of type String.
+/// Check that @-key is a valid JSON object, e.g.
+/// "@homePageTitle": {"description": "This is a title"}
 ///
-/// Catches cases like this:
-/// * "key": 1
-/// * "key": true
-/// * "key": null
-/// * "key": {}
-class StringType extends CheckBase {
-  const StringType();
+/// Fails in cases like this:
+/// * "@homePageTitle": null,
+/// * "@homePageTitle": "not a JSON object",
+class AtKeyType extends Rule {
+  const AtKeyType();
 
   @override
   int run(List<ParsedArbFile> files, RebellionOptions options) {
@@ -20,15 +20,14 @@ class StringType extends CheckBase {
 
     for (final file in files) {
       final keys = file.keys;
-
       for (final key in keys) {
-        if (key.isAtKey || key.isLocaleDefinition) continue;
+        if (!key.isAtKey) continue;
 
         final value = file.content[key];
-        if (value is! String) {
+        if (value is! AtKeyMeta) {
           issues++;
           logError(
-            '${file.file.filepath}: "$key" must be a string. Instead "${value.runtimeType}" was found',
+            '${file.file.filepath}: @-key "$key" must be a JSON object. Instead "${value.runtimeType}" was found',
           );
         }
       }

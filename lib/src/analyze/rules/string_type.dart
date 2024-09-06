@@ -1,13 +1,18 @@
-import 'package:rebellion/src/analyze/checks/check_base.dart';
-import 'package:rebellion/src/utils/arb_parser/at_key_meta.dart';
+import 'package:rebellion/src/analyze/rules/rule.dart';
 import 'package:rebellion/src/utils/arb_parser/parsed_arb_file.dart';
 import 'package:rebellion/src/utils/extensions.dart';
 import 'package:rebellion/src/utils/logger.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
 
-/// Check that there are no @-keys without content
-class EmptyAtKeys extends CheckBase {
-  const EmptyAtKeys();
+/// Checks that all strings are of type String.
+///
+/// Catches cases like this:
+/// * "key": 1
+/// * "key": true
+/// * "key": null
+/// * "key": {}
+class StringType extends Rule {
+  const StringType();
 
   @override
   int run(List<ParsedArbFile> files, RebellionOptions options) {
@@ -15,16 +20,16 @@ class EmptyAtKeys extends CheckBase {
 
     for (final file in files) {
       final keys = file.keys;
+
       for (final key in keys) {
-        if (!key.isAtKey) continue;
+        if (key.isAtKey || key.isLocaleDefinition) continue;
 
         final value = file.content[key];
-        if (value is AtKeyMeta) {
-          if ((value.description?.isEmpty ?? true) &&
-              value.placeholders.isEmpty) {
-            issues++;
-            logError('${file.file.filepath}: empty @-key "$key"');
-          }
+        if (value is! String) {
+          issues++;
+          logError(
+            '${file.file.filepath}: "$key" must be a string. Instead "${value.runtimeType}" was found',
+          );
         }
       }
     }

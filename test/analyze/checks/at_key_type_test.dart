@@ -1,4 +1,4 @@
-import 'package:rebellion/src/analyze/checks/at_key_type.dart';
+import 'package:rebellion/src/analyze/rules/at_key_type.dart';
 import 'package:rebellion/src/utils/arb_parser/at_key_meta.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
 import 'package:test/test.dart';

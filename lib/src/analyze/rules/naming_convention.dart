@@ -1,5 +1,5 @@
 import 'package:collection/collection.dart';
-import 'package:rebellion/src/analyze/checks/check_base.dart';
+import 'package:rebellion/src/analyze/rules/rule.dart';
 import 'package:rebellion/src/utils/arb_parser/parsed_arb_file.dart';
 import 'package:rebellion/src/utils/extensions.dart';
 import 'package:rebellion/src/utils/logger.dart';
@@ -35,8 +35,8 @@ enum NamingConvention {
 
 /// Check that keys are camelCase or snake_case. In addition this checks that
 /// keys use latin characters only
-class NamingConventionCheck extends CheckBase {
-  const NamingConventionCheck();
+class NamingConventionRule extends Rule {
+  const NamingConventionRule();
 
   @override
   int run(List<ParsedArbFile> files, RebellionOptions options) {

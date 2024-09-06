@@ -1,4 +1,4 @@
-import 'package:rebellion/src/analyze/checks/redundant_at_key.dart';
+import 'package:rebellion/src/analyze/rules/redundant_at_key.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
 import 'package:test/test.dart';
 

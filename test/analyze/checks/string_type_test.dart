@@ -1,4 +1,4 @@
-import 'package:rebellion/src/analyze/checks/string_type.dart';
+import 'package:rebellion/src/analyze/rules/string_type.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
 import 'package:test/test.dart';
 

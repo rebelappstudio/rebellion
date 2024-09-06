@@ -1,10 +1,10 @@
-import 'package:rebellion/src/analyze/checks/check_base.dart';
+import 'package:rebellion/src/analyze/rules/rule.dart';
 import 'package:rebellion/src/utils/arb_parser/parsed_arb_file.dart';
 import 'package:rebellion/src/utils/logger.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
 
 /// Translation file contains @@locale key with locale definition
-class LocaleDefinitionPresent extends CheckBase {
+class LocaleDefinitionPresent extends Rule {
   const LocaleDefinitionPresent();
 
   @override

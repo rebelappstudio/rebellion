@@ -1,5 +1,5 @@
 import 'package:collection/collection.dart';
-import 'package:rebellion/src/analyze/checks/check_base.dart';
+import 'package:rebellion/src/analyze/rules/rule.dart';
 import 'package:rebellion/src/utils/arb_parser/parsed_arb_file.dart';
 import 'package:rebellion/src/utils/extensions.dart';
 import 'package:rebellion/src/utils/logger.dart';
@@ -7,7 +7,7 @@ import 'package:rebellion/src/utils/rebellion_options.dart';
 
 /// Check if there are unnecessary translations (translation files contain
 /// keys not present in the main file)
-class RedundantTranslations extends CheckBase {
+class RedundantTranslations extends Rule {
   const RedundantTranslations();
 
   @override

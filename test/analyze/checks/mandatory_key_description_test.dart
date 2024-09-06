@@ -1,4 +1,4 @@
-import 'package:rebellion/src/analyze/checks/mandatory_key_description.dart';
+import 'package:rebellion/src/analyze/rules/mandatory_key_description.dart';
 import 'package:rebellion/src/utils/arb_parser/arb_file.dart';
 import 'package:rebellion/src/utils/arb_parser/at_key_meta.dart';
 import 'package:rebellion/src/utils/arb_parser/parsed_arb_file.dart';

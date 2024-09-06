@@ -1,4 +1,4 @@
-import 'package:rebellion/src/analyze/checks/missing_plurals.dart';
+import 'package:rebellion/src/analyze/rules/missing_plurals.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
 import 'package:test/test.dart';
 

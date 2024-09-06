@@ -1,4 +1,4 @@
-import 'package:rebellion/src/analyze/checks/naming_convention.dart';
+import 'package:rebellion/src/analyze/rules/naming_convention.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
 import 'package:test/test.dart';
 
@@ -10,7 +10,7 @@ void main() {
   test('NamingConventionCheck checks key naming', () async {
     AppTester.create();
 
-    var issues = NamingConventionCheck().run(
+    var issues = NamingConventionRule().run(
       [
         createFile(
           values: {
@@ -27,7 +27,7 @@ void main() {
     expect(inMemoryLogger.output, isEmpty);
 
     inMemoryLogger.clear();
-    issues = NamingConventionCheck().run(
+    issues = NamingConventionRule().run(
       [
         createFile(
           values: {
