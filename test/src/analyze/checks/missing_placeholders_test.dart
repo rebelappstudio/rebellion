@@ -189,4 +189,44 @@ intl_es.arb: key "key" has different placeholders than the main file: [name] vs 
       'intl_en.arb: key "@key" is missing a placeholder type for "name"',
     );
   });
+
+  test('MissingPlaceholders reports missing placeholders in plural strings',
+      () {
+    final issues = MissingPlaceholders().run(
+      [
+        createFile(
+          filepath: 'intl_en.arb',
+          isMainFile: true,
+          locale: 'en',
+          values: {
+            'key': '{count, plural, one {1 item} other {{count} items}}',
+            '@key': AtKeyMeta(
+              description: null,
+              placeholders: [
+                AtKeyPlaceholder(
+                  name: 'count',
+                  type: 'int',
+                  example: null,
+                ),
+              ],
+            ),
+          },
+        ),
+        createFile(
+          filepath: 'intl_es.arb',
+          isMainFile: false,
+          locale: 'es',
+          values: {
+            'key': '{count, plural, one {1 item} other {x items}}',
+          },
+        ),
+      ],
+      RebellionOptions.empty(),
+    );
+    expect(issues, 1);
+    expect(
+      inMemoryLogger.output,
+      'intl_es.arb: key "key" has different placeholders than the main file: [] vs [count]',
+    );
+  });
 }
