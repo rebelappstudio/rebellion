@@ -8,8 +8,8 @@ import 'package:rebellion/src/message_parser/messages/submessages/gender.dart';
 import 'package:rebellion/src/message_parser/messages/submessages/plural.dart';
 import 'package:rebellion/src/message_parser/messages/submessages/select.dart';
 import 'package:rebellion/src/utils/arb_parser/parsed_arb_file.dart';
-import 'package:rebellion/src/utils/file_utils.dart';
 import 'package:rebellion/src/utils/logger.dart';
+import 'package:rebellion/src/utils/rebellion_options.dart';
 
 /// Check if there are all caps strings. This considered to be a bad practice.
 /// It's better to convert to all caps programmatically

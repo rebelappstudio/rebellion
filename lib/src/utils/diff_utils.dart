@@ -1,10 +1,11 @@
 import 'package:collection/collection.dart';
+import 'package:equatable/equatable.dart';
 import 'package:rebellion/src/utils/arb_parser/parsed_arb_file.dart';
 import 'package:rebellion/src/utils/extensions.dart';
 import 'package:rebellion/src/utils/logger.dart';
 import 'package:rebellion/src/utils/exit_exception.dart';
 
-class DiffArbFile {
+class DiffArbFile with EquatableMixin {
   final ParsedArbFile sourceFile;
   final List<String> untranslatedKeys;
 
@@ -12,6 +13,9 @@ class DiffArbFile {
     required this.sourceFile,
     required this.untranslatedKeys,
   });
+
+  @override
+  List<Object?> get props => [sourceFile, untranslatedKeys];
 }
 
 List<DiffArbFile> getMissingTranslations(List<ParsedArbFile> files) {

@@ -4,8 +4,8 @@ import 'package:rebellion/src/message_parser/message_parser.dart';
 import 'package:rebellion/src/message_parser/messages/submessages/plural.dart';
 import 'package:rebellion/src/utils/arb_parser/parsed_arb_file.dart';
 import 'package:rebellion/src/utils/extensions.dart';
-import 'package:rebellion/src/utils/file_utils.dart';
 import 'package:rebellion/src/utils/logger.dart';
+import 'package:rebellion/src/utils/rebellion_options.dart';
 
 /// Check if there are missing plurals in main file and translations
 class MissingPlurals extends CheckBase {

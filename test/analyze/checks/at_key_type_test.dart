@@ -1,11 +1,11 @@
 import 'package:rebellion/src/analyze/checks/at_key_type.dart';
 import 'package:rebellion/src/utils/arb_parser/at_key_meta.dart';
-import 'package:rebellion/src/utils/file_utils.dart';
+import 'package:rebellion/src/utils/rebellion_options.dart';
 import 'package:test/test.dart';
 
 import '../../infrastructure/app_tester.dart';
-import '../../infrastructure/test_arb_files.dart';
 import '../../infrastructure/logger.dart';
+import '../../infrastructure/test_arb_files.dart';
 
 void main() {
   test('At key check ensures at key type', () {

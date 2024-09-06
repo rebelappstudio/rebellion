@@ -2,7 +2,7 @@ import 'package:rebellion/src/analyze/checks/mandatory_key_description.dart';
 import 'package:rebellion/src/utils/arb_parser/arb_file.dart';
 import 'package:rebellion/src/utils/arb_parser/at_key_meta.dart';
 import 'package:rebellion/src/utils/arb_parser/parsed_arb_file.dart';
-import 'package:rebellion/src/utils/file_utils.dart';
+import 'package:rebellion/src/utils/rebellion_options.dart';
 import 'package:test/test.dart';
 
 import '../../infrastructure/app_tester.dart';

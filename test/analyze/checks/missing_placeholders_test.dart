@@ -1,6 +1,6 @@
 import 'package:rebellion/src/analyze/checks/missing_placeholders.dart';
 import 'package:rebellion/src/utils/arb_parser/at_key_meta.dart';
-import 'package:rebellion/src/utils/file_utils.dart';
+import 'package:rebellion/src/utils/rebellion_options.dart';
 import 'package:test/test.dart';
 
 import '../../infrastructure/app_tester.dart';

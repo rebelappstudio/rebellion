@@ -1,9 +1,11 @@
+import 'package:equatable/equatable.dart';
+
 /// Class containing parsed @-key data: description, placeholders, examples etc
 ///
 /// "@myKey": {
 ///   "description": "Key description",
 ///   "placeholders":
-class AtKeyMeta {
+class AtKeyMeta with EquatableMixin {
   final String? description;
   final List<AtKeyPlaceholder> placeholders;
 
@@ -30,6 +32,9 @@ class AtKeyMeta {
   @override
   String toString() =>
       'AtKeyMeta(description: $description, placeholders: $placeholders)';
+
+  @override
+  List<Object?> get props => [description, placeholders];
 }
 
 /// One ARB placeholder. E.g.
@@ -38,7 +43,7 @@ class AtKeyMeta {
 ///     "type": "int",
 ///     "example": "42"
 ///   },
-class AtKeyPlaceholder {
+class AtKeyPlaceholder with EquatableMixin {
   final String? name;
   final String? type;
   final String? example;
@@ -64,4 +69,7 @@ class AtKeyPlaceholder {
   @override
   String toString() =>
       'AtKeyPlaceholder(name: $name, type: $type, example: $example)';
+
+  @override
+  List<Object?> get props => [name, type, example];
 }

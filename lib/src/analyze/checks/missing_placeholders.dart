@@ -11,8 +11,8 @@ import 'package:rebellion/src/message_parser/messages/variable_substitution_mess
 import 'package:rebellion/src/utils/arb_parser/at_key_meta.dart';
 import 'package:rebellion/src/utils/arb_parser/parsed_arb_file.dart';
 import 'package:rebellion/src/utils/extensions.dart';
-import 'package:rebellion/src/utils/file_utils.dart';
 import 'package:rebellion/src/utils/logger.dart';
+import 'package:rebellion/src/utils/rebellion_options.dart';
 
 /// Translation file contains @-keys without specifying the data type of the
 /// placeholders

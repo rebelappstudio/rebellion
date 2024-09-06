@@ -4,6 +4,7 @@ import 'package:rebellion/src/analyze/checks/naming_convention.dart';
 import 'package:rebellion/src/sort/sort.dart';
 import 'package:rebellion/src/utils/file_reader.dart';
 import 'package:rebellion/src/utils/file_utils.dart';
+import 'package:rebellion/src/utils/rebellion_options.dart';
 import 'package:test/test.dart';
 
 import '../infrastructure/app_tester.dart';

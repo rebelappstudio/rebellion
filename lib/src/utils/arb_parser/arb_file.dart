@@ -1,4 +1,6 @@
-class ArbFile {
+import 'package:equatable/equatable.dart';
+
+class ArbFile with EquatableMixin {
   final String filepath;
   final String locale;
   final bool isMainFile;
@@ -8,4 +10,7 @@ class ArbFile {
     required this.locale,
     required this.isMainFile,
   });
+
+  @override
+  List<Object?> get props => [filepath, locale, isMainFile];
 }

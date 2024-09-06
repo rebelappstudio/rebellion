@@ -1,8 +1,8 @@
 import 'package:rebellion/src/analyze/checks/check_base.dart';
 import 'package:rebellion/src/utils/arb_parser/parsed_arb_file.dart';
 import 'package:rebellion/src/utils/extensions.dart';
-import 'package:rebellion/src/utils/file_utils.dart';
 import 'package:rebellion/src/utils/logger.dart';
+import 'package:rebellion/src/utils/rebellion_options.dart';
 
 /// Check if there are @-keys without corresponding key
 class UnusedAtKey extends CheckBase {

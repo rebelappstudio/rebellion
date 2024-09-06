@@ -1,10 +1,10 @@
 import 'package:rebellion/src/analyze/checks/all_caps.dart';
-import 'package:rebellion/src/utils/file_utils.dart';
+import 'package:rebellion/src/utils/rebellion_options.dart';
 import 'package:test/test.dart';
 
 import '../../infrastructure/app_tester.dart';
-import '../../infrastructure/test_arb_files.dart';
 import '../../infrastructure/logger.dart';
+import '../../infrastructure/test_arb_files.dart';
 
 void main() {
   late final options = RebellionOptions.empty();

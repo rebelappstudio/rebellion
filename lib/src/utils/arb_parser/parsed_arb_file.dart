@@ -1,6 +1,7 @@
+import 'package:equatable/equatable.dart';
 import 'package:rebellion/src/utils/arb_parser/arb_file.dart';
 
-class ParsedArbFile {
+class ParsedArbFile with EquatableMixin {
   final ArbFile file;
   final Map<String, dynamic> content;
 
@@ -25,4 +26,7 @@ class ParsedArbFile {
       rawKeys: rawKeys,
     );
   }
+
+  @override
+  List<Object?> get props => [file, content, rawKeys];
 }
