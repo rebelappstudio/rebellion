@@ -16,7 +16,6 @@ void main() {
       'strings_en.arb': '{}',
       'strings_fi.arb': '{}',
       'strings_fi_diff.arb': '{}',
-      'strings.arb': '{}',
     });
 
     var files = getArbFiles(['./strings_en.arb'], 'en');
@@ -91,4 +90,39 @@ options:
     final readFile = json.decode(readFileContent);
     expect(readFile, content);
   });
+
+  test('getLocaleFromFilepath returns locale from filename', () {
+    expect(getLocaleFromFilepath('en.arb'), 'en');
+    expect(getLocaleFromFilepath('l10n_en.arb'), 'en');
+    expect(getLocaleFromFilepath('intl_en.arb'), 'en');
+    expect(getLocaleFromFilepath('app_strings_en.arb'), 'en');
+    expect(getLocaleFromFilepath('strings_en.arb'), 'en');
+    expect(getLocaleFromFilepath('strings_fi.arb'), 'fi');
+    expect(getLocaleFromFilepath('strings_fi_diff.arb'), null);
+    expect(getLocaleFromFilepath('strings.yaml'), null);
+    expect(getLocaleFromFilepath('strings_en.yaml'), null);
+    expect(getLocaleFromFilepath('strings_en_uk.arb'), 'en');
+    expect(getLocaleFromFilepath('strings_en_US.arb'), 'en');
+
+    expect(
+      () => getLocaleFromFilepath('strings.arb'),
+      exceptionWithMessage("Filename can't be parsed"),
+    );
+
+    expect(
+      () => getLocaleFromFilepath('strings_english.arb'),
+      exceptionWithMessage("Filename can't be parsed"),
+    );
+
+    expect(
+      () => getLocaleFromFilepath('strings_ac.arb'),
+      exceptionWithMessage('Locale not supported'),
+    );
+  });
+}
+
+Matcher exceptionWithMessage(String message) {
+  return throwsA(
+    predicate((e) => e is Exception && e.toString().contains(message)),
+  );
 }

@@ -22,15 +22,9 @@ List<ArbFile> getArbFiles(List<String> filesAndFolders, String mainLocale) {
   final files = _getAllFiles(filesAndFolders);
   return files
       .map((file) {
-        final filename = path.basenameWithoutExtension(file.path);
+        final locale = getLocaleFromFilepath(file.path);
+        if (locale == null) return null;
 
-        // Ignore diff files
-        if (filename.endsWith('_diff')) return null;
-
-        final underscoreIndex = filename.lastIndexOf('_');
-        if (underscoreIndex == -1) return null;
-
-        final locale = filename.substring(underscoreIndex + 1);
         return ArbFile(
           filepath: file.path,
           locale: locale,
@@ -39,6 +33,58 @@ List<ArbFile> getArbFiles(List<String> filesAndFolders, String mainLocale) {
       })
       .nonNulls
       .toList();
+}
+
+String? getLocaleFromFilepath(String filepath) {
+  final extension = path.extension(filepath);
+  if (extension.toLowerCase() != '.arb') return null;
+
+  final filename = path.basenameWithoutExtension(filepath);
+
+  // Ignore diff files
+  if (filename.endsWith('_diff')) return null;
+
+  final codes = filename
+      .split('_')
+      .where((e) => e.length == 2)
+      .toList()
+      .reversed
+      .toList();
+  final String locale;
+  if (codes.length == 2) {
+    locale = codes[1];
+  } else if (codes.length == 1) {
+    locale = codes[0];
+  } else {
+    logError('Cannot parse locale from $filepath');
+    throw Exception("Filename can't be parsed");
+  }
+
+  // final match = _filenameRegExp.firstMatch(filename);
+  // if (match == null) {
+  //   logError('Cannot parse locale from $filepath');
+  //   throw Exception('Filename not supported');
+  // }
+
+  // final locale = match.group(2);
+
+  // final underscoreIndex = filename.indexOf('_');
+  // if (underscoreIndex == -1) return null;
+
+  // final locale = filename.substring(underscoreIndex + 1, filename.length);
+  // if (locale.length != 2) {
+  //   logError(
+  //     '$filepath: only two-letter locale codes are supported at the moment',
+  //   );
+  //   throw Exception('Filename not supported');
+  // }
+
+  if (!_supportedLocales.contains(locale)) {
+    logError('$filepath: locale $locale is not supported by Flutter');
+    throw Exception('Locale not supported');
+  }
+
+  return locale;
 }
 
 List<File> _getAllFiles(List<String> filesAndFolders) {
@@ -108,3 +154,194 @@ RebellionOptions loadOptionsYaml() {
   final options = yaml.nodes['options'] as YamlMap?;
   return RebellionOptions.fromYaml(rules, options);
 }
+
+// List of locales supported by Flutter
+// https://github.com/flutter/flutter/blob/ce318b7b539e228b806f81b3fa7b33793c2a2685/packages/flutter_tools/lib/src/localizations/gen_l10n_types.dart
+final Set<String> _supportedLocales = <String>{
+  'aa',
+  'ab',
+  'ae',
+  'af',
+  'ak',
+  'am',
+  'an',
+  'ar',
+  'as',
+  'av',
+  'ay',
+  'az',
+  'ba',
+  'be',
+  'bg',
+  'bh',
+  'bi',
+  'bm',
+  'bn',
+  'bo',
+  'br',
+  'bs',
+  'ca',
+  'ce',
+  'ch',
+  'co',
+  'cr',
+  'cs',
+  'cu',
+  'cv',
+  'cy',
+  'da',
+  'de',
+  'dv',
+  'dz',
+  'ee',
+  'el',
+  'en',
+  'eo',
+  'es',
+  'et',
+  'eu',
+  'fa',
+  'ff',
+  'fi',
+  'fil',
+  'fj',
+  'fo',
+  'fr',
+  'fy',
+  'ga',
+  'gd',
+  'gl',
+  'gn',
+  'gsw',
+  'gu',
+  'gv',
+  'ha',
+  'he',
+  'hi',
+  'ho',
+  'hr',
+  'ht',
+  'hu',
+  'hy',
+  'hz',
+  'ia',
+  'id',
+  'ie',
+  'ig',
+  'ii',
+  'ik',
+  'io',
+  'is',
+  'it',
+  'iu',
+  'ja',
+  'jv',
+  'ka',
+  'kg',
+  'ki',
+  'kj',
+  'kk',
+  'kl',
+  'km',
+  'kn',
+  'ko',
+  'kr',
+  'ks',
+  'ku',
+  'kv',
+  'kw',
+  'ky',
+  'la',
+  'lb',
+  'lg',
+  'li',
+  'ln',
+  'lo',
+  'lt',
+  'lu',
+  'lv',
+  'mg',
+  'mh',
+  'mi',
+  'mk',
+  'ml',
+  'mn',
+  'mr',
+  'ms',
+  'mt',
+  'my',
+  'na',
+  'nb',
+  'nd',
+  'ne',
+  'ng',
+  'nl',
+  'nn',
+  'no',
+  'nr',
+  'nv',
+  'ny',
+  'oc',
+  'oj',
+  'om',
+  'or',
+  'os',
+  'pa',
+  'pi',
+  'pl',
+  'ps',
+  'pt',
+  'qu',
+  'rm',
+  'rn',
+  'ro',
+  'ru',
+  'rw',
+  'sa',
+  'sc',
+  'sd',
+  'se',
+  'sg',
+  'si',
+  'sk',
+  'sl',
+  'sm',
+  'sn',
+  'so',
+  'sq',
+  'sr',
+  'ss',
+  'st',
+  'su',
+  'sv',
+  'sw',
+  'ta',
+  'te',
+  'tg',
+  'th',
+  'ti',
+  'tk',
+  'tl',
+  'tn',
+  'to',
+  'tr',
+  'ts',
+  'tt',
+  'tw',
+  'ty',
+  'ug',
+  'uk',
+  'ur',
+  'uz',
+  've',
+  'vi',
+  'vo',
+  'wa',
+  'wo',
+  'xh',
+  'yi',
+  'yo',
+  'za',
+  'zh',
+  'zu',
+};
