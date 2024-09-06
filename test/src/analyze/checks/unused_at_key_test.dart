@@ -2,9 +2,9 @@ import 'package:rebellion/src/analyze/rules/unused_at_key.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
 import 'package:test/test.dart';
 
-import '../../infrastructure/app_tester.dart';
-import '../../infrastructure/logger.dart';
-import '../../infrastructure/test_arb_files.dart';
+import '../../../infrastructure/app_tester.dart';
+import '../../../infrastructure/logger.dart';
+import '../../../infrastructure/test_arb_files.dart';
 
 void main() {
   test('UnusedAtKey checks that @-keys have corresponding keys', () async {

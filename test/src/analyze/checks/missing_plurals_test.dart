@@ -2,9 +2,9 @@ import 'package:rebellion/src/analyze/rules/missing_plurals.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
 import 'package:test/test.dart';
 
-import '../../infrastructure/app_tester.dart';
-import '../../infrastructure/logger.dart';
-import '../../infrastructure/test_arb_files.dart';
+import '../../../infrastructure/app_tester.dart';
+import '../../../infrastructure/logger.dart';
+import '../../../infrastructure/test_arb_files.dart';
 
 void main() {
   setUp(() {

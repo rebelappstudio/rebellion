@@ -7,7 +7,7 @@ import 'package:rebellion/src/utils/file_utils.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
 import 'package:test/test.dart';
 
-import '../infrastructure/app_tester.dart';
+import '../../infrastructure/app_tester.dart';
 
 void main() {
   test('getArbFiles returns all available files', () {

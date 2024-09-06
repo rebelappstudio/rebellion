@@ -2,9 +2,9 @@ import 'package:rebellion/src/analyze/rules/redundant_translations.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
 import 'package:test/test.dart';
 
-import '../../infrastructure/app_tester.dart';
-import '../../infrastructure/logger.dart';
-import '../../infrastructure/test_arb_files.dart';
+import '../../../infrastructure/app_tester.dart';
+import '../../../infrastructure/logger.dart';
+import '../../../infrastructure/test_arb_files.dart';
 
 void main() {
   setUp(() {
@@ -79,5 +79,27 @@ strings_es.arb: redundant translation "key4"
 strings_es.arb: redundant translation "key5"
 '''
             .trim());
+  });
+
+  test('RedundantTranslations reports an error when no main file found', () {
+    final issues = RedundantTranslations().run(
+      [
+        createFile(
+          filepath: 'strings_en.arb',
+          locale: 'en',
+          isMainFile: false,
+          values: {'key1': 'value'},
+        ),
+        createFile(
+          filepath: 'strings_es.arb',
+          locale: 'es',
+          isMainFile: false,
+          values: {'key1': 'valor'},
+        ),
+      ],
+      RebellionOptions.empty(),
+    );
+    expect(issues, 1);
+    expect(inMemoryLogger.output, 'No main file found');
   });
 }

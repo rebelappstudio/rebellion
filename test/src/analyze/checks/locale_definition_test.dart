@@ -2,9 +2,9 @@ import 'package:rebellion/src/analyze/rules/locale_definition.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
 import 'package:test/test.dart';
 
-import '../../infrastructure/app_tester.dart';
-import '../../infrastructure/logger.dart';
-import '../../infrastructure/test_arb_files.dart';
+import '../../../infrastructure/app_tester.dart';
+import '../../../infrastructure/logger.dart';
+import '../../../infrastructure/test_arb_files.dart';
 
 void main() {
   test('LocaleDefinitionPresent checks that @@locale is present', () async {

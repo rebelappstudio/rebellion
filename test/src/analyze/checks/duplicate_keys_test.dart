@@ -1,19 +1,18 @@
-import 'package:rebellion/src/analyze/rules/mandatory_key_description.dart';
+import 'package:rebellion/src/analyze/rules/duplicate_keys.dart';
 import 'package:rebellion/src/utils/arb_parser/arb_file.dart';
-import 'package:rebellion/src/utils/arb_parser/at_key_meta.dart';
 import 'package:rebellion/src/utils/arb_parser/parsed_arb_file.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
 import 'package:test/test.dart';
 
-import '../../infrastructure/app_tester.dart';
-import '../../infrastructure/logger.dart';
+import '../../../infrastructure/app_tester.dart';
+import '../../../infrastructure/logger.dart';
 
 void main() {
-  test('MandatoryKeyDescription checks that key description is present', () {
+  test('DuplicatedKeys checks for key duplicates', () {
     AppTester.create();
 
-    // Key description is present
-    var issues = MandatoryKeyDescription().run(
+    // No duplicates
+    var issues = DuplicatedKeys().run(
       [
         ParsedArbFile(
           file: ArbFile(
@@ -23,10 +22,7 @@ void main() {
           ),
           content: {
             'key': 'value',
-            '@key': AtKeyMeta(
-              description: 'Key description',
-              placeholders: [],
-            ),
+            '@key': 'value',
           },
           rawKeys: ['key', '@key'],
         )
@@ -36,9 +32,9 @@ void main() {
     expect(issues, 0);
     expect(inMemoryLogger.output, isEmpty);
 
-    // No key description
+    // Duplicated keys found
     inMemoryLogger.clear();
-    issues = MandatoryKeyDescription().run(
+    issues = DuplicatedKeys().run(
       [
         ParsedArbFile(
           file: ArbFile(
@@ -48,20 +44,22 @@ void main() {
           ),
           content: {
             'key': 'value',
-            '@key': AtKeyMeta(
-              description: null,
-              placeholders: [],
-            ),
+            '@key': 'value',
+            'key2': 'value2',
           },
-          rawKeys: ['key', '@key'],
+          rawKeys: ['key', 'key2', '@key', 'key', '@key'],
         )
       ],
       RebellionOptions.empty(),
     );
-    expect(issues, 1);
+    expect(issues, 2);
     expect(
       inMemoryLogger.output,
-      'filepath: @-key "@key" must have a description',
+      '''
+filepath: file has duplicate key "key"
+filepath: file has duplicate key "@key"
+'''
+          .trim(),
     );
   });
 }

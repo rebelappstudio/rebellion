@@ -2,9 +2,9 @@ import 'package:rebellion/src/analyze/rules/all_caps.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
 import 'package:test/test.dart';
 
-import '../../infrastructure/app_tester.dart';
-import '../../infrastructure/logger.dart';
-import '../../infrastructure/test_arb_files.dart';
+import '../../../infrastructure/app_tester.dart';
+import '../../../infrastructure/logger.dart';
+import '../../../infrastructure/test_arb_files.dart';
 
 void main() {
   late final options = RebellionOptions.empty();
@@ -47,15 +47,19 @@ void main() {
 
     issues = AllCaps().run(
       oneKeyFile(
-        '{count, plural, one{STRING} two{{count} String} other{{count} STRINGS}}',
+        '{count, plural, zero{NO STRINGS} one{ONE STRING} two{{count} STRING} few{{count} STRING} many{{count} STRING} other{{count} STRINGS}}',
       ),
       options,
     );
-    expect(issues, 2);
+    expect(issues, 6);
     expect(
         inMemoryLogger.output,
         '''
+filepath key key: all caps string in case "zero"
 filepath key key: all caps string in case "one"
+filepath key key: all caps string in case "two"
+filepath key key: all caps string in case "few"
+filepath key key: all caps string in case "many"
 filepath key key: all caps string in case "other"
 '''
             .trim());
@@ -71,14 +75,19 @@ filepath key key: all caps string in case "other"
 
     issues = AllCaps().run(
       oneKeyFile(
-        '{sex, select, male{His} female{Her} other{THEIR}}',
+        '{sex, select, male{HIS} female{HER} other{THEIR}}',
       ),
       options,
     );
-    expect(issues, 1);
+    expect(issues, 3);
     expect(
       inMemoryLogger.output,
-      'filepath key key: all caps string in case "other"',
+      '''
+filepath key key: all caps string in case "female"
+filepath key key: all caps string in case "male"
+filepath key key: all caps string in case "other"
+'''
+          .trim(),
     );
   });
 

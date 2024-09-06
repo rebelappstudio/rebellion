@@ -2,8 +2,8 @@ import 'package:rebellion/src/utils/command_runner.dart';
 import 'package:rebellion/src/utils/exit_exception.dart';
 import 'package:test/test.dart';
 
-import '../infrastructure/app_tester.dart';
-import '../infrastructure/logger.dart';
+import '../../infrastructure/app_tester.dart';
+import '../../infrastructure/logger.dart';
 
 void main() {
   test('Prints a message when no files and folders specified', () async {

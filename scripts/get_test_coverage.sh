@@ -1,3 +1,3 @@
 flutter test --coverage
-lcov --remove coverage/lcov.info 'lib/src/message_parser/*' -o coverage/new_lcov.info
+lcov --remove coverage/lcov.info 'lib/src/message_parser/*' 'lib/src/generated/*' -o coverage/new_lcov.info
 genhtml coverage/new_lcov.info --output=coverage
