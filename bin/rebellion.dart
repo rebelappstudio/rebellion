@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:rebellion/src/utils/command_runner.dart';
 import 'package:rebellion/src/utils/exit_exception.dart';
 
-void main(List<String> arguments) {
+Future<void> main(List<String> arguments) async {
   try {
-    commandRunner.run(arguments);
+    await commandRunner.run(arguments);
   } on ExitException {
     // Handle ExitException when running program from CLI and exit with the
     // error code
