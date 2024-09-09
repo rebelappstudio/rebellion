@@ -1,0 +1,32 @@
+name: Pull requests
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  analyze-test:
+    name: Analyze and test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+      - run: dart pub get
+
+      - name: Analyze
+        uses: zgosalvez/github-actions-analyze-dart@v2
+        with:
+          fail-on-warnings: true
+
+      - name: Test on Flutter stable channel
+        run: ./scripts/get_test_coverage.sh
+
+      - name: Upload code coverage
+        uses: codecov/codecov-action@v3.1.1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/lcov.info
+          fail_ci_if_error: true

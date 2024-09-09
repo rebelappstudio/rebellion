@@ -3,7 +3,6 @@ description: A linter for Flutter's ARB files
 version: 0.0.1
 publish: none
 repository: https://github.com/rebelappstudio/rebellion
-# homepage: https://github.com/my_org/my_repo
 
 topics:
   - localization
@@ -15,7 +14,6 @@ topics:
 environment:
   sdk: ^3.2.0
 
-# Add regular dependencies here.
 dependencies:
   args: ^2.4.2
   collection: ^1.18.0
@@ -26,8 +24,6 @@ dependencies:
   file: ^7.0.0
   meta: ^1.15.0
   equatable: ^2.0.5
-  http: ^1.2.1
-  xml: ^6.5.0
 
 dev_dependencies:
   lints: ^2.1.0

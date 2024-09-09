@@ -9,7 +9,6 @@ const _supportedPlurals = ['zero', 'one', 'two', 'few', 'many', 'other'];
 const _pluralsXml =
     'https://raw.githubusercontent.com/unicode-org/cldr/main/common/supplemental/plurals.xml';
 const _temporaryFileLocation = './plurals.xml';
-const _outputFileLocation = './lib/generated/plural_rules.dart';
 
 typedef PluralRules = Map<String, List<String>>;
 
@@ -18,18 +17,18 @@ typedef PluralRules = Map<String, List<String>>;
 ///
 /// Source for plural rules is the official Unicode repository:
 /// https://github.com/unicode-org/cldr
-Future<void> main() async {
+Future<void> downloadAndGeneratePluralRules(String outputFilepath) async {
   final file = await downloadFile();
   print('File downloaded successfully');
 
   final rules = await extractRules(file);
   print('Rules extracted successfully');
 
-  await generateDartCode(rules);
+  await generateDartCode(rules, outputFilepath);
   print('Dart code generated successfully');
 
   file.delete();
-  Process.run('dart', ['format', _outputFileLocation]);
+  Process.run('dart', ['format', outputFilepath]);
   print('Done');
 }
 
@@ -87,7 +86,7 @@ Future<PluralRules> extractRules(File file) async {
   return result;
 }
 
-Future<void> generateDartCode(PluralRules rules) {
+Future<void> generateDartCode(PluralRules rules, String outputFilepath) {
   final map = jsonEncode(rules);
   final code = '''
 /// Generated file. Do not edit.
@@ -98,6 +97,6 @@ class PluralRules {
 }
 ''';
 
-  final outputFile = File(_outputFileLocation);
+  final outputFile = File(outputFilepath);
   return outputFile.writeAsString(code);
 }

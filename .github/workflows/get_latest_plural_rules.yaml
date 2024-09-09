@@ -1,0 +1,31 @@
+# Download latest plural rules, generate dart file and create a PR with changes
+name: Get latest plural rules
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: 0 6 * * 1 # At 06:00 on Monday
+
+jobs:
+  analyze-test:
+    name: Analyze and test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+      - run: dart pub get
+
+      - name: Analyze
+        uses: zgosalvez/github-actions-analyze-dart@v2
+        with:
+          fail-on-warnings: true
+
+      - name: Generate plural rules
+        run: dart packages/plural_rules_generator/bin/plural_rules_generator.dart ./lib/src/generated/plural_rules.dart
+
+      - name: Create pull request with changes (if any)
+        uses: peter-evans/create-pull-request@v5
+        with:
+          commit-message: "Generate plural rules"
+          title: "[automated] Update plural rules"
+          branch: ${{ env.BRANCH_NAME }}
