@@ -11,6 +11,8 @@ class ArbFile with EquatableMixin {
     required this.isMainFile,
   });
 
+  // coverage:ignore-start
   @override
   List<Object?> get props => [filepath, locale, isMainFile];
+  // coverage:ignore-end
 }

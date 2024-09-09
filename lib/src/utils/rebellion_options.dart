@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:meta/meta.dart';
 import 'package:rebellion/src/analyze/rules/all_caps.dart';
 import 'package:rebellion/src/analyze/rules/at_key_type.dart';
 import 'package:rebellion/src/analyze/rules/rule.dart';
@@ -38,7 +39,8 @@ class RebellionOptions with EquatableMixin {
   final NamingConvention namingConvention;
   final Sorting sorting;
 
-  const RebellionOptions._({
+  @visibleForTesting
+  const RebellionOptions({
     required this.allCapsRuleEnabled,
     required this.stringTypeRuleEnabled,
     required this.atKeyTypeRuleEnabled,
@@ -59,7 +61,7 @@ class RebellionOptions with EquatableMixin {
   });
 
   factory RebellionOptions.empty() {
-    return RebellionOptions._(
+    return RebellionOptions(
       allCapsRuleEnabled: true,
       stringTypeRuleEnabled: true,
       atKeyTypeRuleEnabled: true,
@@ -84,7 +86,7 @@ class RebellionOptions with EquatableMixin {
     YamlList? rules,
     YamlMap? options,
   ) {
-    return RebellionOptions._(
+    return RebellionOptions(
       allCapsRuleEnabled: rules?.contains('all_caps') ?? true,
       stringTypeRuleEnabled: rules?.contains('string_type') ?? true,
       atKeyTypeRuleEnabled: rules?.contains('at_key_type') ?? true,
@@ -151,57 +153,4 @@ class RebellionOptions with EquatableMixin {
         namingConvention,
         sorting,
       ];
-
-  RebellionOptions copyWith({
-    bool? allCapsRuleEnabled,
-    bool? stringTypeRuleEnabled,
-    bool? atKeyTypeRuleEnabled,
-    bool? duplicatedKeysRuleEnabled,
-    bool? emptyAtKeyRuleEnabled,
-    bool? localeDefinitionRuleEnabled,
-    bool? mandatoryAtKeyDescriptionRuleEnabled,
-    bool? missingPlaceholdersRuleEnabled,
-    bool? missingPluralsRuleEnabled,
-    bool? missingTranslationsRuleEnabled,
-    bool? namingConventionRuleEnabled,
-    bool? redundantAtKeyRuleEnabled,
-    bool? redundantTranslationsRuleEnabled,
-    bool? unusedAtKeyRuleEnabled,
-    String? mainLocale,
-    NamingConvention? namingConvention,
-    Sorting? sorting,
-  }) {
-    return RebellionOptions._(
-      allCapsRuleEnabled: allCapsRuleEnabled ?? this.allCapsRuleEnabled,
-      stringTypeRuleEnabled:
-          stringTypeRuleEnabled ?? this.stringTypeRuleEnabled,
-      atKeyTypeRuleEnabled: atKeyTypeRuleEnabled ?? this.atKeyTypeRuleEnabled,
-      duplicatedKeysRuleEnabled:
-          duplicatedKeysRuleEnabled ?? this.duplicatedKeysRuleEnabled,
-      emptyAtKeyRuleEnabled:
-          emptyAtKeyRuleEnabled ?? this.emptyAtKeyRuleEnabled,
-      localeDefinitionRuleEnabled:
-          localeDefinitionRuleEnabled ?? this.localeDefinitionRuleEnabled,
-      mandatoryAtKeyDescriptionRuleEnabled:
-          mandatoryAtKeyDescriptionRuleEnabled ??
-              this.mandatoryAtKeyDescriptionRuleEnabled,
-      missingPlaceholdersRuleEnabled:
-          missingPlaceholdersRuleEnabled ?? this.missingPlaceholdersRuleEnabled,
-      missingPluralsRuleEnabled:
-          missingPluralsRuleEnabled ?? this.missingPluralsRuleEnabled,
-      missingTranslationsRuleEnabled:
-          missingTranslationsRuleEnabled ?? this.missingTranslationsRuleEnabled,
-      namingConventionRuleEnabled:
-          namingConventionRuleEnabled ?? this.namingConventionRuleEnabled,
-      redundantAtKeyRuleEnabled:
-          redundantAtKeyRuleEnabled ?? this.redundantAtKeyRuleEnabled,
-      redundantTranslationsRuleEnabled: redundantTranslationsRuleEnabled ??
-          this.redundantTranslationsRuleEnabled,
-      unusedAtKeyRuleEnabled:
-          unusedAtKeyRuleEnabled ?? this.unusedAtKeyRuleEnabled,
-      mainLocale: mainLocale ?? this.mainLocale,
-      namingConvention: namingConvention ?? this.namingConvention,
-      sorting: sorting ?? this.sorting,
-    );
-  }
 }

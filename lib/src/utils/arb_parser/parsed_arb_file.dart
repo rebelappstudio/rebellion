@@ -16,17 +16,16 @@ class ParsedArbFile with EquatableMixin {
 
   List<String> get keys => content.keys.toList();
 
-  List<dynamic> get atKeys =>
-      content.keys.where((key) => key.startsWith('@')).toList();
-
-  ParsedArbFile copyWith({Map<String, dynamic>? content}) {
+  ParsedArbFile copyWithContent(Map<String, dynamic> content) {
     return ParsedArbFile(
       file: file,
-      content: content ?? this.content,
       rawKeys: rawKeys,
+      content: content,
     );
   }
 
+  // coverage:ignore-start
   @override
   List<Object?> get props => [file, content, rawKeys];
+  // coverage:ignore-end
 }

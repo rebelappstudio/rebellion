@@ -14,8 +14,10 @@ class DiffArbFile with EquatableMixin {
     required this.untranslatedKeys,
   });
 
+  // coverage:ignore-start
   @override
   List<Object?> get props => [sourceFile, untranslatedKeys];
+  // coverage:ignore-end
 }
 
 List<DiffArbFile> getMissingTranslations(List<ParsedArbFile> files) {

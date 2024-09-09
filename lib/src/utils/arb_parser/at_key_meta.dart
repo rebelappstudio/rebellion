@@ -29,12 +29,10 @@ class AtKeyMeta with EquatableMixin {
     );
   }
 
-  @override
-  String toString() =>
-      'AtKeyMeta(description: $description, placeholders: $placeholders)';
-
+  // coverage:ignore-start
   @override
   List<Object?> get props => [description, placeholders];
+// coverage:ignore-end
 }
 
 /// One ARB placeholder. E.g.
@@ -66,10 +64,8 @@ class AtKeyPlaceholder with EquatableMixin {
     );
   }
 
-  @override
-  String toString() =>
-      'AtKeyPlaceholder(name: $name, type: $type, example: $example)';
-
+  // coverage:ignore-start
   @override
   List<Object?> get props => [name, type, example];
+  // coverage:ignore-end
 }

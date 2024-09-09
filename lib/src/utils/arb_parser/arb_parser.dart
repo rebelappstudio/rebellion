@@ -4,7 +4,6 @@ import 'package:rebellion/src/utils/arb_parser/at_key_meta.dart';
 import 'package:rebellion/src/utils/arb_parser/parsed_arb_file.dart';
 import 'package:rebellion/src/utils/file_reader.dart';
 import 'package:rebellion/src/utils/logger.dart';
-import 'package:rebellion/src/utils/exit_exception.dart';
 
 /// Get all strings from [filename] file
 ParsedArbFile parseArbFile(ArbFile file) {
@@ -39,7 +38,7 @@ ParsedArbFile parseArbFile(ArbFile file) {
       case JsonEventType.endArray:
       case JsonEventType.arrayElement:
         logError('${file.filepath}: ARB files must not contain arrays');
-        throw ExitException();
+        throw FormatException();
       case JsonEventType.beginObject:
         level++;
 

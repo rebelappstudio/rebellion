@@ -28,4 +28,8 @@ class AppTester {
       fileReader.file(entry.key).writeAsStringSync(entry.value);
     }
   }
+
+  String getFileContent(String filepath) {
+    return fileReader.readFile(filepath);
+  }
 }

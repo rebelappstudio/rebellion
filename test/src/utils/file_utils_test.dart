@@ -2,12 +2,14 @@ import 'dart:convert';
 
 import 'package:rebellion/src/analyze/rules/naming_convention.dart';
 import 'package:rebellion/src/sort/sort.dart';
+import 'package:rebellion/src/utils/exit_exception.dart';
 import 'package:rebellion/src/utils/file_reader.dart';
 import 'package:rebellion/src/utils/file_utils.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
 import 'package:test/test.dart';
 
 import '../../infrastructure/app_tester.dart';
+import '../../infrastructure/logger.dart';
 
 void main() {
   test('getArbFiles returns all available files', () {
@@ -118,6 +120,28 @@ options:
       () => getLocaleFromFilepath('strings_ac.arb'),
       exceptionWithMessage('Locale not supported'),
     );
+  });
+
+  test('ensureFilesAndFoldersExist checks if files and folders exist', () {
+    AppTester.create();
+    fileReader.directory('dir1').createSync();
+    fileReader.file('dir1/file1').createSync();
+
+    ensureFilesAndFoldersExist(['dir1', 'dir1/file1']);
+    expect(inMemoryLogger.output, isEmpty);
+
+    expect(
+      () => ensureFilesAndFoldersExist(['dir1', 'dir1/file2']),
+      throwsA(isA<ExitException>()),
+    );
+    expect(inMemoryLogger.output, 'dir1/file2 does not exist');
+
+    inMemoryLogger.clear();
+    expect(
+      () => ensureFilesAndFoldersExist(['dir2', 'dir2/file3']),
+      throwsA(isA<ExitException>()),
+    );
+    expect(inMemoryLogger.output, 'dir2 does not exist');
   });
 }
 

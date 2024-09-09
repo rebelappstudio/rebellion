@@ -52,7 +52,9 @@ class SortCommand extends Command {
         _sortAlphabetically(parsedFiles, reverse: true),
       Sorting.followMainFile => _sortFollowingMainFile(parsedFiles),
     };
-    writeArbFiles(sortedFiles);
+    for (final file in sortedFiles) {
+      writeArbFile(file.content, file.file.filepath);
+    }
   }
 
   List<ParsedArbFile> _sortAlphabetically(
@@ -77,7 +79,7 @@ class SortCommand extends Command {
         for (final key in sortedKeys) key: file.content[key],
       };
       result.add(
-        file.copyWith(content: fileContent),
+        file.copyWithContent(fileContent),
       );
     }
 
@@ -96,10 +98,11 @@ class SortCommand extends Command {
       }
 
       final fileContent = {
-        for (final key in mainKeys) key: file.content[key],
+        for (final key in mainKeys)
+          if (file.keys.contains(key)) key: file.content[key],
       };
       result.add(
-        file.copyWith(content: fileContent),
+        file.copyWithContent(fileContent),
       );
     }
 

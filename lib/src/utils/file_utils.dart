@@ -108,7 +108,7 @@ List<ParsedArbFile> getFilesAndFolders(
 ) {
   final mainLocale = options.mainLocale;
   final filesAndFolders = argResults?.rest ?? const [];
-  _ensureFilesAndFoldersExist(filesAndFolders);
+  ensureFilesAndFoldersExist(filesAndFolders);
 
   return getArbFiles(filesAndFolders, mainLocale).map(parseArbFile).toList();
 }
@@ -120,13 +120,8 @@ void writeArbFile(Map<String, dynamic> content, String filename) {
   file.writeAsStringSync(jsonContent);
 }
 
-void writeArbFiles(List<ParsedArbFile> files) {
-  for (final file in files) {
-    writeArbFile(file.content, file.file.filepath);
-  }
-}
-
-void _ensureFilesAndFoldersExist(List<String> filesAndFolders) {
+@visibleForTesting
+void ensureFilesAndFoldersExist(List<String> filesAndFolders) {
   if (filesAndFolders.isEmpty) {
     logError('No files or folders to analyze');
     throw ExitException();
