@@ -17,9 +17,7 @@ jobs:
       - run: dart pub get
 
       - name: Analyze
-        uses: zgosalvez/github-actions-analyze-dart@v2
-        with:
-          fail-on-warnings: true
+        run: dart analyze --fatal-infos
 
       - name: Test on Flutter stable channel
         run: ./scripts/get_test_coverage.sh
