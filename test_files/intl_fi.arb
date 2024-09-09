@@ -1,0 +1,8 @@
+{
+  "key": "Count: {count}",
+  "@key": {
+    "description": "Näyttää kuinka monta kohdetta on"
+  },
+  "key2": "THIS STRING IS CONSIDERED BAD PRACTICE BECAUSE IT'S ALL CAPS",
+  "key3": "{count, plural, other{{count} cars}}."
+}

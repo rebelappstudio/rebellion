@@ -1,0 +1,21 @@
+{
+  "@@locale": "en",
+  "key": "Count: {count}",
+  "@key": {
+    "description": "Shows how many items there is",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "key2": "THIS STRING IS CONSIDERED BAD PRACTICE BECAUSE IT'S ALL CAPS",
+  "key3": "{count, plural, zero{no cars} one{one car} other{{count} cars}}.",
+  "key4": "This is a message with a {placeholder}.",
+  "@key4": {
+    "description": "A message with a placeholder",
+    "placeholders": {
+    }
+  },
+  "key_5": "Hi"
+}

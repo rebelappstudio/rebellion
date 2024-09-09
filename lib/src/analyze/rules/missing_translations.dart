@@ -11,14 +11,18 @@ class MissingTranslations extends Rule {
 
   @override
   int run(List<ParsedArbFile> files, RebellionOptions options) {
+    int issues = 0;
+
     final filesWithMissingTranslations = getMissingTranslations(files);
     for (final file in filesWithMissingTranslations) {
-      final missingItems = file.untranslatedKeys.map((e) => '"$e"').join(', ');
-      logError(
-        '${file.sourceFile.file.filepath}: missing translations $missingItems',
-      );
+      for (final key in file.untranslatedKeys) {
+        issues++;
+        logError(
+          '${file.sourceFile.file.filepath}: missing translation for key "$key"',
+        );
+      }
     }
 
-    return filesWithMissingTranslations.length;
+    return issues;
   }
 }

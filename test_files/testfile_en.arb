@@ -1,8 +1,0 @@
-{
-  "@@locale": "en",
-  "key": "value",
-  "@key": {
-    "description": "foo"
-  }
-  
-}

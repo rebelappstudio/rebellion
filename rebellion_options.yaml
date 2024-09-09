@@ -16,5 +16,5 @@ rules:
 
 options:
   main_locale: en
-  naming_convention: snake
+  naming_convention: camel
   sorting: alphabetical
