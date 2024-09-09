@@ -57,10 +57,14 @@ void main() {
       ],
       RebellionOptions.empty(),
     );
-    expect(issues, 1);
+    expect(issues, 2);
     expect(
       inMemoryLogger.output,
-      'strings_es.arb: missing translations "key2", "key3"',
+      '''
+strings_es.arb: missing translation for key "key2"
+strings_es.arb: missing translation for key "key3"
+'''
+          .trim(),
     );
   });
 }
