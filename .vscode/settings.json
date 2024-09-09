@@ -1,6 +1,0 @@
-{
-  "cSpell.enabled": true,
-  "yaml.schemas": {
-    "https://json.schemastore.org/github-workflow.json": "file:///Users/alexander/projects/rebellion/.github/workflows/generate_plural_rules.yaml"
-  }
-}
