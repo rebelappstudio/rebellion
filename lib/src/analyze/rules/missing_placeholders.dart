@@ -44,11 +44,14 @@ class MissingPlaceholders extends Rule {
 
         final originalString = file.content[key.cleanKey];
         final variablesMain = getAllVariableSubstitutions(mainFileContent);
-        final variables = getAllVariableSubstitutions(originalString);
+        final variables =
+            getAllVariableSubstitutions(originalString).toSet().toList();
         final definedPlaceholders = mainFileAtKey.placeholders;
         final placeholderNames = definedPlaceholders
             .map((e) => e.name)
             .whereNot((e) => e == null || e.isEmpty)
+            .toList()
+            .toSet()
             .toList();
 
         if (isMainFile) {

@@ -106,7 +106,7 @@ class RebellionOptions with EquatableMixin {
       unusedAtKeyRuleEnabled: rules?.contains('unused_at_key') ?? false,
       mainLocale: options?['main_locale'] as String? ?? defaultMainLocale,
       namingConvention: NamingConvention.fromOptionName(
-              options?['naming_convention'] as String) ??
+              options?['naming_convention'] as String?) ??
           NamingConvention.camel,
       sorting:
           Sorting.fromOptionName(options?['sorting']) ?? Sorting.alphabetical,

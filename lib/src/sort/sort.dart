@@ -17,7 +17,7 @@ enum Sorting {
   const Sorting(this.optionName);
 
   static Sorting? fromOptionName(String? optionName) {
-    return Sorting.values.firstWhere((e) => e.optionName == optionName);
+    return Sorting.values.firstWhereOrNull((e) => e.optionName == optionName);
   }
 }
 

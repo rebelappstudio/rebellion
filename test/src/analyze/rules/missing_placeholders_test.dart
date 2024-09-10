@@ -1,5 +1,6 @@
 import 'package:rebellion/src/analyze/rules/missing_placeholders.dart';
 import 'package:rebellion/src/utils/arb_parser/at_key_meta.dart';
+import 'package:rebellion/src/utils/command_runner.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
 import 'package:test/test.dart';
 
@@ -8,8 +9,10 @@ import '../../../infrastructure/logger.dart';
 import '../../../infrastructure/test_arb_files.dart';
 
 void main() {
+  late AppTester tester;
+
   setUp(() {
-    AppTester.create();
+    tester = AppTester.create();
   });
 
   test('MissingPlaceholders reports no issues when placeholders are present',
@@ -305,5 +308,45 @@ intl_es.arb: key "key" has different placeholders than the main file: [name] vs 
     );
     expect(issues, 0);
     expect(inMemoryLogger.output, isEmpty);
+  });
+
+  test(
+      "MissingPlaceholders reports no missing placeholders if plural strings have extra placeholders",
+      () async {
+    tester.setConfigFile(
+      '''
+rules:
+  - missing_placeholders
+
+options:
+  main_locale: en
+
+''',
+    );
+    tester.populateFileSystem({
+      'intl_en.arb': '''
+{
+  "key": "{count, plural, zero{Mode is available} one{{count} games with {stars} remain} two{{count} games with {stars} remain} few{{count} games with {stars} remain} many{{count} games with {stars} remain} other{{count} games with {stars} remain}}",
+  "@key": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "String"
+      }
+    }
+  }
+}
+''',
+      'intl_ru.arb': '''
+{
+  "key": "{count, plural, one{Осталась {count} игра и {stars} звезда} few{Остались {count} игры и {stars}} many{Осталось {count} игр и {stars}} other{Осталось {count} игр и {stars}}}"
+}
+''',
+    });
+
+    await commandRunner.run(['analyze', '.']);
+    expect(inMemoryLogger.output, 'No issues found');
   });
 }
