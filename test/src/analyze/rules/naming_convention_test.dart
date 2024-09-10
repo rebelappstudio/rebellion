@@ -62,6 +62,11 @@ filepath: key "kebab-case-key" does not match selected naming convention (camel 
     expect(NamingConvention.camel.hasMatch('kebab-case'), isFalse);
     expect(NamingConvention.camel.hasMatch('camelCase_not'), isFalse);
     expect(NamingConvention.camel.hasMatch('NotCamelCase'), isFalse);
+    expect(NamingConvention.camel.hasMatch('camelCase2'), isTrue);
+    expect(NamingConvention.camel.hasMatch('camelCase123'), isTrue);
+    expect(NamingConvention.camel.hasMatch('camel2case'), isTrue);
+    expect(NamingConvention.camel.hasMatch('camel2Case'), isTrue);
+    expect(NamingConvention.camel.hasMatch('notACamelCase'), isFalse);
 
     expect(NamingConvention.snake.hasMatch('snake'), isTrue);
     expect(NamingConvention.snake.hasMatch('snake_case'), isTrue);
