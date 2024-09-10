@@ -199,7 +199,7 @@ intl_es.arb: key "key" has different placeholders than the main file: [name] vs 
           isMainFile: true,
           locale: 'en',
           values: {
-            'key': '{count, plural, one {1 item} other {{count} items}}',
+            'key': '{count, plural, one{1 item} other{{count} items}}',
             '@key': AtKeyMeta(
               description: null,
               placeholders: [
@@ -228,5 +228,82 @@ intl_es.arb: key "key" has different placeholders than the main file: [name] vs 
       inMemoryLogger.output,
       'intl_es.arb: key "key" has different placeholders than the main file: [] vs [count]',
     );
+  });
+
+  test('MissingPlaceholders reports missing placeholders in inline strings',
+      () {
+    final issues = MissingPlaceholders().run(
+      [
+        createFile(
+          filepath: 'intl_en.arb',
+          isMainFile: true,
+          locale: 'en',
+          values: {
+            'key':
+                'Selected items: {count, plural, one {1 item} other {{count} items}}. Continue?',
+            '@key': AtKeyMeta(
+              description: null,
+              placeholders: [
+                AtKeyPlaceholder(
+                  name: 'count',
+                  type: 'int',
+                  example: null,
+                ),
+              ],
+            ),
+          },
+        ),
+        createFile(
+          filepath: 'intl_es.arb',
+          isMainFile: false,
+          locale: 'es',
+          values: {
+            'key':
+                '{count, plural, one{1 elemento} other{{count} elementos}}. ¿Continuar?',
+          },
+        ),
+      ],
+      RebellionOptions.empty(),
+    );
+    expect(issues, 0);
+    expect(inMemoryLogger.output, isEmpty);
+  });
+
+  test(
+      "MissingPlaceholders reports no missing placeholders is string doesn't use placeholders",
+      () {
+    final issues = MissingPlaceholders().run(
+      [
+        createFile(
+          filepath: 'intl_en.arb',
+          isMainFile: true,
+          locale: 'en',
+          values: {
+            'key': '{count, plural, one {1 item} other {X items}}',
+            '@key': AtKeyMeta(
+              description: null,
+              placeholders: [
+                AtKeyPlaceholder(
+                  name: 'count',
+                  type: 'int',
+                  example: null,
+                ),
+              ],
+            ),
+          },
+        ),
+        createFile(
+          filepath: 'intl_es.arb',
+          isMainFile: false,
+          locale: 'es',
+          values: {
+            'key': '{count, plural, one{1 elemento} other{X elementos}}',
+          },
+        ),
+      ],
+      RebellionOptions.empty(),
+    );
+    expect(issues, 0);
+    expect(inMemoryLogger.output, isEmpty);
   });
 }

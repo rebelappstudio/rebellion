@@ -35,13 +35,17 @@ class MissingPlaceholders extends Rule {
         // because it's expected that @-keys are only in the main file
         if (isMainFile && !key.isAtKey) continue;
 
-        final mainFileContent =
-            mainFile.content[key.isAtKey ? key : key.toAtKey];
-        if (mainFileContent is! AtKeyMeta) continue;
+        final mainFileContent = mainFile
+            .content[key.isAtKey ? key.atKeyToRegularKey : key] as String?;
+        if (mainFileContent == null) continue;
+
+        final mainFileAtKey = mainFile.content[key.isAtKey ? key : key.toAtKey];
+        if (mainFileAtKey is! AtKeyMeta) continue;
 
         final originalString = file.content[key.cleanKey];
+        final variablesMain = getAllVariableSubstitutions(mainFileContent);
         final variables = getAllVariableSubstitutions(originalString);
-        final definedPlaceholders = mainFileContent.placeholders;
+        final definedPlaceholders = mainFileAtKey.placeholders;
         final placeholderNames = definedPlaceholders
             .map((e) => e.name)
             .whereNot((e) => e == null || e.isEmpty)
@@ -72,7 +76,14 @@ class MissingPlaceholders extends Rule {
             }
           }
         } else {
-          // Check if localized string
+          // It's possible that main file uses plural placeholders just to get
+          // the correct plural form without actually using them in the string.
+          // For example: {count, plurals, one {1 item} other {More items}}
+          // In this case, no need to check for missing or redundant
+          // placeholders
+          if (variablesMain.isEmpty && variables.isEmpty) continue;
+
+          // Check if localized string has the same placeholders as the main file
           if (!ListEquality().equals(variables, placeholderNames)) {
             issues++;
             logError(
