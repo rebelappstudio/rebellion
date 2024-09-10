@@ -1,3 +1,5 @@
+![Banner](assets/banner.png)
+
 # Rebellion
 
 Rebellion is a linter for Flutter's ARB translation files.
