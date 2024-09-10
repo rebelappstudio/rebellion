@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:meta/meta.dart';
 import 'package:rebellion/src/analyze/rules/rule.dart';
 import 'package:rebellion/src/message_parser/message_parser.dart';
 import 'package:rebellion/src/message_parser/messages/composite_message.dart';
@@ -10,6 +11,12 @@ import 'package:rebellion/src/message_parser/messages/submessages/select.dart';
 import 'package:rebellion/src/utils/arb_parser/parsed_arb_file.dart';
 import 'package:rebellion/src/utils/logger.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
+
+// Regular expression to match all upper case letters. For example:
+// * 'HELLO' -> match
+// * 'Hello' -> no match
+// * 'A-1' -> no match
+final _upperCaseLettersRegExp = RegExp(r'^\p{Lu}+$', unicode: true);
 
 /// Check if there are all caps strings. This considered to be a bad practice.
 /// It's better to convert to all caps programmatically
@@ -57,8 +64,13 @@ class AllCaps extends Rule {
     return issues;
   }
 
-  bool _isAllCapsString(String value) {
-    return value.isNotEmpty && value == value.toUpperCase();
+  @visibleForTesting
+  static bool isAllCapsString(String value) {
+    final newValue = value.replaceAll(' ', '');
+
+    if (newValue.isEmpty) return false;
+
+    return _upperCaseLettersRegExp.hasMatch(newValue);
   }
 
   int _checkPlural(String location, Plural plural) {
@@ -144,7 +156,7 @@ class AllCaps extends Rule {
     if (message == null) return false;
 
     final literals = allMessageLiterals(message);
-    return literals.any(_isAllCapsString);
+    return literals.any(isAllCapsString);
   }
 }
 

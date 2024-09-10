@@ -14,7 +14,7 @@ void main() {
     AppTester.create();
   });
 
-  test('All caps checks simple strings', () {
+  test('AllCaps checks simple strings', () {
     var issues = AllCaps().run(oneKeyFile('String'), options);
     expect(issues, 0);
     expect(inMemoryLogger.output, isEmpty);
@@ -24,7 +24,7 @@ void main() {
     expect(inMemoryLogger.output, 'filepath: all caps string key "key"');
   });
 
-  test('All caps checks string with variables', () {
+  test('AllCaps checks string with variables', () {
     var issues = AllCaps().run(
       oneKeyFile('Issues: {count}'),
       options,
@@ -32,12 +32,12 @@ void main() {
     expect(issues, 0);
     expect(inMemoryLogger.output, isEmpty);
 
-    issues = AllCaps().run(oneKeyFile('ISSUES: {count}'), options);
+    issues = AllCaps().run(oneKeyFile('{count} ISSUES'), options);
     expect(issues, 1);
     expect(inMemoryLogger.output, 'filepath: all caps string key "key"');
   });
 
-  test('All caps checks plurals', () {
+  test('AllCaps checks plurals', () {
     var issues = AllCaps().run(
       oneKeyFile('{count, plural, one {String} two {Strings}}'),
       options,
@@ -65,7 +65,7 @@ filepath key key: all caps string in case "other"
             .trim());
   });
 
-  test('All caps checks gender', () {
+  test('AllCaps checks gender', () {
     var issues = AllCaps().run(
       oneKeyFile('{sex, select, male{His} female{Her} other{Their}}'),
       options,
@@ -91,7 +91,7 @@ filepath key key: all caps string in case "other"
     );
   });
 
-  test('All caps checks select', () {
+  test('AllCaps checks select', () {
     var issues = AllCaps().run(
       oneKeyFile('{color, select, red{Red} blue{Blue} other{Other}}'),
       options,
@@ -112,5 +112,22 @@ filepath key key: all caps string in case "other"
 '''
           .trim(),
     );
+  });
+
+  test('AllCaps only checks letters', () {
+    expect(AllCaps.isAllCapsString(''), isFalse);
+    expect(AllCaps.isAllCapsString('ABC'), isTrue);
+    expect(AllCaps.isAllCapsString('Abc'), isFalse);
+    expect(AllCaps.isAllCapsString('123'), isFalse);
+    expect(AllCaps.isAllCapsString('__123-'), isFalse);
+    expect(AllCaps.isAllCapsString('AAA12'), isFalse);
+    expect(AllCaps.isAllCapsString('A-1'), isFalse);
+    expect(AllCaps.isAllCapsString('FOOBAR:'), isFalse);
+    expect(AllCaps.isAllCapsString('FÜBÆR'), isTrue);
+    expect(AllCaps.isAllCapsString('Fùbæř'), isFalse);
+    expect(AllCaps.isAllCapsString('фубар'), isFalse);
+    expect(AllCaps.isAllCapsString('ФУБАР'), isTrue);
+    expect(AllCaps.isAllCapsString('😉'), isFalse);
+    expect(AllCaps.isAllCapsString('☝🏾'), isFalse);
   });
 }
