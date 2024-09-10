@@ -60,6 +60,8 @@ rebellion diff ./myLocalizationsFolder
 
 By default this command prints missing translations to console. You can instruct Rebellion to create "diff" ARB files with missing translations using `--output` option (available values: `console` or `file`).
 
+`diff` uses main app locale to compare ARB files. Default locale is `en` but you can change it using `--main-locale` option
+
 ## Sort
 
 Sort ARB files alphabetically, in reverse alphabetical order or follow main ARB file's order:
@@ -73,12 +75,6 @@ Use `--sorting` to change sorting: `alphabetical` (default), `alphabetical-rever
 
 ## Configuration
 
-`analyze` and `diff` use main app locale to compare ARB files. Default locale is `en` but you can change it using `--main-locale` option:
-
-```sh
-rebellion diff --main-locale=fi .
-```
-
 You can disable some rules or set `sort` or `diff` settings using a configuration file. Create a file called `rebellion_options.yaml` in the root of your app and enable certain rules and options:
 
 ```yaml
@@ -90,6 +86,7 @@ rules:
     # Disable missing translations rule
     # - missing_translations
 
+    # Enable all other rules
     - all_caps
     - string_type
     - at_key_type
@@ -116,7 +113,7 @@ options:
   sorting: alphabetical
 ```
 
-Consider committing this file to git so all developers and CI actions use the same setup.
+If this YAML file could not be found, default set of options is used. Consider committing this file to git so all developers and CI actions use the same setup.
 
 ## Available rules
 

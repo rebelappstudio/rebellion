@@ -82,29 +82,28 @@ class RebellionOptions with EquatableMixin {
     );
   }
 
-  factory RebellionOptions.fromYaml(
-    YamlList? rules,
-    YamlMap? options,
-  ) {
+  factory RebellionOptions.fromYaml(YamlList? rules, YamlMap? options) {
     return RebellionOptions(
-      allCapsRuleEnabled: rules?.contains('all_caps') ?? true,
-      stringTypeRuleEnabled: rules?.contains('string_type') ?? true,
-      atKeyTypeRuleEnabled: rules?.contains('at_key_type') ?? true,
-      duplicatedKeysRuleEnabled: rules?.contains('duplicated_keys') ?? true,
-      emptyAtKeyRuleEnabled: rules?.contains('empty_at_key') ?? true,
-      localeDefinitionRuleEnabled: rules?.contains('locale_definition') ?? true,
+      allCapsRuleEnabled: rules?.contains('all_caps') ?? false,
+      stringTypeRuleEnabled: rules?.contains('string_type') ?? false,
+      atKeyTypeRuleEnabled: rules?.contains('at_key_type') ?? false,
+      duplicatedKeysRuleEnabled: rules?.contains('duplicated_keys') ?? false,
+      emptyAtKeyRuleEnabled: rules?.contains('empty_at_key') ?? false,
+      localeDefinitionRuleEnabled:
+          rules?.contains('locale_definition') ?? false,
       mandatoryAtKeyDescriptionRuleEnabled:
           rules?.contains('mandatory_at_key_description') ?? false,
       missingPlaceholdersRuleEnabled:
-          rules?.contains('missing_placeholders') ?? true,
-      missingPluralsRuleEnabled: rules?.contains('missing_plurals') ?? true,
+          rules?.contains('missing_placeholders') ?? false,
+      missingPluralsRuleEnabled: rules?.contains('missing_plurals') ?? false,
       missingTranslationsRuleEnabled:
-          rules?.contains('missing_translations') ?? true,
-      namingConventionRuleEnabled: rules?.contains('naming_convention') ?? true,
-      redundantAtKeyRuleEnabled: rules?.contains('redundant_at_key') ?? true,
+          rules?.contains('missing_translations') ?? false,
+      namingConventionRuleEnabled:
+          rules?.contains('naming_convention') ?? false,
+      redundantAtKeyRuleEnabled: rules?.contains('redundant_at_key') ?? false,
       redundantTranslationsRuleEnabled:
-          rules?.contains('redundant_translations') ?? true,
-      unusedAtKeyRuleEnabled: rules?.contains('unused_at_key') ?? true,
+          rules?.contains('redundant_translations') ?? false,
+      unusedAtKeyRuleEnabled: rules?.contains('unused_at_key') ?? false,
       mainLocale: options?['main_locale'] as String? ?? defaultMainLocale,
       namingConvention: NamingConvention.fromOptionName(
               options?['naming_convention'] as String) ??

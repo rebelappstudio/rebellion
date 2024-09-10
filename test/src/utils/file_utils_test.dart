@@ -72,6 +72,24 @@ options:
     expect(options.mainLocale, 'fi');
     expect(options.namingConvention, NamingConvention.snake);
     expect(options.sorting, Sorting.alphabetical);
+
+    tester.setConfigFile('''
+rules:
+  # - all_caps
+  #- string_type
+  - at_key_type
+
+options:
+  main_locale: fi
+  naming_convention: snake
+  sorting: follow-main-file
+''');
+    options = loadOptionsYaml();
+    expect(options.allCapsRuleEnabled, isFalse);
+    expect(options.stringTypeRuleEnabled, isFalse);
+    expect(options.atKeyTypeRuleEnabled, isTrue);
+    expect(options.unusedAtKeyRuleEnabled, isFalse);
+    expect(options.missingPluralsRuleEnabled, isFalse);
   });
 
   test('Writing ARB file writes valid JSON file', () {
