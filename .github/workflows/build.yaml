@@ -20,8 +20,10 @@ jobs:
       - name: Analyze
         run: dart analyze --fatal-infos
 
-      - name: Test on Flutter stable channel
-        run: sh ./scripts/get_test_coverage.sh
+      - name: Test and generate coverage report
+        run: 
+          dart pub global activate coverage
+          dart pub global run coverage:test_with_coverage
 
       - name: Upload code coverage
         uses: codecov/codecov-action@v3.1.1
