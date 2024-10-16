@@ -19,27 +19,24 @@ At the moment rebellion is meant to be used as a CLI tool and can't be used as a
 ## Example
 
 ```
-> rebellion analyze test_files/
+> rebellion analyze ./l10n/
 
-test_files/intl_fi.arb: all caps string key "key2"
-test_files/intl_en.arb: all caps string key "key2"
-test_files/intl_en.arb: all caps string key "key4"
-test_files/intl_fi.arb: no @@locale key found
-test_files/intl_en.arb: key "@key4" is missing placeholders definition
-test_files/intl_fi.arb key "key3" is missing a plural value "one"
-test_files/intl_en.arb key "key3" contains a redundant plural value "zero"
-test_files/intl_fi.arb: missing translation for key "key4"
-test_files/intl_fi.arb: missing translation for key "key_5"
-test_files/intl_fi.arb: @-key "@key" should only be present in the main file
-test_files/intl_en.arb: key "key_5" does not match selected naming convention (camel case)
+l10n/intl_fi.arb: all caps string key "key2"
+l10n/intl_fi.arb: no @@locale key found
+l10n/intl_en.arb: key "@key4" is missing placeholders definition
+l10n/intl_fi.arb key "key3" is missing a plural value "one"
+l10n/intl_en.arb key "key3" contains a redundant plural value "zero"
+l10n/intl_fi.arb: missing translation for key "key_5"
+l10n/intl_fi.arb: @-key "@key" should only be present in the main file
+l10n/intl_en.arb: key "key_5" does not match selected naming convention (camel case)
 
-11 issues found
+8 issues found
 ```
 
 ## Installation
 
 ```sh
-TODO
+dart pub add rebellion
 ```
 
 ## Analyze ARB files
@@ -47,7 +44,7 @@ TODO
 Find problems in ARB files:
 
 ```sh
-rebellion analyze ./myLocalizationsFolder
+rebellion analyze ./l10n/
 ```
 
 See Configuration section below to customize set of rules.
@@ -57,10 +54,14 @@ See Configuration section below to customize set of rules.
 Find missing translations:
 
 ```sh
-rebellion diff ./myLocalizationsFolder
+> rebellion diff ./l10n/
+
+l10n/intl_fi.arb: 2 missing translations:
+ - key4
+ - key_5
 ```
 
-By default this command prints missing translations to console. You can instruct Rebellion to create "diff" ARB files with missing translations using `--output` option (available values: `console` or `file`).
+By default this command prints missing translations to the console. You can instruct Rebellion to create "diff" ARB files with missing translations using `--output` option (available values: `console` or `file`).
 
 `diff` uses main app locale to compare ARB files. Default locale is `en` but you can change it using `--main-locale` option
 
@@ -69,15 +70,14 @@ By default this command prints missing translations to console. You can instruct
 Sort ARB files alphabetically, in reverse alphabetical order or follow main ARB file's order:
 
 ```sh
-rebellion sort ./myLocalizationsFolder
+rebellion sort ./l10n/
 ```
 
 Use `--sorting` to change sorting: `alphabetical` (default), `alphabetical-reverse` or `follow-main-file`
 
-
 ## Configuration
 
-You can disable some rules or set `sort` or `diff` settings using a configuration file. Create a file called `rebellion_options.yaml` in the root of your app and enable certain rules and options:
+You can disable some rules, set `sort` and `diff` settings using a configuration file. Create a file called `rebellion_options.yaml` in the root of your app and enable certain rules and options:
 
 ```yaml
 # List all rules that rebellion should follow
@@ -115,24 +115,74 @@ options:
   sorting: alphabetical
 ```
 
-If this YAML file could not be found, default set of options is used. Consider committing this file to git so all developers and CI actions use the same setup.
+If this YAML file could not be found, default set of options is used. Consider committing this file to git so all developers and CI actions use the same config.
 
 ## Available rules
 
-* `missing_plurals` - check that `plural` strings contain all required plural options for current locale and don't contain unused strings for this locale
-* `missing_placeholders` - check that @-keys don't contain empty placeholders
-* `all_caps` - check that strings are not written in capital letters
-* `string_type` - check that all strings are of type String
-* `at_key_type` - check that @-key has correct type
-* `duplicated_keys` - check that ARB files don't contain duplicated keys
-* `empty_at_key` - check that ARB files don't contain empty @-keys
-* `locale_definition` - check that ARB file has locale definition key (`@@locale`)
-* `mandatory_at_key_description` - check that all @-keys have `description` provided. Disabled by default
-* `missing_translations` - check that translation files have strings for all keys (checked against the main localization file)
-* `naming_convention` - check that key names are following naming conventions (camelCase or snake_case)
-* `redundant_at_key` - check that only main localization file contains @-keys
-* `redundant_translations` - check that translation files don't have keys not present in the main localization file
-* `unused_at_key` - check that all @-keys have corresponding key
+* ### `missing_plurals`
+
+  Check that `plural` strings contain all required plural options for current locale and don't contain unused strings for this locale.
+
+  For example:
+    - English uses `one` ("1 book") and `other` ("0 books", "20 books"). All other options are never used
+    - French uses `one`, `many` and `other`
+    - Arabic uses `zero`, `one`, `two`, `few`, `many`, `other`
+    - Vietnamese uses `other`
+
+* ### `missing_placeholders` 
+  
+  Check that @-keys don't contain empty placeholders
+
+* ### `all_caps` 
+  
+  Check that strings are not written in capital letters
+
+* ### `string_type` 
+  
+  Check that all strings are of type String
+
+* ### `at_key_type` 
+  
+  Check that @-key has correct type
+
+* ### `duplicated_keys` 
+  
+  Check that ARB files don't contain duplicated keys
+
+* ### `empty_at_key` 
+  
+  Check that ARB files don't contain empty @-keys
+
+  There's no need for ARB files
+
+* ### `locale_definition` 
+  
+  Check that ARB file has locale definition key (`@@locale`)
+
+* ### `mandatory_at_key_description` 
+  
+  Check that all @-keys have `description` provided. Disabled by default
+
+* ### `missing_translations` 
+  
+  Check that translation files have strings for all keys (checked against the main 
+  localization file)
+* ### `naming_convention` 
+  
+  Check that key names are following naming conventions (camelCase or snake_case)
+
+* ### `redundant_at_key` 
+  
+  Check that only main localization file contains @-keys
+
+* ### `redundant_translations` 
+  
+  Check that translation files don't have keys not present in the main localization file
+
+* ### `unused_at_key` 
+  
+  Check that all @-keys have corresponding key
+
 
 ## Updating plurals rules
 
@@ -149,4 +199,4 @@ There's a CI action that runs this script periodically so rules are up-to-date.
 * "Rebel" is from [Rebel App Studio](https://rebelappstudio.com)
 * "Lion" is `l10n` (localization) that could be misread as `lion`
 
-It's rebel, lion, localization and rebellion at the same time. Roar!
+It's rebel, lion and localization at the same time. Roar!
