@@ -21,7 +21,7 @@ jobs:
         run: dart analyze --fatal-infos
 
       - name: Test and generate coverage report
-        run: 
+        run: |
           dart pub global activate coverage
           dart pub global run coverage:test_with_coverage
 
