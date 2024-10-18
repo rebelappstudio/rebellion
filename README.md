@@ -1,4 +1,4 @@
-![Banner](assets/banner.png)
+![Banner](https://github.com/rebelappstudio/rebellion/raw/main/assets/banner.png)
 
 # Rebellion
 
@@ -36,7 +36,7 @@ l10n/intl_en.arb: key "key_5" does not match selected naming convention (camel c
 ## Installation
 
 ```sh
-dart pub add rebellion
+dart pub global activate rebellion
 ```
 
 ## Analyze ARB files
@@ -47,7 +47,7 @@ Find problems in ARB files:
 rebellion analyze ./l10n/
 ```
 
-See Configuration section below to customize set of rules.
+See Configuration section below to customize the set of rules.
 
 ## Diff
 
