@@ -15,6 +15,9 @@ class AnalyzeCommand extends Command {
   String get name => 'analyze';
 
   @override
+  List<String> get aliases => ['analyse'];
+
+  @override
   void run() {
     final options = loadOptionsYaml();
     final parsedFiles = getFilesAndFolders(options, argResults);
