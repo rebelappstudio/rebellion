@@ -1,7 +1,6 @@
 name: rebellion
 description: A linter for Flutter's ARB files
 version: 0.0.1
-publish: none
 repository: https://github.com/rebelappstudio/rebellion
 
 topics:
