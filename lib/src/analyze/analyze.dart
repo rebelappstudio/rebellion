@@ -23,8 +23,14 @@ class AnalyzeCommand extends Command {
     final parsedFiles = getFilesAndFolders(options, argResults);
     final enabledRules = options.enabledRules();
 
-    final issuesFound =
-        enabledRules.map((rule) => rule.run(parsedFiles, options)).sum;
+    final issuesFound = enabledRules.map((rule) {
+      final issues = rule.run(parsedFiles, options);
+
+      // Print a new line to separate issues from different rules
+      if (issues > 0) logError('');
+
+      return issues;
+    }).sum;
 
     if (issuesFound > 0) {
       logError(
