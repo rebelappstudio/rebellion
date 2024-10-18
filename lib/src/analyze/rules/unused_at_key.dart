@@ -6,6 +6,7 @@ import 'package:rebellion/src/utils/rebellion_options.dart';
 
 /// Check if there are @-keys without corresponding key
 class UnusedAtKey extends Rule {
+  /// Default constructor
   const UnusedAtKey();
 
   @override

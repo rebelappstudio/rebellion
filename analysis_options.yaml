@@ -1,1 +1,10 @@
 include: package:lints/recommended.yaml
+
+linter:
+  rules:
+    - public_member_api_docs
+
+analyzer:
+  exclude:
+    - lib/src/generated/
+    - lib/src/message_parser/

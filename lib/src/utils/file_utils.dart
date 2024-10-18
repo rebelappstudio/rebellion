@@ -13,6 +13,7 @@ import 'package:rebellion/src/utils/logger.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
 import 'package:yaml/yaml.dart';
 
+/// Filename of the configuration YAML file
 @visibleForTesting
 const configFilename = 'rebellion_options.yaml';
 
@@ -35,6 +36,9 @@ List<ArbFile> getArbFiles(List<String> filesAndFolders, String mainLocale) {
       .toList();
 }
 
+/// Parse ARB file name and extract locale
+///
+/// E.g. "strings_fi.arb" returns "fi"
 String? getLocaleFromFilepath(String filepath) {
   final extension = path.extension(filepath);
   if (extension.toLowerCase() != '.arb') return null;
@@ -60,25 +64,6 @@ String? getLocaleFromFilepath(String filepath) {
     throw Exception("Filename can't be parsed");
   }
 
-  // final match = _filenameRegExp.firstMatch(filename);
-  // if (match == null) {
-  //   logError('Cannot parse locale from $filepath');
-  //   throw Exception('Filename not supported');
-  // }
-
-  // final locale = match.group(2);
-
-  // final underscoreIndex = filename.indexOf('_');
-  // if (underscoreIndex == -1) return null;
-
-  // final locale = filename.substring(underscoreIndex + 1, filename.length);
-  // if (locale.length != 2) {
-  //   logError(
-  //     '$filepath: only two-letter locale codes are supported at the moment',
-  //   );
-  //   throw Exception('Filename not supported');
-  // }
-
   if (!_supportedLocales.contains(locale)) {
     logError('$filepath: locale $locale is not supported by Flutter');
     throw Exception('Locale not supported');
@@ -102,6 +87,7 @@ List<File> _getAllFiles(List<String> filesAndFolders) {
   return files;
 }
 
+/// Get a list of requested files
 List<ParsedArbFile> getFilesAndFolders(
   RebellionOptions options,
   ArgResults? argResults,
@@ -113,6 +99,7 @@ List<ParsedArbFile> getFilesAndFolders(
   return getArbFiles(filesAndFolders, mainLocale).map(parseArbFile).toList();
 }
 
+/// Write [content] to the file with the given [filename]
 void writeArbFile(Map<String, dynamic> content, String filename) {
   final encoder = JsonEncoder.withIndent('  ');
   final jsonContent = encoder.convert(content);
@@ -120,6 +107,7 @@ void writeArbFile(Map<String, dynamic> content, String filename) {
   file.writeAsStringSync(jsonContent);
 }
 
+/// Ensure that all specified files and folders exist or throw an exception
 @visibleForTesting
 void ensureFilesAndFoldersExist(List<String> filesAndFolders) {
   if (filesAndFolders.isEmpty) {
@@ -137,6 +125,7 @@ void ensureFilesAndFoldersExist(List<String> filesAndFolders) {
   }
 }
 
+/// Load options from the YAML file
 RebellionOptions loadOptionsYaml() {
   if (!fileReader.file(configFilename).existsSync()) {
     return RebellionOptions.empty();

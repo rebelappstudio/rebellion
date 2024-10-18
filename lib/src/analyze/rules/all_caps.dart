@@ -21,6 +21,7 @@ final _upperCaseLettersRegExp = RegExp(r'^\p{Lu}+$', unicode: true);
 /// Check if there are all caps strings. This considered to be a bad practice.
 /// It's better to convert to all caps programmatically
 class AllCaps extends Rule {
+  /// Default constructor
   const AllCaps();
 
   @override
@@ -64,6 +65,7 @@ class AllCaps extends Rule {
     return issues;
   }
 
+  /// Check if the [value] string contains only upper case letters
   @visibleForTesting
   static bool isAllCapsString(String value) {
     final newValue = value.replaceAll(' ', '');

@@ -6,16 +6,23 @@ import 'package:rebellion/src/utils/main_locale.dart';
 
 const _outputType = 'output';
 
+/// Output type for the diff command
 enum OutputType {
+  /// Crate a "diff" ARB file with missing translations
   printToFile('file'),
+
+  /// Print missing translations to the console
   printToConsole('console');
 
+  /// CLI option name
   final String optionName;
 
   const OutputType(this.optionName);
 }
 
+/// Collect missing translations by comparing main ARB file with other ARB files
 class DiffCommand extends Command {
+  /// Default constructor
   DiffCommand() {
     argParser
       ..addOption(mainLocaleParam, defaultsTo: defaultMainLocale)

@@ -12,6 +12,7 @@ import 'package:rebellion/src/utils/rebellion_options.dart';
 /// * "key": null
 /// * "key": {}
 class StringType extends Rule {
+  /// Default constructor
   const StringType();
 
   @override

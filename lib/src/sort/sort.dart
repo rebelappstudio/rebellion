@@ -7,21 +7,31 @@ import 'package:rebellion/src/utils/main_locale.dart';
 
 const _sortingParam = 'sorting';
 
+/// Sorting options
 enum Sorting {
+  /// Sort keys alphabetically
   alphabetical('alphabetical'),
+
+  /// Sort keys in reverse alphabetical order
   alphabeticalReverse('alphabetical-reverse'),
+
+  /// Sort keys following the main file key order
   followMainFile('follow-main-file');
 
+  /// CLI option name
   final String optionName;
 
   const Sorting(this.optionName);
 
+  /// Get [Sorting] from CLI option name
   static Sorting? fromOptionName(String? optionName) {
     return Sorting.values.firstWhereOrNull((e) => e.optionName == optionName);
   }
 }
 
+/// Sort keys of ARB files
 class SortCommand extends Command {
+  /// Default constructor
   SortCommand() {
     argParser
       ..addOption(mainLocaleParam, defaultsTo: defaultMainLocale)

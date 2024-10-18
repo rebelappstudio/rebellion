@@ -12,6 +12,7 @@ import 'package:rebellion/src/utils/rebellion_options.dart';
 /// * "@homePageTitle": null,
 /// * "@homePageTitle": "not a JSON object",
 class AtKeyType extends Rule {
+  /// Default constructor
   const AtKeyType();
 
   @override

@@ -10,6 +10,7 @@ import 'package:rebellion/src/utils/rebellion_options.dart';
 ///
 /// This check is off by default
 class MandatoryKeyDescription extends Rule {
+  /// Default constructor
   const MandatoryKeyDescription();
 
   @override

@@ -6,19 +6,25 @@ import 'package:equatable/equatable.dart';
 ///   "description": "Key description",
 ///   "placeholders":
 class AtKeyMeta with EquatableMixin {
+  /// 'description' field of the @-key
   final String? description;
+
+  /// List of placeholders for the @-key
   final List<AtKeyPlaceholder> placeholders;
 
+  /// Default constructor
   const AtKeyMeta({
     required this.description,
     required this.placeholders,
   });
 
+  /// Default empty constructor
   factory AtKeyMeta.empty() => const AtKeyMeta(
         description: null,
         placeholders: [],
       );
 
+  /// Copy the object with new values
   AtKeyMeta copyWith({
     String? description,
     List<AtKeyPlaceholder>? placeholders,
@@ -42,16 +48,23 @@ class AtKeyMeta with EquatableMixin {
 ///     "example": "42"
 ///   },
 class AtKeyPlaceholder with EquatableMixin {
+  /// Placeholder name
   final String? name;
+
+  /// Placeholder type
   final String? type;
+
+  /// Placeholder example
   final String? example;
 
+  /// Default constructor
   const AtKeyPlaceholder({
     required this.name,
     required this.type,
     required this.example,
   });
 
+  /// Copy the object with new values
   AtKeyPlaceholder copyWith({
     String? name,
     String? type,

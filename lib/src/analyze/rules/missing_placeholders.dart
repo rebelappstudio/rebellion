@@ -17,6 +17,7 @@ import 'package:rebellion/src/utils/rebellion_options.dart';
 /// Translation file contains @-keys without specifying the data type of the
 /// placeholders
 class MissingPlaceholders extends Rule {
+  /// Default constructor
   const MissingPlaceholders();
 
   @override
@@ -101,6 +102,9 @@ class MissingPlaceholders extends Rule {
   }
 }
 
+/// Get all variable substitutions from the [string]
+///
+/// E.g. "Hello, {name}" returns ["name"]
 List<String> getAllVariableSubstitutions(String string) {
   final parser = MessageParser(string);
   Message message = parser.pluralGenderSelectParse();
@@ -124,6 +128,7 @@ List<String> getAllVariableSubstitutions(String string) {
   return const [];
 }
 
+/// Get all variable substitutions from the composite [message]
 List<String> getVariableSubstitutionsFromCompositeMessage(
   CompositeMessage message,
 ) {

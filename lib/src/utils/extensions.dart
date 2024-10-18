@@ -1,6 +1,7 @@
 import 'package:rebellion/src/message_parser/messages/message.dart';
 import 'package:rebellion/src/message_parser/messages/submessages/plural.dart';
 
+/// String extensions
 extension StringX on String {
   /// Return true if the string is a locale definition
   bool get isLocaleDefinition => toLowerCase() == '@@locale';
@@ -33,6 +34,7 @@ extension StringX on String {
     }
   }
 
+  /// Covert regular key to an @-key
   String get toAtKey {
     if (isAtKey) {
       throw Exception('Key must not be an at-key');
@@ -45,6 +47,7 @@ extension StringX on String {
   }
 }
 
+/// [Plural] extensions
 extension PluralX on Plural {
   /// Get a list of all plural attributes available in this plural
   List<String> get allPluralAttributes => [
@@ -56,6 +59,7 @@ extension PluralX on Plural {
         if (other != null) 'other',
       ];
 
+  /// Get a list of all submessages available in this plural
   List<Message> get allSubmessages =>
       [zero, one, two, few, many, other].nonNulls.toList();
 }

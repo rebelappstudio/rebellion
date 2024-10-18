@@ -7,6 +7,7 @@ import 'package:rebellion/src/utils/rebellion_options.dart';
 /// Check if there are missing translations (translation files miss some keys
 /// present in the main file)
 class MissingTranslations extends Rule {
+  /// Default constructor
   const MissingTranslations();
 
   @override

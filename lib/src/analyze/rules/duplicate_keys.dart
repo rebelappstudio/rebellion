@@ -5,6 +5,7 @@ import 'package:rebellion/src/utils/rebellion_options.dart';
 
 /// Check for duplicated keys
 class DuplicatedKeys extends Rule {
+  /// Default constructor
   const DuplicatedKeys();
 
   @override

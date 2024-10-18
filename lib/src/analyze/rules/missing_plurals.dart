@@ -9,6 +9,7 @@ import 'package:rebellion/src/utils/rebellion_options.dart';
 
 /// Check if there are missing plurals in main file and translations
 class MissingPlurals extends Rule {
+  /// Default constructor
   const MissingPlurals();
 
   @override

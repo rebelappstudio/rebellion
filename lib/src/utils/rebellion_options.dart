@@ -19,26 +19,60 @@ import 'package:rebellion/src/sort/sort.dart';
 import 'package:rebellion/src/utils/main_locale.dart';
 import 'package:yaml/yaml.dart';
 
+/// Options for the rebellion tool
 class RebellionOptions with EquatableMixin {
+  /// True if [AllCaps] rule is enabled
   final bool allCapsRuleEnabled;
+
+  /// True if [StringType] rule is enabled
   final bool stringTypeRuleEnabled;
+
+  /// True if [AtKeyType] rule is enabled
   final bool atKeyTypeRuleEnabled;
+
+  /// True if [DuplicatedKeys] rule is enabled
   final bool duplicatedKeysRuleEnabled;
+
+  /// True if [EmptyAtKeys] rule is enabled
   final bool emptyAtKeyRuleEnabled;
+
+  /// True if [LocaleDefinitionPresent] rule is enabled
   final bool localeDefinitionRuleEnabled;
+
+  /// True if [MandatoryKeyDescription] rule is enabled
   final bool mandatoryAtKeyDescriptionRuleEnabled;
+
+  /// True if [MissingPlaceholders] rule is enabled
   final bool missingPlaceholdersRuleEnabled;
+
+  /// True if [MissingPlurals] rule is enabled
   final bool missingPluralsRuleEnabled;
+
+  /// True if [MissingTranslations] rule is enabled
   final bool missingTranslationsRuleEnabled;
+
+  /// True if [NamingConventionRule] rule is enabled
   final bool namingConventionRuleEnabled;
+
+  /// True if [RedundantAtKey] rule is enabled
   final bool redundantAtKeyRuleEnabled;
+
+  /// True if [RedundantTranslations] rule is enabled
   final bool redundantTranslationsRuleEnabled;
+
+  /// True if [UnusedAtKey] rule is enabled
   final bool unusedAtKeyRuleEnabled;
 
+  /// Default locale of the project
   final String mainLocale;
+
+  /// Naming convention for keys
   final NamingConvention namingConvention;
+
+  /// Sorting of keys
   final Sorting sorting;
 
+  /// Default constructor
   @visibleForTesting
   const RebellionOptions({
     required this.allCapsRuleEnabled,
@@ -60,6 +94,7 @@ class RebellionOptions with EquatableMixin {
     required this.sorting,
   });
 
+  /// Default empty constructor
   factory RebellionOptions.empty() {
     return RebellionOptions(
       allCapsRuleEnabled: true,
@@ -82,6 +117,7 @@ class RebellionOptions with EquatableMixin {
     );
   }
 
+  /// Create an instance of [RebellionOptions] from a YAML file content
   factory RebellionOptions.fromYaml(YamlList? rules, YamlMap? options) {
     return RebellionOptions(
       allCapsRuleEnabled: rules?.contains('all_caps') ?? false,
@@ -113,6 +149,7 @@ class RebellionOptions with EquatableMixin {
     );
   }
 
+  /// Get a list of enabled rules
   List<Rule> enabledRules() {
     return <Rule>[
       if (stringTypeRuleEnabled) const StringType(),

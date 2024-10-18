@@ -8,6 +8,7 @@ import 'package:rebellion/src/utils/rebellion_options.dart';
 /// Check if there are unnecessary translations (translation files contain
 /// keys not present in the main file)
 class RedundantTranslations extends Rule {
+  /// Default constructor
   const RedundantTranslations();
 
   @override

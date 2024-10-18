@@ -5,10 +5,15 @@ import 'package:rebellion/src/utils/extensions.dart';
 import 'package:rebellion/src/utils/logger.dart';
 import 'package:rebellion/src/utils/exit_exception.dart';
 
+/// A class that represents a diff between two ARB files
 class DiffArbFile with EquatableMixin {
+  /// The source ARB file
   final ParsedArbFile sourceFile;
+
+  /// The list of untranslated keys
   final List<String> untranslatedKeys;
 
+  /// Default constructor
   const DiffArbFile({
     required this.sourceFile,
     required this.untranslatedKeys,
@@ -20,6 +25,9 @@ class DiffArbFile with EquatableMixin {
   // coverage:ignore-end
 }
 
+/// Get a list of missing translations
+///
+/// [files] must contain a main file (used to compare all other files against)
 List<DiffArbFile> getMissingTranslations(List<ParsedArbFile> files) {
   final mainFile = files.firstWhereOrNull((file) => file.file.isMainFile);
   if (mainFile == null) {

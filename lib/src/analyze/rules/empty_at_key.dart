@@ -7,6 +7,7 @@ import 'package:rebellion/src/utils/rebellion_options.dart';
 
 /// Check that there are no @-keys without content
 class EmptyAtKeys extends Rule {
+  /// Default constructor
   const EmptyAtKeys();
 
   @override

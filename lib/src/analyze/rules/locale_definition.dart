@@ -5,6 +5,7 @@ import 'package:rebellion/src/utils/rebellion_options.dart';
 
 /// Translation file contains @@locale key with locale definition
 class LocaleDefinitionPresent extends Rule {
+  /// Default constructor
   const LocaleDefinitionPresent();
 
   @override

@@ -4,6 +4,9 @@ import 'package:rebellion/src/utils/file_utils.dart';
 import 'package:rebellion/src/utils/logger.dart';
 import 'package:rebellion/src/utils/exit_exception.dart';
 
+/// Analyze ARB files and report any found issues
+///
+/// List of files and rules to check against are based on [argResults]
 class AnalyzeCommand extends Command {
   @override
   String get description => 'Analyze ARB file(s)';

@@ -6,6 +6,7 @@ import 'package:rebellion/src/utils/rebellion_options.dart';
 
 /// Translation files contain @-keys with data already present in the main file
 class RedundantAtKey extends Rule {
+  /// Default constructor
   const RedundantAtKey();
 
   @override
