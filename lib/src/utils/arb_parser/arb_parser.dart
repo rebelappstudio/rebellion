@@ -37,8 +37,12 @@ ParsedArbFile parseArbFile(ArbFile file) {
       case JsonEventType.beginArray:
       case JsonEventType.endArray:
       case JsonEventType.arrayElement:
-        logError('${file.filepath}: ARB files must not contain arrays');
-        throw FormatException();
+        if (level == 0) {
+          logError(
+            '${file.filepath}: ARB files must not contain top-level arrays',
+          );
+          throw FormatException();
+        }
       case JsonEventType.beginObject:
         level++;
 
