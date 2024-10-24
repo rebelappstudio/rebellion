@@ -1,6 +1,6 @@
 import 'package:rebellion/src/analyze/rules/missing_placeholders.dart';
-import 'package:rebellion/src/utils/arb_parser/at_key_meta.dart';
 import 'package:rebellion/src/utils/command_runner.dart';
+import 'package:rebellion/src/utils/exit_exception.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
 import 'package:test/test.dart';
 
@@ -13,44 +13,39 @@ void main() {
 
   setUp(() {
     tester = AppTester.create();
+
+    // Enable MissingPlaceholders rule and set main locale
+    tester.setConfigFile('''
+rules:
+  - missing_placeholders
+
+options:
+  main_locale: en
+''');
   });
 
-  test('MissingPlaceholders reports no issues when placeholders are present',
-      () {
-    final issues = MissingPlaceholders().run(
-      [
-        createFile(
-          filepath: 'intl_en.arb',
-          isMainFile: true,
-          locale: 'en',
-          values: {
-            'key': 'Hello, {name}!',
-            '@key': AtKeyMeta(
-              description: null,
-              placeholders: [
-                AtKeyPlaceholder(
-                  name: 'name',
-                  type: 'String',
-                  example: null,
-                )
-              ],
-            ),
-          },
-        ),
-        createFile(
-          filepath: 'intl_es.arb',
-          isMainFile: false,
-          locale: 'es',
-          values: {'key': '¡Hola, {name}!'},
-        ),
-      ],
-      RebellionOptions.empty(),
-    );
-    expect(issues, isZero);
-    expect(inMemoryLogger.output, isEmpty);
+  test('Reports no issues when placeholders are present', () async {
+    tester.populateFileSystem({
+      'intl_en.arb': '''{
+  "nameTitle": "Hello {name}",
+  "@nameTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  }
+}''',
+      'intl_fi.arb': '''{
+  "nameTitle": "¡Hola, {name}!"
+}''',
+    });
+
+    await commandRunner.run(['analyze', '.']);
+    expect(inMemoryLogger.output, 'No issues found');
   });
 
-  test("MissingPlaceholders ignores @-keys that can't be parsed", () {
+  test("Ignores @-keys that can't be parsed", () async {
     final issues = MissingPlaceholders().run(
       [
         createFile(
@@ -76,253 +71,215 @@ void main() {
   });
 
   test(
-      "MissingPlaceholders reports errors when placeholder are different from what's in the main file",
-      () {
-    final issues = MissingPlaceholders().run(
-      [
-        createFile(
-          filepath: 'intl_en.arb',
-          isMainFile: true,
-          locale: 'en',
-          values: {
-            'key': 'Hello, {name}!',
-            '@key': AtKeyMeta(
-              description: null,
-              placeholders: [
-                AtKeyPlaceholder(
-                  name: 'name',
-                  type: 'String',
-                  example: null,
-                )
-              ],
-            ),
-          },
-        ),
-        createFile(
-          filepath: 'intl_es.arb',
-          isMainFile: false,
-          locale: 'es',
-          values: {'key': '¡Hola, {nombre}!'},
-        ),
-      ],
-      RebellionOptions.empty(),
-    );
-    expect(issues, 1);
-    expect(
-      inMemoryLogger.output,
-      'intl_es.arb: key "key" has different placeholders than the main file: [nombre] vs [name]',
-    );
-  });
+      "Reports errors when placeholder are different from what's in the main file",
+      () async {
+    tester.populateFileSystem({
+      'int_en.arb': '''{
+  "key": "Hello, {name}!",
+  "@key": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  }
+}''',
+      'intl_es.arb': '''{
+  "key": "¡Hola, {nombre}!"
+}''',
+    });
 
-  test('MissingPlaceholders reports placeholders without name', () {
-    final issues = MissingPlaceholders().run(
-      [
-        createFile(
-          filepath: 'intl_en.arb',
-          isMainFile: true,
-          locale: 'en',
-          values: {
-            'key': 'Hello, {name}!',
-            '@key': AtKeyMeta(
-              description: null,
-              placeholders: [
-                AtKeyPlaceholder(
-                  name: null,
-                  type: 'String',
-                  example: null,
-                )
-              ],
-            ),
-          },
-        ),
-        createFile(
-          filepath: 'intl_es.arb',
-          isMainFile: false,
-          locale: 'es',
-          values: {'key': '¡Hola, {name}!'},
-        ),
-      ],
-      RebellionOptions.empty(),
+    expect(
+      () async => await commandRunner.run(['analyze', '.']),
+      throwsA(isA<ExitException>()),
     );
-    expect(issues, 3);
     expect(
       inMemoryLogger.output,
       '''
-intl_en.arb: key "@key" is missing placeholders definition
-intl_en.arb: key "@key" is missing a placeholder name
-intl_es.arb: key "key" has different placeholders than the main file: [name] vs []
+./intl_es.arb: key "key" is missing a placeholder defined in the main file: name
+./intl_es.arb: key "key" uses a placeholder not present in the main file: nombre
+
+2 issues found
 '''
           .trim(),
     );
   });
 
-  test('MissingPlaceholders reports missing placeholders', () {
-    final issues = MissingPlaceholders().run(
-      [
-        createFile(
-          filepath: 'intl_en.arb',
-          isMainFile: true,
-          locale: 'en',
-          values: {
-            'key': 'Hello, {name}!',
-            '@key': AtKeyMeta(
-              description: null,
-              placeholders: [
-                AtKeyPlaceholder(
-                  name: 'name',
-                  type: null,
-                  example: null,
-                )
-              ],
-            ),
-          },
-        ),
-        createFile(
-          filepath: 'intl_es.arb',
-          isMainFile: false,
-          locale: 'es',
-          values: {'key': '¡Hola, {name}!'},
-        ),
-      ],
-      RebellionOptions.empty(),
+  test('Reports placeholders without name', () {
+    tester.populateFileSystem({
+      'intl_en.arb': '''{
+  "key": "Hello, {name}!",
+  "@key": {
+    "placeholders": [
+      {
+        "name": null,
+        "type": "String",
+        "example": null
+      }
+    ]
+  }
+}''',
+      'intl_es.arb': '''{
+"key": "¡Hola, {name}!"
+}''',
+    });
+
+    expect(
+      () async => await commandRunner.run(['analyze', '.']),
+      throwsA(isA<ExitException>()),
     );
-    expect(issues, 1);
     expect(
       inMemoryLogger.output,
-      'intl_en.arb: key "@key" is missing a placeholder type for "name"',
-    );
-  });
-
-  test('MissingPlaceholders reports missing placeholders in plural strings',
-      () {
-    final issues = MissingPlaceholders().run(
-      [
-        createFile(
-          filepath: 'intl_en.arb',
-          isMainFile: true,
-          locale: 'en',
-          values: {
-            'key': '{count, plural, one{1 item} other{{count} items}}',
-            '@key': AtKeyMeta(
-              description: null,
-              placeholders: [
-                AtKeyPlaceholder(
-                  name: 'count',
-                  type: 'int',
-                  example: null,
-                ),
-              ],
-            ),
-          },
-        ),
-        createFile(
-          filepath: 'intl_es.arb',
-          isMainFile: false,
-          locale: 'es',
-          values: {
-            'key': '{count, plural, one {1 item} other {x items}}',
-          },
-        ),
-      ],
-      RebellionOptions.empty(),
-    );
-    expect(issues, 1);
-    expect(
-      inMemoryLogger.output,
-      'intl_es.arb: key "key" has different placeholders than the main file: [] vs [count]',
-    );
-  });
-
-  test('MissingPlaceholders reports missing placeholders in inline strings',
-      () {
-    final issues = MissingPlaceholders().run(
-      [
-        createFile(
-          filepath: 'intl_en.arb',
-          isMainFile: true,
-          locale: 'en',
-          values: {
-            'key':
-                'Selected items: {count, plural, one {1 item} other {{count} items}}. Continue?',
-            '@key': AtKeyMeta(
-              description: null,
-              placeholders: [
-                AtKeyPlaceholder(
-                  name: 'count',
-                  type: 'int',
-                  example: null,
-                ),
-              ],
-            ),
-          },
-        ),
-        createFile(
-          filepath: 'intl_es.arb',
-          isMainFile: false,
-          locale: 'es',
-          values: {
-            'key':
-                '{count, plural, one{1 elemento} other{{count} elementos}}. ¿Continuar?',
-          },
-        ),
-      ],
-      RebellionOptions.empty(),
-    );
-    expect(issues, 0);
-    expect(inMemoryLogger.output, isEmpty);
-  });
-
-  test(
-      "MissingPlaceholders reports no missing placeholders is string doesn't use placeholders",
-      () {
-    final issues = MissingPlaceholders().run(
-      [
-        createFile(
-          filepath: 'intl_en.arb',
-          isMainFile: true,
-          locale: 'en',
-          values: {
-            'key': '{count, plural, one {1 item} other {X items}}',
-            '@key': AtKeyMeta(
-              description: null,
-              placeholders: [
-                AtKeyPlaceholder(
-                  name: 'count',
-                  type: 'int',
-                  example: null,
-                ),
-              ],
-            ),
-          },
-        ),
-        createFile(
-          filepath: 'intl_es.arb',
-          isMainFile: false,
-          locale: 'es',
-          values: {
-            'key': '{count, plural, one{1 elemento} other{X elementos}}',
-          },
-        ),
-      ],
-      RebellionOptions.empty(),
-    );
-    expect(issues, 0);
-    expect(inMemoryLogger.output, isEmpty);
-  });
-
-  test(
-      "MissingPlaceholders reports no missing placeholders if plural strings have extra placeholders",
-      () async {
-    tester.setConfigFile(
       '''
-rules:
-  - missing_placeholders
+./intl_en.arb: key "@key" is missing placeholders definition
 
-options:
-  main_locale: en
-
-''',
+1 issue found
+'''
+          .trim(),
     );
+  });
+
+  test('Reports missing placeholder type', () {
+    tester.populateFileSystem({
+      'intl_en.arb': '''{
+  "key": "Hello, {name}!",
+  "@key": {
+    "placeholders": {
+      "name": {
+      }
+    }
+  }
+}''',
+      'intl_es.arb': '''{
+  "key": "¡Hola, {name}!"
+}''',
+    });
+
+    expect(
+      () async => await commandRunner.run(['analyze', '.']),
+      throwsA(isA<ExitException>()),
+    );
+    expect(
+      inMemoryLogger.output,
+      '''
+./intl_en.arb: key "@key" is missing a placeholder type for "name"
+
+1 issue found
+'''
+          .trim(),
+    );
+  });
+
+  test('Reports missing placeholders in plural strings', () {
+    tester.populateFileSystem({
+      'intl_en.arb': '''{
+  "key": "{count, plural, one{1 item} other{{count} items}}",
+  "@key": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
+}''',
+      'intl_es.arb': '''{
+  "key": "{count, plural, one{1 item} other{many items}}"
+}''',
+    });
+    expect(
+      () async => await commandRunner.run(['analyze', '.']),
+      throwsA(isA<ExitException>()),
+    );
+    expect(
+      inMemoryLogger.output,
+      '''
+./intl_es.arb: key "key" is missing a placeholder defined in the main file: count
+
+1 issue found
+'''
+          .trim(),
+    );
+  });
+
+  test('Reports no issues when plurals are used without variable substitution',
+      () async {
+    tester.populateFileSystem({
+      'intl_en.arb': '''{
+  "key": "{count, plural, one{One item} other{Many items}}",
+  "@key": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
+}''',
+      'intl_es.arb': '''{
+  "key": "{count, plural, one{Uno elemento} other{Muchos elementos}}"
+}''',
+    });
+    await commandRunner.run(['analyze', '.']);
+    expect(inMemoryLogger.output, 'No issues found');
+  });
+
+  test('Reports missing placeholders in inline strings', () async {
+    tester.populateFileSystem({
+      'intl_en.arb': '''
+{
+  "key": "Selected items: {count, plural, one {1 item} other {{count} items}}. Continue?",
+  "@key": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
+}''',
+      'intl_es.arb': '''
+{
+  "key": "{count, plural, one{1 elemento} other{{count} elementos}}. ¿Continuar?"
+}
+''',
+    });
+    await commandRunner.run(['analyze', '.']);
+    expect(inMemoryLogger.output, 'No issues found');
+
+    tester.populateFileSystem({
+      'intl_en.arb': '''
+{
+  "key": "Selected items: {count, plural, one {1 item} other {{count} items}}. Continue?",
+  "@key": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
+}''',
+      'intl_es.arb': '''
+{
+  "key": "{count, plural, one{1 elemento} other{Muchos elementos}}. ¿Continuar?"
+}
+''',
+    });
+    inMemoryLogger.clear();
+    expect(
+      () async => await commandRunner.run(['analyze', '.']),
+      throwsA(isA<ExitException>()),
+    );
+    expect(
+        inMemoryLogger.output,
+        '''
+./intl_es.arb: key "key" is missing a placeholder defined in the main file: count
+
+1 issue found
+'''
+            .trim());
+  });
+
+  test(
+      "Reports no missing placeholders if plural strings have extra placeholders",
+      () async {
     tester.populateFileSystem({
       'intl_en.arb': '''
 {
@@ -348,5 +305,173 @@ options:
 
     await commandRunner.run(['analyze', '.']);
     expect(inMemoryLogger.output, 'No issues found');
+  });
+
+  test("Placeholder is not defined and @-key is present in translation file",
+      () async {
+    tester.populateFileSystem({
+      'intl_en.arb': '''
+{
+  "distanceMeters": "{distance} m",
+  "@distanceMeters": {}
+}
+''',
+      'intl_fi.arb': '''
+{
+  "distanceMeters": "{distance} m",
+  "@distanceMeters": {}
+}
+''',
+    });
+
+    expect(
+      () async => await commandRunner.run(['analyze', '.']),
+      throwsA(isA<ExitException>()),
+    );
+    expect(
+      inMemoryLogger.output,
+      '''
+./intl_en.arb: key "@distanceMeters" is missing placeholders definition
+
+1 issue found
+'''
+          .trim(),
+    );
+  });
+
+  test("@-key is present in translation file", () async {
+    tester.populateFileSystem({
+      'intl_en.arb': '''
+{
+  "distanceMeters": "{distance} m",
+  "@distanceMeters": {
+    "placeholders": {
+      "distance": {
+        "type": "int"
+      }
+    }
+  }
+}
+''',
+      'intl_fi.arb': '''
+{
+  "distanceMeters": "{distance} m",
+  "@distanceMeters": {
+    "placeholders": {
+      "distance": {
+        "type": "int"
+      }
+    }
+  }
+}
+''',
+    });
+
+    await commandRunner.run(['analyze', '.']);
+    expect(inMemoryLogger.output, 'No issues found');
+  });
+
+  test("Translation has placeholders not present in main file", () async {
+    tester.populateFileSystem({
+      'intl_en.arb': '''
+{
+  "nameTitle": "Hello {name} {surname}",
+  "@nameTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  }
+}
+''',
+      'intl_fi.arb': '''
+{
+  "nameTitle": "Hei {name} {secondName} {surname}"
+}
+''',
+    });
+
+    expect(
+      () async => await commandRunner.run(['analyze', '.']),
+      throwsA(isA<ExitException>()),
+    );
+    expect(
+        inMemoryLogger.output,
+        '''
+./intl_fi.arb: key "nameTitle" uses a placeholder not present in the main file: secondName
+
+1 issue found
+'''
+            .trim());
+  });
+
+  test("Translation has missing placeholders only present in main file",
+      () async {
+    tester.populateFileSystem({
+      'intl_en.arb': '''
+{
+  "nameTitle": "Hello {name} {surname}",
+  "@nameTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  }
+}
+''',
+      'intl_fi.arb': '''
+{
+  "nameTitle": "Hei {name}"
+}
+''',
+    });
+
+    expect(
+      () async => await commandRunner.run(['analyze', '.']),
+      throwsA(isA<ExitException>()),
+    );
+    expect(
+        inMemoryLogger.output,
+        '''
+./intl_fi.arb: key "nameTitle" is missing a placeholder defined in the main file: surname
+
+1 issue found
+'''
+            .trim());
+  });
+
+  test("Main file key lacks placeholders definition", () async {
+    tester.populateFileSystem({
+      'intl_en.arb': '''
+{
+  "nameTitle": "Hello {name}",
+  "@nameTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "surname": {
+        "type": "String"
+      }
+    }
+  }
+}
+''',
+    });
+
+    expect(
+      () async => await commandRunner.run(['analyze', '.']),
+      throwsA(isA<ExitException>()),
+    );
+    expect(
+        inMemoryLogger.output,
+        '''
+./intl_en.arb: key "@nameTitle" defines a placeholder that is not used in the string: surname
+
+1 issue found
+'''
+            .trim());
   });
 }

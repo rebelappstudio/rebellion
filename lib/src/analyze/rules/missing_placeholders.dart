@@ -14,8 +14,8 @@ import 'package:rebellion/src/utils/extensions.dart';
 import 'package:rebellion/src/utils/logger.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
 
-/// Translation file contains @-keys without specifying the data type of the
-/// placeholders
+/// Checks whether translation strings contain all variables defined in the main
+/// file and don't have any extra variables
 class MissingPlaceholders extends Rule {
   /// Default constructor
   const MissingPlaceholders();
@@ -32,46 +32,56 @@ class MissingPlaceholders extends Rule {
         final isMainFile = file.file.isMainFile;
         if (key.isLocaleDefinition) continue;
 
-        // For main file check @-keys only. For other files check all keys
-        // because it's expected that @-keys are only in the main file
+        // For main file check @-keys only
         if (isMainFile && !key.isAtKey) continue;
 
-        final mainFileContent = mainFile
-            .content[key.isAtKey ? key.atKeyToRegularKey : key] as String?;
+        // For other files use translation keys only. It's expected that
+        // translation files don't have @-keys (caught by [RedundantAtKey])
+        if (!isMainFile && key.isAtKey) continue;
+
+        final mainFileContent = mainFile.content[key.cleanKey] as String?;
         if (mainFileContent == null) continue;
 
-        final mainFileAtKey = mainFile.content[key.isAtKey ? key : key.toAtKey];
+        final mainFileAtKey = mainFile.content[key.toAtKey];
         if (mainFileAtKey is! AtKeyMeta) continue;
 
-        final originalString = file.content[key.cleanKey];
-        final variablesMain = getAllVariableSubstitutions(mainFileContent);
-        final variables =
-            getAllVariableSubstitutions(originalString).toSet().toList();
-        final definedPlaceholders = mainFileAtKey.placeholders;
-        final placeholderNames = definedPlaceholders
+        // Placeholders actually used in the string
+        final mainKeyUsedPlaceholders =
+            getAllVariableSubstitutions(mainFileContent).toSet();
+
+        // Placeholders defined in the main file (may or may not be used in
+        // the string as variables)
+        final definedPlaceholdersMain = mainFileAtKey.placeholders;
+        final definedMainFilePlaceholderNames = definedPlaceholdersMain
             .map((e) => e.name)
-            .whereNot((e) => e == null || e.isEmpty)
-            .toList()
-            .toSet()
-            .toList();
+            .nonNulls
+            .whereNot((e) => e.isEmpty)
+            .toSet();
+
+        final keyContent = file.content[key.cleanKey];
+        final keyPlaceholders = getAllVariableSubstitutions(keyContent).toSet();
 
         if (isMainFile) {
-          if (placeholderNames.isEmpty && variables.isNotEmpty) {
+          if (definedMainFilePlaceholderNames.isEmpty &&
+              keyPlaceholders.isNotEmpty) {
             issues++;
             logError(
               '${file.file.filepath}: key "$key" is missing placeholders definition',
             );
           }
 
-          // Check placeholder names and types for main file only
-          for (final placeholder in definedPlaceholders) {
-            if (placeholder.name?.isEmpty ?? true) {
-              issues++;
-              logError(
-                '${file.file.filepath}: key "$key" is missing a placeholder name',
-              );
-            }
+          // Check if there are any defined but unused placeholders
+          final unusedPlaceholders = definedMainFilePlaceholderNames
+              .where((e) => !mainKeyUsedPlaceholders.contains(e))
+              .toSet();
+          if (mainKeyUsedPlaceholders.isNotEmpty &&
+              unusedPlaceholders.isNotEmpty) {
+            issues++;
+            _logUnusedPlaceholders(file, key, unusedPlaceholders);
+          }
 
+          // Check placeholder names and types for main file only
+          for (final placeholder in definedPlaceholdersMain) {
             if (placeholder.type?.isEmpty ?? true) {
               issues++;
               logError(
@@ -85,20 +95,74 @@ class MissingPlaceholders extends Rule {
           // For example: {count, plurals, one {1 item} other {More items}}
           // In this case, no need to check for missing or redundant
           // placeholders
-          if (variablesMain.isEmpty && variables.isEmpty) continue;
+          if (mainKeyUsedPlaceholders.isEmpty && keyPlaceholders.isEmpty) {
+            continue;
+          }
 
-          // Check if localized string has the same placeholders as the main file
-          if (!ListEquality().equals(variables, placeholderNames)) {
+          final allDefinedVariables = {
+            ...mainKeyUsedPlaceholders,
+            ...definedMainFilePlaceholderNames,
+          };
+          // Placeholders present in translation but not defined or used in the
+          // main file
+          final extraPlaceholders =
+              keyPlaceholders.where((v) => !allDefinedVariables.contains(v));
+
+          // Placeholders defined in the main file but not used in the
+          // translation
+          final missingPlaceholders =
+              allDefinedVariables.where((v) => !keyPlaceholders.contains(v));
+
+          if (missingPlaceholders.isNotEmpty) {
             issues++;
-            logError(
-              '${file.file.filepath}: key "$key" has different placeholders than the main file: $variables vs $placeholderNames',
-            );
+            _logMissingPlaceholders(file, key, missingPlaceholders);
+          }
+
+          if (extraPlaceholders.isNotEmpty) {
+            issues++;
+            _logExtraPlaceholders(file, key, extraPlaceholders);
           }
         }
       }
     }
 
     return issues;
+  }
+
+  void _logUnusedPlaceholders(
+    ParsedArbFile file,
+    String key,
+    Iterable<String> placeholders,
+  ) {
+    logError(
+      placeholders.length == 1
+          ? '${file.file.filepath}: key "$key" defines a placeholder that is not used in the string: ${placeholders.first}'
+          : '${file.file.filepath}: key "$key" defines placeholders that are not used in the string: ${placeholders.join(', ')}',
+    );
+  }
+
+  void _logMissingPlaceholders(
+    ParsedArbFile file,
+    String key,
+    Iterable<String> placeholders,
+  ) {
+    logError(
+      placeholders.length == 1
+          ? '${file.file.filepath}: key "$key" is missing a placeholder defined in the main file: ${placeholders.first}'
+          : '${file.file.filepath}: key "$key" is missing placeholders defined in the main file: ${placeholders.join(', ')}',
+    );
+  }
+
+  void _logExtraPlaceholders(
+    ParsedArbFile file,
+    String key,
+    Iterable<String> placeholders,
+  ) {
+    logError(
+      placeholders.length == 1
+          ? '${file.file.filepath}: key "$key" uses a placeholder not present in the main file: ${placeholders.first}'
+          : '${file.file.filepath}: key "$key" uses placeholders not present in the main file: ${placeholders.join(', ')}',
+    );
   }
 }
 
