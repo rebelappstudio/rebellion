@@ -15,6 +15,9 @@ class AnalyzeCommand extends Command {
   String get name => 'analyze';
 
   @override
+  List<String> get aliases => ['analyse'];
+
+  @override
   void run() {
     final options = loadOptionsYaml();
     final parsedFiles = getFilesAndFolders(options, argResults);
@@ -24,6 +27,7 @@ class AnalyzeCommand extends Command {
         enabledRules.map((rule) => rule.run(parsedFiles, options)).sum;
 
     if (issuesFound > 0) {
+      logMessage('');
       logError(
         issuesFound == 1 ? '1 issue found' : '$issuesFound issues found',
       );

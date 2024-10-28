@@ -15,11 +15,16 @@ At the moment rebellion is meant to be used as a CLI tool and can't be used as a
 * [pub.dev page](https://pub.dev/packages/rebellion)
 * [Rebel App Studio](https://rebelappstudio.com)
 
+## Installation
+
+```sh
+dart pub global activate rebellion
+```
 
 ## Example
 
 ```
-> rebellion analyze ./l10n/
+> rebellion analyze ./lib/l10n/
 
 l10n/intl_fi.arb: all caps string key "key2"
 l10n/intl_fi.arb: no @@locale key found
@@ -33,18 +38,12 @@ l10n/intl_en.arb: key "key_5" does not match selected naming convention (camel c
 8 issues found
 ```
 
-## Installation
-
-```sh
-dart pub global activate rebellion
-```
-
 ## Analyze ARB files
 
 Find problems in ARB files:
 
 ```sh
-rebellion analyze ./l10n/
+rebellion analyze ./lib/l10n/
 ```
 
 See Configuration section below to customize the set of rules.
@@ -54,7 +53,7 @@ See Configuration section below to customize the set of rules.
 Find missing translations:
 
 ```sh
-> rebellion diff ./l10n/
+> rebellion diff ./lib/l10n/
 
 l10n/intl_fi.arb: 2 missing translations:
  - key4
@@ -70,7 +69,7 @@ By default this command prints missing translations to the console. You can inst
 Sort ARB files alphabetically, in reverse alphabetical order or follow main ARB file's order:
 
 ```sh
-rebellion sort ./l10n/
+rebellion sort ./lib/l10n/
 ```
 
 Use `--sorting` to change sorting: `alphabetical` (default), `alphabetical-reverse` or `follow-main-file`

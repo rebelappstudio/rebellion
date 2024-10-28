@@ -48,8 +48,54 @@ void main() {
     );
     expect(
       inMemoryLogger.output,
-      'strings_en.arb: ARB files must not contain arrays',
+      'strings_en.arb: ARB files must not contain top-level arrays',
     );
+  });
+
+  test('parseArbFile can parse placeholder array', () {
+    final tester = AppTester.create();
+    tester.populateFileSystem({
+      'strings_en.arb': '''
+{
+  "key": "Hi, {name}",
+  "@key": {
+    "description": "Greeting",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Hi, John",
+        "something": ["a", "b"]
+      }
+    }
+  }
+}
+''',
+    });
+
+    final parsedFile = parseArbFile(
+      ArbFile(
+        filepath: 'strings_en.arb',
+        locale: 'en',
+        isMainFile: true,
+      ),
+    );
+    expect(
+      parsedFile.content,
+      {
+        'key': 'Hi, {name}',
+        '@key': AtKeyMeta(
+          description: 'Greeting',
+          placeholders: [
+            AtKeyPlaceholder(
+              name: 'name',
+              type: 'String',
+              example: 'Hi, John',
+            ),
+          ],
+        ),
+      },
+    );
+    expect(inMemoryLogger.output, isEmpty);
   });
 
   test('parseArbFile can parse key meta', () {

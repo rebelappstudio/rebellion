@@ -36,11 +36,11 @@ extension StringX on String {
 
   /// Covert regular key to an @-key
   String get toAtKey {
-    if (isAtKey) {
-      throw Exception('Key must not be an at-key');
-    }
     if (isLocaleDefinition) {
       throw Exception('Key must not be a locale definition');
+    }
+    if (isAtKey) {
+      return this;
     }
 
     return '@$this';
