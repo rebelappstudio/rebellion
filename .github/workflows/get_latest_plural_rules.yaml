@@ -21,6 +21,5 @@ jobs:
       - name: Create pull request with changes (if any)
         uses: peter-evans/create-pull-request@v5
         with:
-          commit-message: "Generate plural rules"
+          commit-message: "Update plural rules"
           title: "[automated] Update plural rules"
-          branch: ${{ env.BRANCH_NAME }}
