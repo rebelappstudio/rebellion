@@ -8,12 +8,12 @@ on:
 
 jobs:
   analyze-test:
-    name: Analyze and test
+    name: Run plurals generator
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: dart-lang/setup-dart@v1
-      - run: dart pub get
+      - run: cd packages/plural_rules_generator && dart pub get && cd ../..
 
       - name: Generate plural rules
         run: dart packages/plural_rules_generator/bin/plural_rules_generator.dart ./lib/src/generated/plural_rules.dart
