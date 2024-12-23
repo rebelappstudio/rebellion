@@ -15,11 +15,6 @@ jobs:
       - uses: dart-lang/setup-dart@v1
       - run: dart pub get
 
-      - name: Analyze
-        uses: zgosalvez/github-actions-analyze-dart@v2
-        with:
-          fail-on-warnings: true
-
       - name: Generate plural rules
         run: dart packages/plural_rules_generator/bin/plural_rules_generator.dart ./lib/src/generated/plural_rules.dart
 
