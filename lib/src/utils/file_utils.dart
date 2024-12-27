@@ -11,11 +11,6 @@ import 'package:rebellion/src/utils/exit_exception.dart';
 import 'package:rebellion/src/utils/file_reader.dart';
 import 'package:rebellion/src/utils/logger.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
-import 'package:yaml/yaml.dart';
-
-/// Filename of the configuration YAML file
-@visibleForTesting
-const configFilename = 'rebellion_options.yaml';
 
 /// Get list of all .arb files except the main file
 /// Returns list of tuples (Target language, ARB filename)
@@ -123,20 +118,6 @@ void ensureFilesAndFoldersExist(List<String> filesAndFolders) {
       throw ExitException();
     }
   }
-}
-
-/// Load options from the YAML file
-RebellionOptions loadOptionsYaml() {
-  if (!fileReader.file(configFilename).existsSync()) {
-    return RebellionOptions.empty();
-  }
-
-  final fileContent = fileReader.readFile(configFilename);
-  final yaml = loadYaml(fileContent) as YamlMap;
-
-  final rules = yaml.nodes['rules'] as YamlList?;
-  final options = yaml.nodes['options'] as YamlMap?;
-  return RebellionOptions.fromYaml(rules, options);
 }
 
 // List of locales supported by Flutter

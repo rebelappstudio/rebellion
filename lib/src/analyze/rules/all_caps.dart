@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
+import 'package:rebellion/src/analyze/analyzer_options.dart';
 import 'package:rebellion/src/analyze/rules/rule.dart';
 import 'package:rebellion/src/message_parser/message_parser.dart';
 import 'package:rebellion/src/message_parser/messages/composite_message.dart';
@@ -10,7 +11,6 @@ import 'package:rebellion/src/message_parser/messages/submessages/plural.dart';
 import 'package:rebellion/src/message_parser/messages/submessages/select.dart';
 import 'package:rebellion/src/utils/arb_parser/parsed_arb_file.dart';
 import 'package:rebellion/src/utils/logger.dart';
-import 'package:rebellion/src/utils/rebellion_options.dart';
 
 // Regular expression to match all upper case letters. For example:
 // * 'HELLO' -> match
@@ -25,7 +25,7 @@ class AllCaps extends Rule {
   const AllCaps();
 
   @override
-  int run(List<ParsedArbFile> files, RebellionOptions options) {
+  int run(List<ParsedArbFile> files, AnalyzerOptions options) {
     int issues = 0;
 
     for (final file in files) {

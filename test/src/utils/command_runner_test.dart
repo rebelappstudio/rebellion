@@ -25,7 +25,9 @@ void main() {
 Analyze ARB file(s)
 
 Usage: rebellion analyze [arguments]
--h, --help    Print this usage information.
+-h, --help                Print this usage information.
+    --main-locale=<en>    Set the main locale. All localization files are compared to the main locale file for some of the checks
+                          (defaults to "en")
 
 Run "rebellion help" to see global options.
 '''
@@ -52,9 +54,10 @@ Run "rebellion help" to see global options.
 Sort keys of ARB files
 
 Usage: rebellion sort [arguments]
--h, --help           Print this usage information.
-    --main-locale    (defaults to "en")
-    --sorting        [alphabetical (default), alphabetical-reverse, follow-main-file]
+-h, --help                Print this usage information.
+    --main-locale=<en>    Set the main locale. All localization files are compared to the main locale file for some of the checks
+                          (defaults to "en")
+    --sorting             [alphabetical (default), alphabetical-reverse, follow-main-file]
 
 Run "rebellion help" to see global options.
 '''
@@ -81,9 +84,10 @@ Run "rebellion help" to see global options.
 Collect missing translations
 
 Usage: rebellion diff [arguments]
--h, --help           Print this usage information.
-    --main-locale    (defaults to "en")
-    --output         [file, console (default)]
+-h, --help                Print this usage information.
+    --main-locale=<en>    Set the main locale. All localization files are compared to the main locale file for some of the checks
+                          (defaults to "en")
+    --output              [file, console (default)]
 
 Run "rebellion help" to see global options.
 '''

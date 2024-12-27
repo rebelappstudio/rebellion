@@ -1,15 +1,23 @@
+import 'package:rebellion/src/analyze/analyzer_options.dart';
 import 'package:rebellion/src/analyze/rules/naming_convention.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
 import 'package:test/test.dart';
 
 import '../../../infrastructure/app_tester.dart';
-import '../../../infrastructure/extensions.dart';
 import '../../../infrastructure/logger.dart';
 import '../../../infrastructure/test_arb_files.dart';
 
 void main() {
   test('NamingConventionCheck checks key naming', () async {
     AppTester.create();
+
+    final analyzerOptions = AnalyzerOptions(
+      rebellionOptions: RebellionOptions.empty().copyWith(
+        namingConvention: NamingConvention.camel,
+      ),
+      isSingleFile: true,
+      containsMainFile: true,
+    );
 
     var issues = NamingConventionRule().run(
       [
@@ -20,9 +28,7 @@ void main() {
           },
         ),
       ],
-      RebellionOptions.empty().copyWith(
-        namingConvention: NamingConvention.camel,
-      ),
+      analyzerOptions,
     );
     expect(issues, 0);
     expect(inMemoryLogger.output, isEmpty);
@@ -38,9 +44,7 @@ void main() {
           },
         ),
       ],
-      RebellionOptions.empty().copyWith(
-        namingConvention: NamingConvention.camel,
-      ),
+      analyzerOptions,
     );
     expect(issues, 2);
     expect(

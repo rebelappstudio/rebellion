@@ -1,3 +1,4 @@
+import 'package:rebellion/src/analyze/analyzer_options.dart';
 import 'package:rebellion/src/analyze/rules/redundant_translations.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
 import 'package:test/test.dart';
@@ -37,7 +38,11 @@ void main() {
           },
         ),
       ],
-      RebellionOptions.empty(),
+      AnalyzerOptions(
+        rebellionOptions: RebellionOptions.empty(),
+        isSingleFile: false,
+        containsMainFile: true,
+      ),
     );
     expect(issues, isZero);
     expect(inMemoryLogger.output, isEmpty);
@@ -69,7 +74,11 @@ void main() {
           },
         ),
       ],
-      RebellionOptions.empty(),
+      AnalyzerOptions(
+        rebellionOptions: RebellionOptions.empty(),
+        isSingleFile: false,
+        containsMainFile: true,
+      ),
     );
     expect(issues, 2);
     expect(
@@ -81,7 +90,7 @@ strings_es.arb: redundant translation "key5"
             .trim());
   });
 
-  test('RedundantTranslations reports an error when no main file found', () {
+  test('RedundantTranslations reports no errors when no main file found', () {
     final issues = RedundantTranslations().run(
       [
         createFile(
@@ -97,9 +106,13 @@ strings_es.arb: redundant translation "key5"
           values: {'key1': 'valor'},
         ),
       ],
-      RebellionOptions.empty(),
+      AnalyzerOptions(
+        rebellionOptions: RebellionOptions.empty(),
+        isSingleFile: false,
+        containsMainFile: false,
+      ),
     );
-    expect(issues, 1);
-    expect(inMemoryLogger.output, 'No main file found');
+    expect(issues, 0);
+    expect(inMemoryLogger.output, isEmpty);
   });
 }

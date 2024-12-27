@@ -1,7 +1,7 @@
 import 'package:file/memory.dart';
 import 'package:rebellion/src/utils/file_reader.dart';
-import 'package:rebellion/src/utils/file_utils.dart';
 import 'package:rebellion/src/utils/logger.dart';
+import 'package:rebellion/src/utils/rebellion_options.dart';
 
 import 'logger.dart';
 

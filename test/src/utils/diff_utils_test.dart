@@ -1,5 +1,4 @@
 import 'package:rebellion/src/utils/diff_utils.dart';
-import 'package:rebellion/src/utils/exit_exception.dart';
 import 'package:test/test.dart';
 
 import '../../infrastructure/app_tester.dart';
@@ -7,10 +6,11 @@ import '../../infrastructure/logger.dart';
 import '../../infrastructure/test_arb_files.dart';
 
 void main() {
-  test('getMissingTranslations stops execution when no main locale found', () {
+  test('getMissingTranslations returns empty list when no main locale found',
+      () {
     AppTester.create();
     expect(
-      () => getMissingTranslations(
+      getMissingTranslations(
         [
           createFile(
             isMainFile: false,
@@ -24,9 +24,9 @@ void main() {
           ),
         ],
       ),
-      throwsA(isA<ExitException>()),
+      isEmpty,
     );
-    expect(inMemoryLogger.output, 'No main file found');
+    expect(inMemoryLogger.output, isEmpty);
   });
 
   test('getMissingTranslations produces lists of diff files', () {

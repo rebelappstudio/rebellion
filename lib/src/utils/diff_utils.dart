@@ -2,8 +2,6 @@ import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:rebellion/src/utils/arb_parser/parsed_arb_file.dart';
 import 'package:rebellion/src/utils/extensions.dart';
-import 'package:rebellion/src/utils/logger.dart';
-import 'package:rebellion/src/utils/exit_exception.dart';
 
 /// A class that represents a diff between two ARB files
 class DiffArbFile with EquatableMixin {
@@ -31,8 +29,8 @@ class DiffArbFile with EquatableMixin {
 List<DiffArbFile> getMissingTranslations(List<ParsedArbFile> files) {
   final mainFile = files.firstWhereOrNull((file) => file.file.isMainFile);
   if (mainFile == null) {
-    logError("No main file found");
-    throw ExitException();
+    // No main file found to compare against
+    return const [];
   }
 
   final result = <DiffArbFile>[];

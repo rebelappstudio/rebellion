@@ -1,3 +1,4 @@
+import 'package:rebellion/src/analyze/analyzer_options.dart';
 import 'package:rebellion/src/analyze/rules/all_caps.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
 import 'package:test/test.dart';
@@ -7,7 +8,10 @@ import '../../../infrastructure/logger.dart';
 import '../../../infrastructure/test_arb_files.dart';
 
 void main() {
-  late final options = RebellionOptions.empty();
+  late final options = AnalyzerOptions.fromFiles(
+    rebellionOptions: RebellionOptions.empty(),
+    files: const [],
+  );
 
   setUp(() {
     // Reset logger before each test

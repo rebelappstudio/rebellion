@@ -1,9 +1,9 @@
 import 'package:collection/collection.dart';
+import 'package:rebellion/src/analyze/analyzer_options.dart';
 import 'package:rebellion/src/analyze/rules/rule.dart';
 import 'package:rebellion/src/utils/arb_parser/parsed_arb_file.dart';
 import 'package:rebellion/src/utils/extensions.dart';
 import 'package:rebellion/src/utils/logger.dart';
-import 'package:rebellion/src/utils/rebellion_options.dart';
 
 // Note: these regexps are quite strict and no latin extended characters are
 // allowed
@@ -49,10 +49,10 @@ class NamingConventionRule extends Rule {
   const NamingConventionRule();
 
   @override
-  int run(List<ParsedArbFile> files, RebellionOptions options) {
+  int run(List<ParsedArbFile> files, AnalyzerOptions options) {
     int issues = 0;
 
-    final convention = options.namingConvention;
+    final convention = options.rebellionOptions.namingConvention;
     for (final file in files) {
       for (final key in file.keys) {
         if (convention.hasMatch(key) == false) {

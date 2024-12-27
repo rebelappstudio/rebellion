@@ -2,7 +2,8 @@ import 'package:args/command_runner.dart';
 import 'package:rebellion/src/utils/diff_utils.dart';
 import 'package:rebellion/src/utils/file_utils.dart';
 import 'package:rebellion/src/utils/logger.dart';
-import 'package:rebellion/src/utils/main_locale.dart';
+import 'package:rebellion/src/utils/args.dart';
+import 'package:rebellion/src/utils/rebellion_options.dart';
 
 const _outputType = 'output';
 
@@ -25,7 +26,12 @@ class DiffCommand extends Command {
   /// Default constructor
   DiffCommand() {
     argParser
-      ..addOption(mainLocaleParam, defaultsTo: defaultMainLocale)
+      ..addOption(
+        CliArgs.mainLocaleParam,
+        defaultsTo: defaultMainLocale,
+        valueHelp: CliArgs.mainLocaleCliValueHelp,
+        help: CliArgs.mainLocaleCliHelp,
+      )
       ..addOption(
         _outputType,
         defaultsTo: OutputType.printToConsole.optionName,
@@ -41,7 +47,10 @@ class DiffCommand extends Command {
 
   @override
   void run() {
-    final options = loadOptionsYaml();
+    // Create options from YAML file and CLI arguments
+    final yamlOptions = RebellionOptions.loadYaml();
+    final cliOptions = RebellionOptions.fromCliArguments(argResults);
+    final options = yamlOptions.applyCliArguments(cliOptions);
     final parsedFiles = getFilesAndFolders(options, argResults);
     final outputType = OutputType.values.firstWhere(
       (e) => e.optionName == argResults?[_outputType] as String?,
