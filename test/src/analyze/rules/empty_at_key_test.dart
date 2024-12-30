@@ -1,3 +1,4 @@
+import 'package:rebellion/src/analyze/analyzer_options.dart';
 import 'package:rebellion/src/analyze/rules/empty_at_key.dart';
 import 'package:rebellion/src/utils/arb_parser/at_key_meta.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
@@ -11,12 +12,18 @@ void main() {
   test('EmptyAtKeys checks @-keys without description', () async {
     AppTester.create();
 
+    final analyzerOptions = AnalyzerOptions(
+      rebellionOptions: RebellionOptions.empty(),
+      isSingleFile: true,
+      containsMainFile: true,
+    );
+
     // No @-keys - no error
     var issues = EmptyAtKeys().run(
       [
         createFile(values: {'key': 'value'}),
       ],
-      RebellionOptions.empty(),
+      analyzerOptions,
     );
     expect(issues, 0);
     expect(inMemoryLogger.output, isEmpty);
@@ -35,7 +42,7 @@ void main() {
           },
         ),
       ],
-      RebellionOptions.empty(),
+      analyzerOptions,
     );
     expect(issues, 0);
     expect(inMemoryLogger.output, isEmpty);
@@ -54,7 +61,7 @@ void main() {
           },
         ),
       ],
-      RebellionOptions.empty(),
+      analyzerOptions,
     );
     expect(issues, 1);
     expect(
@@ -76,7 +83,7 @@ void main() {
           },
         ),
       ],
-      RebellionOptions.empty(),
+      analyzerOptions,
     );
     expect(issues, 1);
     expect(
@@ -104,7 +111,7 @@ void main() {
           },
         ),
       ],
-      RebellionOptions.empty(),
+      analyzerOptions,
     );
     expect(issues, 0);
     expect(inMemoryLogger.output, isEmpty);

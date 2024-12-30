@@ -1,3 +1,4 @@
+import 'package:rebellion/src/utils/args.dart';
 import 'package:rebellion/src/utils/command_runner.dart';
 import 'package:rebellion/src/utils/exit_exception.dart';
 import 'package:test/test.dart';
@@ -56,5 +57,72 @@ void main() {
 2 issues found'''
           .trim(),
     );
+  });
+
+  test('Warning when no main file', () async {
+    final tester = AppTester.create();
+    tester.populateFileSystem({
+      'strings_fi.arb': '{ "appTitle": "Rebeleijona" }',
+    });
+    expect(
+      () async => await commandRunner.run(['analyze', '.']),
+      throwsA(isA<ExitException>()),
+    );
+    // Special message when analyzing one file
+    expect(
+      inMemoryLogger.output,
+      '''
+⚠️ Looks like a single file is being analyzed but it's not marked as the main file. Some checks may not work. Use the `main-locale` option to specify the main locale
+./strings_fi.arb: no @@locale key found
+
+1 issue found
+'''
+          .trim(),
+    );
+
+    // Analyze multiple files
+    inMemoryLogger.clear();
+    tester.populateFileSystem({
+      'strings_fi.arb': '{ "appTitle": "Rebeleijona" }',
+      'strings_fr.arb': '{ "appTitle": "Rebellion" }',
+    });
+    expect(
+      () async => await commandRunner.run(['analyze', '.']),
+      throwsA(isA<ExitException>()),
+    );
+    expect(
+      inMemoryLogger.output,
+      '''
+⚠️ No main file found, some checks may not work. Use the `main-locale` option to specify the main locale
+./strings_fi.arb: no @@locale key found
+./strings_fr.arb: no @@locale key found
+
+2 issues found
+'''
+          .trim(),
+    );
+  });
+
+  test('Console value is preferred over YAML config', () {
+    final tester = AppTester.create();
+    tester.populateFileSystem({
+      'strings_fi.arb': '{}',
+      'strings_sv.arb': '{}',
+    });
+    expect(defaultMainLocale, 'en');
+    expect(
+      () async => await commandRunner.run(['analyze', '.', '--main-locale=fi']),
+      throwsA(isA<ExitException>()),
+    );
+    expect(
+        inMemoryLogger.output,
+        // Has no warning about main file
+        '''
+./strings_fi.arb: no @@locale key found
+./strings_sv.arb: no @@locale key found
+
+2 issues found
+'''
+            .trim());
   });
 }

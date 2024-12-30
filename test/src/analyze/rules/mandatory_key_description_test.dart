@@ -1,3 +1,4 @@
+import 'package:rebellion/src/analyze/analyzer_options.dart';
 import 'package:rebellion/src/analyze/rules/mandatory_key_description.dart';
 import 'package:rebellion/src/utils/arb_parser/arb_file.dart';
 import 'package:rebellion/src/utils/arb_parser/at_key_meta.dart';
@@ -11,6 +12,12 @@ import '../../../infrastructure/logger.dart';
 void main() {
   test('MandatoryKeyDescription checks that key description is present', () {
     AppTester.create();
+
+    final analyzerOptions = AnalyzerOptions(
+      rebellionOptions: RebellionOptions.empty(),
+      isSingleFile: true,
+      containsMainFile: true,
+    );
 
     // Key description is present
     var issues = MandatoryKeyDescription().run(
@@ -31,7 +38,7 @@ void main() {
           rawKeys: ['key', '@key'],
         )
       ],
-      RebellionOptions.empty(),
+      analyzerOptions,
     );
     expect(issues, 0);
     expect(inMemoryLogger.output, isEmpty);
@@ -56,7 +63,7 @@ void main() {
           rawKeys: ['key', '@key'],
         )
       ],
-      RebellionOptions.empty(),
+      analyzerOptions,
     );
     expect(issues, 1);
     expect(

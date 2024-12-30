@@ -1,3 +1,4 @@
+import 'package:rebellion/src/analyze/analyzer_options.dart';
 import 'package:rebellion/src/analyze/rules/rule.dart';
 import 'package:rebellion/src/generated/plural_rules.dart';
 import 'package:rebellion/src/message_parser/message_parser.dart';
@@ -5,7 +6,6 @@ import 'package:rebellion/src/message_parser/messages/submessages/plural.dart';
 import 'package:rebellion/src/utils/arb_parser/parsed_arb_file.dart';
 import 'package:rebellion/src/utils/extensions.dart';
 import 'package:rebellion/src/utils/logger.dart';
-import 'package:rebellion/src/utils/rebellion_options.dart';
 
 /// Check if there are missing plurals in main file and translations
 class MissingPlurals extends Rule {
@@ -13,7 +13,7 @@ class MissingPlurals extends Rule {
   const MissingPlurals();
 
   @override
-  int run(List<ParsedArbFile> files, RebellionOptions options) {
+  int run(List<ParsedArbFile> files, AnalyzerOptions options) {
     int issues = 0;
 
     final pluralRules = PluralRules();

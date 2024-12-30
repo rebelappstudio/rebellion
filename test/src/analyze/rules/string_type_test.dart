@@ -1,3 +1,4 @@
+import 'package:rebellion/src/analyze/analyzer_options.dart';
 import 'package:rebellion/src/analyze/rules/string_type.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
 import 'package:test/test.dart';
@@ -10,6 +11,12 @@ void main() {
   test('StringType checks that all keys are strings', () async {
     AppTester.create();
 
+    final analyzerOptions = AnalyzerOptions(
+      rebellionOptions: RebellionOptions.empty(),
+      isSingleFile: true,
+      containsMainFile: true,
+    );
+
     var issues = StringType().run(
       [
         createFile(
@@ -19,7 +26,7 @@ void main() {
           },
         ),
       ],
-      RebellionOptions.empty(),
+      analyzerOptions,
     );
     expect(issues, 0);
     expect(inMemoryLogger.output, isEmpty);
@@ -37,7 +44,7 @@ void main() {
           },
         ),
       ],
-      RebellionOptions.empty(),
+      analyzerOptions,
     );
     expect(issues, 4);
     expect(

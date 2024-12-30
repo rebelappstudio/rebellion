@@ -3,9 +3,8 @@ import 'package:collection/collection.dart';
 import 'package:rebellion/src/utils/arb_parser/parsed_arb_file.dart';
 import 'package:rebellion/src/utils/extensions.dart';
 import 'package:rebellion/src/utils/file_utils.dart';
-import 'package:rebellion/src/utils/main_locale.dart';
-
-const _sortingParam = 'sorting';
+import 'package:rebellion/src/utils/args.dart';
+import 'package:rebellion/src/utils/rebellion_options.dart';
 
 /// Sorting options
 enum Sorting {
@@ -34,9 +33,14 @@ class SortCommand extends Command {
   /// Default constructor
   SortCommand() {
     argParser
-      ..addOption(mainLocaleParam, defaultsTo: defaultMainLocale)
       ..addOption(
-        _sortingParam,
+        CliArgs.mainLocaleParam,
+        defaultsTo: defaultMainLocale,
+        valueHelp: CliArgs.mainLocaleCliValueHelp,
+        help: CliArgs.mainLocaleCliHelp,
+      )
+      ..addOption(
+        CliArgs.sortingParam,
         defaultsTo: Sorting.alphabetical.optionName,
         allowed: Sorting.values.map((e) => e.optionName),
       );
@@ -50,9 +54,12 @@ class SortCommand extends Command {
 
   @override
   void run() {
-    final options = loadOptionsYaml();
+    // Create options from YAML file and CLI arguments
+    final yamlOptions = RebellionOptions.loadYaml();
+    final cliOptions = RebellionOptions.fromCliArguments(argResults);
+    final options = yamlOptions.applyCliArguments(cliOptions);
     final sorting = Sorting.values.firstWhere(
-      (e) => e.optionName == argResults?[_sortingParam] as String,
+      (e) => e.optionName == argResults?[CliArgs.sortingParam] as String,
     );
 
     final parsedFiles = getFilesAndFolders(options, argResults);

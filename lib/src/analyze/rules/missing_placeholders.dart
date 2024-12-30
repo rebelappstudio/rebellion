@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:rebellion/src/analyze/analyzer_options.dart';
 import 'package:rebellion/src/analyze/rules/rule.dart';
 import 'package:rebellion/src/message_parser/message_parser.dart';
 import 'package:rebellion/src/message_parser/messages/composite_message.dart';
@@ -12,7 +13,6 @@ import 'package:rebellion/src/utils/arb_parser/at_key_meta.dart';
 import 'package:rebellion/src/utils/arb_parser/parsed_arb_file.dart';
 import 'package:rebellion/src/utils/extensions.dart';
 import 'package:rebellion/src/utils/logger.dart';
-import 'package:rebellion/src/utils/rebellion_options.dart';
 
 /// Checks whether translation strings contain all variables defined in the main
 /// file and don't have any extra variables
@@ -21,8 +21,11 @@ class MissingPlaceholders extends Rule {
   const MissingPlaceholders();
 
   @override
-  int run(List<ParsedArbFile> files, RebellionOptions options) {
+  int run(List<ParsedArbFile> files, AnalyzerOptions options) {
     var issues = 0;
+
+    // Only check if main file is available
+    if (!options.containsMainFile) return issues;
 
     // Use main file to get all placeholders as it should be the source of them
     final mainFile = files.firstWhere((e) => e.file.isMainFile);

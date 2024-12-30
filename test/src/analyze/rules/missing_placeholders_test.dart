@@ -1,3 +1,4 @@
+import 'package:rebellion/src/analyze/analyzer_options.dart';
 import 'package:rebellion/src/analyze/rules/missing_placeholders.dart';
 import 'package:rebellion/src/utils/command_runner.dart';
 import 'package:rebellion/src/utils/exit_exception.dart';
@@ -64,7 +65,11 @@ options:
           values: {'key': '¡Hola, {name}!'},
         ),
       ],
-      RebellionOptions.empty(),
+      AnalyzerOptions(
+        rebellionOptions: RebellionOptions.empty(),
+        isSingleFile: true,
+        containsMainFile: true,
+      ),
     );
     expect(issues, isZero);
     expect(inMemoryLogger.output, isEmpty);

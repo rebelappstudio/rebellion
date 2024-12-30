@@ -6,5 +6,5 @@ linter:
 
 analyzer:
   exclude:
-    - lib/src/generated/
-    - lib/src/message_parser/
+    - lib/src/generated/**
+    - lib/src/message_parser/**

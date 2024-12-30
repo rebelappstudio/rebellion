@@ -1,3 +1,4 @@
+import 'package:rebellion/src/analyze/analyzer_options.dart';
 import 'package:rebellion/src/analyze/rules/unused_at_key.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
 import 'package:test/test.dart';
@@ -10,6 +11,12 @@ void main() {
   test('UnusedAtKey checks that @-keys have corresponding keys', () async {
     AppTester.create();
 
+    final analyzerOptions = AnalyzerOptions(
+      rebellionOptions: RebellionOptions.empty(),
+      isSingleFile: true,
+      containsMainFile: true,
+    );
+
     // No unused @-keys
     var issues = UnusedAtKey().run(
       [
@@ -20,7 +27,7 @@ void main() {
           },
         )
       ],
-      RebellionOptions.empty(),
+      analyzerOptions,
     );
     expect(issues, 0);
     expect(inMemoryLogger.output, isEmpty);
@@ -37,7 +44,7 @@ void main() {
           },
         )
       ],
-      RebellionOptions.empty(),
+      analyzerOptions,
     );
     expect(issues, 2);
     expect(

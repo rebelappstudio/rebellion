@@ -1,3 +1,4 @@
+import 'package:rebellion/src/analyze/analyzer_options.dart';
 import 'package:rebellion/src/analyze/rules/missing_translations.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
 import 'package:test/test.dart';
@@ -9,6 +10,12 @@ import '../../../infrastructure/test_arb_files.dart';
 void main() {
   test('MissingTranslations lists all missing translations', () async {
     AppTester.create();
+
+    final analyzerOptions = AnalyzerOptions(
+      rebellionOptions: RebellionOptions.empty(),
+      isSingleFile: false,
+      containsMainFile: true,
+    );
 
     var issues = MissingTranslations().run(
       [
@@ -29,7 +36,7 @@ void main() {
           },
         ),
       ],
-      RebellionOptions.empty(),
+      analyzerOptions,
     );
     expect(issues, 0);
     expect(inMemoryLogger.output, isEmpty);
@@ -55,7 +62,7 @@ void main() {
           },
         ),
       ],
-      RebellionOptions.empty(),
+      analyzerOptions,
     );
     expect(issues, 2);
     expect(

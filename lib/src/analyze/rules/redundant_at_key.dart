@@ -1,8 +1,8 @@
+import 'package:rebellion/src/analyze/analyzer_options.dart';
 import 'package:rebellion/src/analyze/rules/rule.dart';
 import 'package:rebellion/src/utils/arb_parser/parsed_arb_file.dart';
 import 'package:rebellion/src/utils/extensions.dart';
 import 'package:rebellion/src/utils/logger.dart';
-import 'package:rebellion/src/utils/rebellion_options.dart';
 
 /// Translation files contain @-keys with data already present in the main file
 class RedundantAtKey extends Rule {
@@ -10,7 +10,7 @@ class RedundantAtKey extends Rule {
   const RedundantAtKey();
 
   @override
-  int run(List<ParsedArbFile> files, RebellionOptions options) {
+  int run(List<ParsedArbFile> files, AnalyzerOptions options) {
     var issues = 0;
 
     for (final file in files) {

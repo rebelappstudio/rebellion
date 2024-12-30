@@ -1,3 +1,4 @@
+import 'package:rebellion/src/analyze/analyzer_options.dart';
 import 'package:rebellion/src/analyze/rules/duplicate_keys.dart';
 import 'package:rebellion/src/utils/arb_parser/arb_file.dart';
 import 'package:rebellion/src/utils/arb_parser/parsed_arb_file.dart';
@@ -10,6 +11,12 @@ import '../../../infrastructure/logger.dart';
 void main() {
   test('DuplicatedKeys checks for key duplicates', () {
     AppTester.create();
+
+    final analyzerOptions = AnalyzerOptions(
+      rebellionOptions: RebellionOptions.empty(),
+      isSingleFile: true,
+      containsMainFile: true,
+    );
 
     // No duplicates
     var issues = DuplicatedKeys().run(
@@ -27,7 +34,7 @@ void main() {
           rawKeys: ['key', '@key'],
         )
       ],
-      RebellionOptions.empty(),
+      analyzerOptions,
     );
     expect(issues, 0);
     expect(inMemoryLogger.output, isEmpty);
@@ -50,7 +57,7 @@ void main() {
           rawKeys: ['key', 'key2', '@key', 'key', '@key'],
         )
       ],
-      RebellionOptions.empty(),
+      analyzerOptions,
     );
     expect(issues, 2);
     expect(

@@ -1,3 +1,4 @@
+import 'package:rebellion/src/analyze/analyzer_options.dart';
 import 'package:rebellion/src/analyze/rules/missing_plurals.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
 import 'package:test/test.dart';
@@ -7,6 +8,12 @@ import '../../../infrastructure/logger.dart';
 import '../../../infrastructure/test_arb_files.dart';
 
 void main() {
+  final analyzerOptions = AnalyzerOptions(
+    rebellionOptions: RebellionOptions.empty(),
+    isSingleFile: false,
+    containsMainFile: true,
+  );
+
   setUp(() {
     AppTester.create();
   });
@@ -38,7 +45,7 @@ void main() {
           },
         ),
       ],
-      RebellionOptions.empty(),
+      analyzerOptions,
     );
     expect(issues, 0);
     expect(inMemoryLogger.output, isEmpty);
@@ -64,7 +71,7 @@ void main() {
           },
         ),
       ],
-      RebellionOptions.empty(),
+      analyzerOptions,
     );
     expect(issues, 0);
     expect(inMemoryLogger.output, isEmpty);
@@ -82,7 +89,7 @@ void main() {
             },
           ),
         ],
-        RebellionOptions.empty(),
+        analyzerOptions,
       ),
       throwsA(
         predicate((e) =>
@@ -130,7 +137,7 @@ void main() {
           },
         ),
       ],
-      RebellionOptions.empty(),
+      analyzerOptions,
     );
     expect(issues, 4);
     expect(
@@ -175,7 +182,7 @@ strings_cy.arb key "key" is missing a plural value "two"
           },
         ),
       ],
-      RebellionOptions.empty(),
+      analyzerOptions,
     );
     expect(issues, 3);
     expect(
