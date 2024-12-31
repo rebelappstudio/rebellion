@@ -77,6 +77,9 @@ class AllCaps extends Rule {
   static bool isAllCapsString(String value) {
     final newValue = value.replaceAll(' ', '');
 
+    // Special case for single character string, e.g. `A`, or `A {placeholder}`
+    if (newValue.length == 1) return false;
+
     if (newValue.isEmpty) return false;
 
     return _upperCaseLettersRegExp.hasMatch(newValue);

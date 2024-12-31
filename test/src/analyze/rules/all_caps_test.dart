@@ -42,6 +42,15 @@ void main() {
     expect(inMemoryLogger.output, 'filepath: all caps string key "key"');
   });
 
+  test('AllCaps ignores single letter strings with placeholders', () {
+    var issues = AllCaps().run(
+      oneKeyFile('A {placeholder}'),
+      options,
+    );
+    expect(issues, 0);
+    expect(inMemoryLogger.output, isEmpty);
+  });
+
   test('AllCaps checks plurals', () {
     var issues = AllCaps().run(
       oneKeyFile('{count, plural, one {String} two {Strings}}'),
@@ -134,6 +143,11 @@ filepath key key: all caps string in case "other"
     expect(AllCaps.isAllCapsString('ФУБАР'), isTrue);
     expect(AllCaps.isAllCapsString('😉'), isFalse);
     expect(AllCaps.isAllCapsString('☝🏾'), isFalse);
+
+    // Special case for single character strings
+    expect(AllCaps.isAllCapsString('A'), isFalse);
+    expect(AllCaps.isAllCapsString('a'), isFalse);
+    expect(AllCaps.isAllCapsString('A '), isFalse);
   });
 
   test('Rule can be ignored', () {
