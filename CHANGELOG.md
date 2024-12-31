@@ -1,3 +1,11 @@
+## 0.1.0
+
+- New feature: ignore some rules for specific keys in ARB files
+- New rule: check that `@@locale` value and filename locale name match
+- New rule: check that ARB file locale is in the allowlist
+- Fix default language assumption
+- Ignore single character strings in `all_caps` check
+
 ## 0.0.3
 
 - Fix missing placeholders rule
