@@ -1,5 +1,5 @@
 import 'package:rebellion/src/analyze/analyzer_options.dart';
-import 'package:rebellion/src/analyze/rules/locale_definition.dart';
+import 'package:rebellion/src/analyze/rules/locale_definition_presence.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
 import 'package:test/test.dart';
 
@@ -18,7 +18,7 @@ void main() {
     );
 
     // No error when @@locale is present
-    var issues = LocaleDefinitionPresent().run(
+    var issues = LocaleDefinitionPresence().run(
       [
         createFile(
           values: {
@@ -34,7 +34,7 @@ void main() {
 
     // Error when @@locale is missing
     inMemoryLogger.clear();
-    issues = LocaleDefinitionPresent().run(
+    issues = LocaleDefinitionPresence().run(
       [
         createFile(
           values: {

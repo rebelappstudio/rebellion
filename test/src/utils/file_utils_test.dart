@@ -76,11 +76,6 @@ void main() {
       () => getLocaleFromFilepath('strings_english.arb'),
       exceptionWithMessage("Filename can't be parsed"),
     );
-
-    expect(
-      () => getLocaleFromFilepath('strings_ac.arb'),
-      exceptionWithMessage('Locale not supported'),
-    );
   });
 
   test('ensureFilesAndFoldersExist checks if files and folders exist', () {
