@@ -1,5 +1,6 @@
 import 'package:rebellion/src/analyze/analyzer_options.dart';
 import 'package:rebellion/src/analyze/rules/naming_convention.dart';
+import 'package:rebellion/src/utils/arb_parser/at_key_meta.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
 import 'package:test/test.dart';
 
@@ -8,6 +9,10 @@ import '../../../infrastructure/logger.dart';
 import '../../../infrastructure/test_arb_files.dart';
 
 void main() {
+  setUp(() {
+    inMemoryLogger.clear();
+  });
+
   test('NamingConventionCheck checks key naming', () async {
     AppTester.create();
 
@@ -80,5 +85,36 @@ filepath: key "kebab-case-key" does not match selected naming convention (camel 
     expect(NamingConvention.snake.hasMatch('kebab-case'), isFalse);
     expect(NamingConvention.snake.hasMatch('snake_caseNot'), isFalse);
     expect(NamingConvention.snake.hasMatch('NotSnake_case'), isFalse);
+  });
+
+  test('Rule can be ignored', () {
+    AppTester.create();
+
+    final analyzerOptions = AnalyzerOptions(
+      rebellionOptions: RebellionOptions.empty().copyWith(
+        namingConvention: NamingConvention.camel,
+      ),
+      isSingleFile: true,
+      containsMainFile: true,
+    );
+
+    var issues = NamingConventionRule().run(
+      [
+        createFile(
+          values: {
+            'camelCaseKey': 'value',
+            'snake_case_key': 'value',
+            "@snake_case_key": AtKeyMeta(
+              description: null,
+              placeholders: [],
+              ignoredRulesRaw: ['naming_convention'],
+            ),
+          },
+        ),
+      ],
+      analyzerOptions,
+    );
+    expect(issues, 0);
+    expect(inMemoryLogger.output, isEmpty);
   });
 }

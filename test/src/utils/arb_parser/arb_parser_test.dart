@@ -1,3 +1,4 @@
+import 'package:rebellion/src/analyze/rules/rule.dart';
 import 'package:rebellion/src/utils/arb_parser/arb_file.dart';
 import 'package:rebellion/src/utils/arb_parser/arb_parser.dart';
 import 'package:rebellion/src/utils/arb_parser/at_key_meta.dart';
@@ -48,7 +49,7 @@ void main() {
     );
     expect(
       inMemoryLogger.output,
-      'strings_en.arb: ARB files must not contain top-level arrays',
+      'strings_en.arb: ARB must not contain top-level arrays',
     );
   });
 
@@ -85,6 +86,7 @@ void main() {
         'key': 'Hi, {name}',
         '@key': AtKeyMeta(
           description: 'Greeting',
+          ignoredRulesRaw: [],
           placeholders: [
             AtKeyPlaceholder(
               name: 'name',
@@ -133,6 +135,7 @@ void main() {
       parsedArbFile.content['@key'],
       AtKeyMeta(
         description: 'Number of cars',
+        ignoredRulesRaw: [],
         placeholders: [
           AtKeyPlaceholder(
             name: 'count',
@@ -169,5 +172,57 @@ void main() {
     final parsedArbFile = parseArbFile(arbFile);
     expect(parsedArbFile.keys, ['key', 'key2']);
     expect(parsedArbFile.rawKeys, ['key', 'key', 'key2']);
+  });
+
+  test('Can parse one ignored rule', () {
+    final tester = AppTester.create();
+    tester.populateFileSystem({
+      'intl_en.arb': '''
+{
+  "snake_case": "value",
+  "@snake_case": {
+    "@@x-ignore": "naming_convention"
+  }
+}
+''',
+    });
+
+    final arbFile = ArbFile(
+      filepath: 'intl_en.arb',
+      locale: 'en',
+      isMainFile: true,
+    );
+    final parsedArbFile = parseArbFile(arbFile);
+    expect(parsedArbFile.rawKeys, ['snake_case', '@snake_case']);
+    expect(parsedArbFile.content['@snake_case'], isA<AtKeyMeta>());
+    final meta = parsedArbFile.content['@snake_case'] as AtKeyMeta;
+    expect(meta.ignoredRulesRaw, ['naming_convention']);
+    expect(meta.ignoredRules, [RuleKey.namingConvention]);
+  });
+
+  test('Can parse list of ignored rules', () {
+    final tester = AppTester.create();
+    tester.populateFileSystem({
+      'intl_en.arb': '''
+{
+  "snake_case": "VALUE",
+  "@snake_case": {
+    "@@x-ignore": ["naming_convention", "all_caps"]
+  }
+}
+''',
+    });
+
+    final arbFile = ArbFile(
+      filepath: 'intl_en.arb',
+      locale: 'en',
+      isMainFile: true,
+    );
+    final parsedArbFile = parseArbFile(arbFile);
+    expect(parsedArbFile.rawKeys, ['snake_case', '@snake_case']);
+    expect(parsedArbFile.content['@snake_case'], isA<AtKeyMeta>());
+    final meta = parsedArbFile.content['@snake_case'] as AtKeyMeta;
+    expect(meta.ignoredRulesRaw, ['naming_convention', 'all_caps']);
+    expect(meta.ignoredRules, [RuleKey.namingConvention, RuleKey.allCaps]);
   });
 }

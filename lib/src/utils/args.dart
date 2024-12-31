@@ -18,53 +18,16 @@ abstract class CliArgs {
   static const sortingParam = 'sorting';
 }
 
-/// List of all available YAML arguments
+/// List of all available YAML options
+///
+/// [Rules] contains all available rule names that can be used in YAML
 abstract class YamlArgs {
-  /// All caps rule name
-  static const allCaps = 'all_caps';
-
-  /// At key type rule name
-  static const stringType = 'string_type';
-
-  /// Duplicated keys rule name
-  static const atKeyType = 'at_key_type';
-
-  /// Empty at key rule name
-  static const duplicatedKeys = 'duplicated_keys';
-
-  /// Empty at key rule name
-  static const emptyAtKey = 'empty_at_key';
-
-  /// File name rule name
-  static const localeDefinition = 'locale_definition';
-
-  /// Mandatory at key description rule name
-  static const mandatoryAtKeyDescription = 'mandatory_at_key_description';
-
-  /// Mandatory at key rule name
-  static const missingPlaceholders = 'missing_placeholders';
-
-  /// Missing plurals rule name
-  static const missingPlurals = 'missing_plurals';
-
-  /// Missing translations rule name
-  static const missingTranslations = 'missing_translations';
-
-  /// Redundant at key rule name
-  static const redundantAtKey = 'redundant_at_key';
-
-  /// Redundant translations rule name
-  static const redundantTranslations = 'redundant_translations';
-
-  /// Unused at key rule name
-  static const unusedAtKey = 'unused_at_key';
-
-  /// Main locale option name
+  /// Option to set main locale
   static const mainLocale = 'main_locale';
 
-  /// Naming convention option name
+  /// Option to set naming convention
   static const namingConvention = 'naming_convention';
 
-  /// Sorting option name
+  /// Option to set sorting
   static const sorting = 'sorting';
 }

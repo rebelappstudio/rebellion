@@ -56,6 +56,7 @@ void main() {
           '@key': AtKeyMeta(
             description: 'Key description',
             placeholders: [],
+            ignoredRulesRaw: [],
           ),
         },
       ),

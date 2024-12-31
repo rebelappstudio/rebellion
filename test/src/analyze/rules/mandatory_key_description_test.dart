@@ -8,16 +8,21 @@ import 'package:test/test.dart';
 
 import '../../../infrastructure/app_tester.dart';
 import '../../../infrastructure/logger.dart';
+import '../../../infrastructure/test_arb_files.dart';
 
 void main() {
+  final analyzerOptions = AnalyzerOptions(
+    rebellionOptions: RebellionOptions.empty(),
+    isSingleFile: true,
+    containsMainFile: true,
+  );
+
+  setUp(() {
+    inMemoryLogger.clear();
+  });
+
   test('MandatoryKeyDescription checks that key description is present', () {
     AppTester.create();
-
-    final analyzerOptions = AnalyzerOptions(
-      rebellionOptions: RebellionOptions.empty(),
-      isSingleFile: true,
-      containsMainFile: true,
-    );
 
     // Key description is present
     var issues = MandatoryKeyDescription().run(
@@ -33,6 +38,7 @@ void main() {
             '@key': AtKeyMeta(
               description: 'Key description',
               placeholders: [],
+              ignoredRulesRaw: [],
             ),
           },
           rawKeys: ['key', '@key'],
@@ -58,6 +64,7 @@ void main() {
             '@key': AtKeyMeta(
               description: null,
               placeholders: [],
+              ignoredRulesRaw: [],
             ),
           },
           rawKeys: ['key', '@key'],
@@ -70,5 +77,25 @@ void main() {
       inMemoryLogger.output,
       'filepath: @-key "@key" must have a description',
     );
+  });
+
+  test('Rule can be ignored', () {
+    var issues = MandatoryKeyDescription().run(
+      [
+        createFile(
+          values: {
+            'key': 'Abc',
+            '@key': AtKeyMeta(
+              description: null,
+              placeholders: [],
+              ignoredRulesRaw: ['mandatory_at_key_description'],
+            ),
+          },
+        ),
+      ],
+      analyzerOptions,
+    );
+    expect(issues, 0);
+    expect(inMemoryLogger.output, isEmpty);
   });
 }

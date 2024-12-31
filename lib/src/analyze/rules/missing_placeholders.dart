@@ -48,6 +48,12 @@ class MissingPlaceholders extends Rule {
         final mainFileAtKey = mainFile.content[key.toAtKey];
         if (mainFileAtKey is! AtKeyMeta) continue;
 
+        final atKey = file.content[key.toAtKey];
+        if (atKey is AtKeyMeta &&
+            atKey.isRuleIgnored(RuleKey.missingPlaceholders)) {
+          continue;
+        }
+
         // Placeholders actually used in the string
         final mainKeyUsedPlaceholders =
             getAllVariableSubstitutions(mainFileContent).toSet();

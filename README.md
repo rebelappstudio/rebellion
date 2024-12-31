@@ -182,6 +182,25 @@ If this YAML file could not be found, default set of options is used. Consider c
   
   Check that all @-keys have corresponding key
 
+## Ignoring rules for individual keys
+
+Rules can be ignored for individual keys. Use `@@x-ignore` inside @-key body to list ignored list. For example, here all caps rules is ignored because this string is short and uses upper-case on purpose:
+
+```json
+{
+  "indicatorLost": "X",
+  "@indicatorLost": {
+    "description": "Indicates a failed attempt",
+    "@@x-ignore": "all_caps"
+  }
+}
+```
+
+Ignoring multiple rules can be done by listing all ignored rules:
+
+```json
+"@@x-ignore": ["all_caps", "naming_convention"]
+```
 
 ## Updating plurals rules
 

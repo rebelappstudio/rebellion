@@ -9,7 +9,9 @@ import 'package:rebellion/src/message_parser/messages/message.dart';
 import 'package:rebellion/src/message_parser/messages/submessages/gender.dart';
 import 'package:rebellion/src/message_parser/messages/submessages/plural.dart';
 import 'package:rebellion/src/message_parser/messages/submessages/select.dart';
+import 'package:rebellion/src/utils/arb_parser/at_key_meta.dart';
 import 'package:rebellion/src/utils/arb_parser/parsed_arb_file.dart';
+import 'package:rebellion/src/utils/extensions.dart';
 import 'package:rebellion/src/utils/logger.dart';
 
 // Regular expression to match all upper case letters. For example:
@@ -34,6 +36,11 @@ class AllCaps extends Rule {
 
       for (final key in keys) {
         final value = file.content[key];
+
+        final atKey = file.content[key.toAtKey];
+        if (atKey is AtKeyMeta && atKey.isRuleIgnored(RuleKey.allCaps)) {
+          continue;
+        }
 
         // Ignore unparsable strings, they're likely to be caught by
         // other checks like StringType or AtKeyType

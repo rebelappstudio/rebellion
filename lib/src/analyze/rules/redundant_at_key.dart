@@ -1,5 +1,6 @@
 import 'package:rebellion/src/analyze/analyzer_options.dart';
 import 'package:rebellion/src/analyze/rules/rule.dart';
+import 'package:rebellion/src/utils/arb_parser/at_key_meta.dart';
 import 'package:rebellion/src/utils/arb_parser/parsed_arb_file.dart';
 import 'package:rebellion/src/utils/extensions.dart';
 import 'package:rebellion/src/utils/logger.dart';
@@ -18,6 +19,11 @@ class RedundantAtKey extends Rule {
 
       for (final key in file.keys) {
         if (!key.isAtKey) continue;
+
+        final atKey = file.content[key.toAtKey];
+        if (atKey is AtKeyMeta && atKey.isRuleIgnored(RuleKey.redundantAtKey)) {
+          continue;
+        }
 
         issues++;
         logError(

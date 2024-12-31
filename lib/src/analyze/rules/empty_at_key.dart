@@ -21,8 +21,14 @@ class EmptyAtKeys extends Rule {
 
         final value = file.content[key];
         if (value is AtKeyMeta) {
+          final atKey = file.content[key.toAtKey];
+          if (atKey is AtKeyMeta && atKey.isRuleIgnored(RuleKey.emptyAtKey)) {
+            continue;
+          }
+
           if ((value.description?.isEmpty ?? true) &&
-              value.placeholders.isEmpty) {
+              value.placeholders.isEmpty &&
+              (value.ignoredRulesRaw.isEmpty)) {
             issues++;
             logError('${file.file.filepath}: empty @-key "$key"');
           }

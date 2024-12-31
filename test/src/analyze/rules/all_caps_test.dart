@@ -1,5 +1,6 @@
 import 'package:rebellion/src/analyze/analyzer_options.dart';
 import 'package:rebellion/src/analyze/rules/all_caps.dart';
+import 'package:rebellion/src/utils/arb_parser/at_key_meta.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
 import 'package:test/test.dart';
 
@@ -133,5 +134,31 @@ filepath key key: all caps string in case "other"
     expect(AllCaps.isAllCapsString('ФУБАР'), isTrue);
     expect(AllCaps.isAllCapsString('😉'), isFalse);
     expect(AllCaps.isAllCapsString('☝🏾'), isFalse);
+  });
+
+  test('Rule can be ignored', () {
+    var issues = AllCaps().run(
+      [
+        createFile(
+          values: {
+            'key1': 'ABC',
+            'key2': 'DEF',
+            '@key2': AtKeyMeta(
+              description: null,
+              placeholders: [],
+              ignoredRulesRaw: ['all_caps'],
+            ),
+          },
+        ),
+      ],
+      options,
+    );
+    expect(issues, 1);
+    expect(
+        inMemoryLogger.output,
+        '''
+filepath: all caps string key "key1"
+'''
+            .trim());
   });
 }
