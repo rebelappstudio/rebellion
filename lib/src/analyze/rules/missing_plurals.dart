@@ -3,6 +3,7 @@ import 'package:rebellion/src/analyze/rules/rule.dart';
 import 'package:rebellion/src/generated/plural_rules.dart';
 import 'package:rebellion/src/message_parser/message_parser.dart';
 import 'package:rebellion/src/message_parser/messages/submessages/plural.dart';
+import 'package:rebellion/src/utils/arb_parser/at_key_meta.dart';
 import 'package:rebellion/src/utils/arb_parser/parsed_arb_file.dart';
 import 'package:rebellion/src/utils/extensions.dart';
 import 'package:rebellion/src/utils/logger.dart';
@@ -22,6 +23,11 @@ class MissingPlurals extends Rule {
       for (final key in file.keys) {
         if (key.isAtKey) continue;
         if (key.isLocaleDefinition) continue;
+
+        final atKey = file.content[key.toAtKey];
+        if (atKey is AtKeyMeta && atKey.isRuleIgnored(RuleKey.missingPlurals)) {
+          continue;
+        }
 
         final value = file.content[key];
         // Ignore unparsable strings, they're likely to be caused by

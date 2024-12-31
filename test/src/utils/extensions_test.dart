@@ -37,6 +37,6 @@ void main() {
     expect('key_1'.toAtKey, '@key_1');
     expect('keyOne'.toAtKey, '@keyOne');
     expect('@key'.toAtKey, '@key');
-    expect(() => '@@locale'.toAtKey, throwsException);
+    expect('@@locale'.toAtKey, '@@locale');
   });
 }

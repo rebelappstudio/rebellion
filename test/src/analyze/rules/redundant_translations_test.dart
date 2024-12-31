@@ -1,5 +1,6 @@
 import 'package:rebellion/src/analyze/analyzer_options.dart';
 import 'package:rebellion/src/analyze/rules/redundant_translations.dart';
+import 'package:rebellion/src/utils/arb_parser/at_key_meta.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
 import 'package:test/test.dart';
 
@@ -13,7 +14,7 @@ void main() {
   });
 
   test(
-      'RedundantTranslations reports not issue when there are no redundant translations',
+      'RedundantTranslations reports no issue when there are no redundant translations',
       () {
     final issues = RedundantTranslations().run(
       [
@@ -94,8 +95,8 @@ strings_es.arb: redundant translation "key5"
     final issues = RedundantTranslations().run(
       [
         createFile(
-          filepath: 'strings_en.arb',
-          locale: 'en',
+          filepath: 'strings_fi.arb',
+          locale: 'fi',
           isMainFile: false,
           values: {'key1': 'value'},
         ),
@@ -103,13 +104,50 @@ strings_es.arb: redundant translation "key5"
           filepath: 'strings_es.arb',
           locale: 'es',
           isMainFile: false,
-          values: {'key1': 'valor'},
+          values: {
+            'key1': 'valor',
+            'key2': 'valor',
+          },
         ),
       ],
       AnalyzerOptions(
         rebellionOptions: RebellionOptions.empty(),
         isSingleFile: false,
         containsMainFile: false,
+      ),
+    );
+    expect(issues, 0);
+    expect(inMemoryLogger.output, isEmpty);
+  });
+
+  test('Rule can be ignored', () {
+    final issues = RedundantTranslations().run(
+      [
+        createFile(
+          filepath: 'strings_en.arb',
+          locale: 'en',
+          isMainFile: true,
+          values: {'key1': 'value'},
+        ),
+        createFile(
+          filepath: 'strings_es.arb',
+          locale: 'es',
+          isMainFile: false,
+          values: {
+            'key1': 'valor',
+            'key2': 'valor',
+            '@key2': AtKeyMeta(
+              description: null,
+              placeholders: [],
+              ignoredRulesRaw: ['redundant_translations'],
+            ),
+          },
+        ),
+      ],
+      AnalyzerOptions(
+        rebellionOptions: RebellionOptions.empty(),
+        isSingleFile: false,
+        containsMainFile: true,
       ),
     );
     expect(issues, 0);

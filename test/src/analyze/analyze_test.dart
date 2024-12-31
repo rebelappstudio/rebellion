@@ -7,6 +7,10 @@ import '../../infrastructure/app_tester.dart';
 import '../../infrastructure/logger.dart';
 
 void main() {
+  setUp(() {
+    inMemoryLogger.clear();
+  });
+
   test('Prints a message when no files and folders specified', () async {
     AppTester.create();
 

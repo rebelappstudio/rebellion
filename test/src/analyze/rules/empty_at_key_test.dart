@@ -9,14 +9,14 @@ import '../../../infrastructure/logger.dart';
 import '../../../infrastructure/test_arb_files.dart';
 
 void main() {
+  final analyzerOptions = AnalyzerOptions(
+    rebellionOptions: RebellionOptions.empty(),
+    isSingleFile: true,
+    containsMainFile: true,
+  );
+
   test('EmptyAtKeys checks @-keys without description', () async {
     AppTester.create();
-
-    final analyzerOptions = AnalyzerOptions(
-      rebellionOptions: RebellionOptions.empty(),
-      isSingleFile: true,
-      containsMainFile: true,
-    );
 
     // No @-keys - no error
     var issues = EmptyAtKeys().run(
@@ -38,6 +38,7 @@ void main() {
             '@key': AtKeyMeta(
               description: 'Key description',
               placeholders: [],
+              ignoredRulesRaw: [],
             ),
           },
         ),
@@ -57,6 +58,7 @@ void main() {
             '@key': AtKeyMeta(
               description: null,
               placeholders: [],
+              ignoredRulesRaw: [],
             ),
           },
         ),
@@ -79,6 +81,7 @@ void main() {
             '@key': AtKeyMeta(
               description: '',
               placeholders: [],
+              ignoredRulesRaw: [],
             ),
           },
         ),
@@ -100,6 +103,7 @@ void main() {
             'key': 'Issues: {count}',
             '@key': AtKeyMeta(
               description: null,
+              ignoredRulesRaw: [],
               placeholders: [
                 AtKeyPlaceholder(
                   name: 'count',
@@ -107,6 +111,26 @@ void main() {
                   example: null,
                 ),
               ],
+            ),
+          },
+        ),
+      ],
+      analyzerOptions,
+    );
+    expect(issues, 0);
+    expect(inMemoryLogger.output, isEmpty);
+  });
+
+  test('Rule can be ignored', () {
+    var issues = EmptyAtKeys().run(
+      [
+        createFile(
+          values: {
+            'key': 'Abc',
+            '@key': AtKeyMeta(
+              description: null,
+              placeholders: [],
+              ignoredRulesRaw: ['empty_at_key'],
             ),
           },
         ),

@@ -5,6 +5,16 @@ import 'package:rebellion/src/utils/arb_parser/parsed_arb_file.dart';
 import 'package:rebellion/src/utils/file_reader.dart';
 import 'package:rebellion/src/utils/logger.dart';
 
+const _ignorePropertyName = '@@x-ignore';
+const _descriptionPropertyName = 'description';
+const _placeholdersPropertyName = 'placeholders';
+
+const _allowedAtKeys = [
+  _ignorePropertyName,
+  _descriptionPropertyName,
+  _placeholdersPropertyName,
+];
+
 /// Get all strings from [filename] file
 ParsedArbFile parseArbFile(ArbFile file) {
   final arbContent = fileReader.readFile(file.filepath);
@@ -30,19 +40,33 @@ ParsedArbFile parseArbFile(ArbFile file) {
 
   AtKeyMeta? atKeyMeta;
   AtKeyPlaceholder? placeholder;
+  List<String>? ignoreRules;
 
   int level = 0;
+
   for (final e in jsonEvents) {
     switch (e.type) {
       case JsonEventType.beginArray:
-      case JsonEventType.endArray:
-      case JsonEventType.arrayElement:
         if (level <= 1) {
-          logError(
-            '${file.filepath}: ARB files must not contain top-level arrays',
-          );
+          logError('${file.filepath}: ARB must not contain top-level arrays');
           throw FormatException();
         }
+
+        if (atKeyName == _ignorePropertyName) ignoreRules = [];
+
+      case JsonEventType.arrayElement:
+        if (atKeyName == _ignorePropertyName) {
+          ignoreRules!.add(e.value);
+        }
+
+      case JsonEventType.endArray:
+        // Save ignored rules
+        if (atKeyName == _ignorePropertyName) {
+          atKeyMeta = atKeyMeta?.copyWith(ignoredRulesRaw: ignoreRules);
+          ignoreRules = null;
+          atKeyName = null;
+        }
+
       case JsonEventType.beginObject:
         level++;
 
@@ -79,6 +103,8 @@ ParsedArbFile parseArbFile(ArbFile file) {
           placeholderKeyName = null;
         }
 
+        atKeyName = null;
+
       case JsonEventType.propertyName:
         // Regular key name (text, plurals etc)
         if (level == 1) {
@@ -89,7 +115,7 @@ ParsedArbFile parseArbFile(ArbFile file) {
 
         // @-key name
         if (level == 2) {
-          if (e.value == 'description' || e.value == 'placeholders') {
+          if (_allowedAtKeys.contains(e.value)) {
             atKeyName = e.value;
           }
         }
@@ -119,6 +145,13 @@ ParsedArbFile parseArbFile(ArbFile file) {
         if (level == 2) {
           if (atKeyName == 'description') {
             atKeyMeta = atKeyMeta?.copyWith(description: e.value);
+          }
+          if (atKeyName == _ignorePropertyName) {
+            // Save ignored rules if it's a simple string
+            atKeyMeta = atKeyMeta?.copyWith(
+              ignoredRulesRaw:
+                  e.value is String ? [e.value as String] : const <String>[],
+            );
           }
         }
 

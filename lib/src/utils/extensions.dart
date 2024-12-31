@@ -34,15 +34,10 @@ extension StringX on String {
     }
   }
 
-  /// Covert regular key to an @-key
+  /// Covert a key to an @-key
   String get toAtKey {
-    if (isLocaleDefinition) {
-      throw Exception('Key must not be a locale definition');
-    }
-    if (isAtKey) {
-      return this;
-    }
-
+    if (isAtKey) return this;
+    if (isLocaleDefinition) return this;
     return '@$this';
   }
 }

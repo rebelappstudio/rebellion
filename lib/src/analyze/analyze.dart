@@ -39,7 +39,7 @@ class AnalyzeCommand extends Command {
 
     // final options = RebellionOptions.fromYaml(argResults, yamlOptions);
     final parsedFiles = getFilesAndFolders(options, argResults);
-    final enabledRules = options.enabledRules();
+    final enabledRules = options.enabledRules.map((r) => r.rule);
     final analyzerOptions = AnalyzerOptions.fromFiles(
       rebellionOptions: options,
       files: parsedFiles,

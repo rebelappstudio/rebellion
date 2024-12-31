@@ -1,10 +1,20 @@
 import 'package:equatable/equatable.dart';
+import 'package:rebellion/src/analyze/rules/rule.dart';
 
 /// Class containing parsed @-key data: description, placeholders, examples etc
 ///
 /// "@myKey": {
 ///   "description": "Key description",
 ///   "placeholders":
+///     ...
+///
+/// Individual keys may ignore certain rules. For example, all_caps rule is
+/// ignored for this key:
+///
+/// "myKey": "X",
+/// "@myKey": {
+///   "@@x-ignore": "all_caps",
+/// }
 class AtKeyMeta with EquatableMixin {
   /// 'description' field of the @-key
   final String? description;
@@ -12,32 +22,47 @@ class AtKeyMeta with EquatableMixin {
   /// List of placeholders for the @-key
   final List<AtKeyPlaceholder> placeholders;
 
+  /// Raw list if rules that should be ignored by the linter
+  final List<String> ignoredRulesRaw;
+
+  /// List of [RuleKey]s that should be ignored by the linter
+  final List<RuleKey> ignoredRules;
+
   /// Default constructor
-  const AtKeyMeta({
+  AtKeyMeta({
     required this.description,
     required this.placeholders,
-  });
+    required this.ignoredRulesRaw,
+  }) : ignoredRules = ignoredRulesRaw.map(RuleKey.fromKey).nonNulls.toList();
 
   /// Default empty constructor
-  factory AtKeyMeta.empty() => const AtKeyMeta(
+  factory AtKeyMeta.empty() => AtKeyMeta(
         description: null,
         placeholders: [],
+        ignoredRulesRaw: [],
       );
 
   /// Copy the object with new values
   AtKeyMeta copyWith({
     String? description,
     List<AtKeyPlaceholder>? placeholders,
+    List<String>? ignoredRulesRaw,
   }) {
     return AtKeyMeta(
       description: description ?? this.description,
       placeholders: placeholders ?? this.placeholders,
+      ignoredRulesRaw: ignoredRulesRaw ?? this.ignoredRulesRaw,
     );
+  }
+
+  /// Return true if [rule] is in the list of ignored rules for this key
+  bool isRuleIgnored(RuleKey rule) {
+    return ignoredRules.contains(rule);
   }
 
   // coverage:ignore-start
   @override
-  List<Object?> get props => [description, placeholders];
+  List<Object?> get props => [description, placeholders, ignoredRulesRaw];
 // coverage:ignore-end
 }
 
@@ -69,6 +94,7 @@ class AtKeyPlaceholder with EquatableMixin {
     String? name,
     String? type,
     String? example,
+    List<String>? ignoredRules,
   }) {
     return AtKeyPlaceholder(
       name: name ?? this.name,

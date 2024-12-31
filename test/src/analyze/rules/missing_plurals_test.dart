@@ -1,5 +1,6 @@
 import 'package:rebellion/src/analyze/analyzer_options.dart';
 import 'package:rebellion/src/analyze/rules/missing_plurals.dart';
+import 'package:rebellion/src/utils/arb_parser/at_key_meta.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
 import 'package:test/test.dart';
 
@@ -193,5 +194,29 @@ strings_zh.arb key "key" contains a redundant plural value "one"
 strings_ru.arb key "key" contains a redundant plural value "two"
 '''
             .trim());
+  });
+
+  test('Rule can be ignored', () {
+    final issues = MissingPlurals().run(
+      [
+        createFile(
+          filepath: 'strings_en.arb',
+          isMainFile: true,
+          locale: 'en',
+          values: {
+            // Missing 'other'
+            'key': '{count, plural, one{one day}}}',
+            "@key": AtKeyMeta(
+              description: null,
+              placeholders: [],
+              ignoredRulesRaw: ['missing_plurals'],
+            ),
+          },
+        ),
+      ],
+      analyzerOptions,
+    );
+    expect(issues, 0);
+    expect(inMemoryLogger.output, isEmpty);
   });
 }

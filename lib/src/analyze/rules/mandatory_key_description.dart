@@ -25,6 +25,12 @@ class MandatoryKeyDescription extends Rule {
       for (final key in keys) {
         if (!key.isAtKey) continue;
 
+        final atKey = file.content[key.toAtKey];
+        if (atKey is AtKeyMeta &&
+            atKey.isRuleIgnored(RuleKey.mandatoryAtKeyDescription)) {
+          continue;
+        }
+
         final value = file.content[key];
         if (value is AtKeyMeta && (value.description?.isEmpty ?? true)) {
           issues++;

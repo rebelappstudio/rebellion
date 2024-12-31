@@ -1,5 +1,6 @@
 import 'package:args/args.dart';
 import 'package:rebellion/src/analyze/rules/naming_convention.dart';
+import 'package:rebellion/src/analyze/rules/rule.dart';
 import 'package:rebellion/src/sort/sort.dart';
 import 'package:rebellion/src/utils/args.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
@@ -30,6 +31,25 @@ void main() {
     final tester = AppTester.create();
     var options = RebellionOptions.loadYaml();
     expect(options, RebellionOptions.empty());
+    expect(options.mainLocale, 'en');
+    expect(options.sorting, Sorting.alphabetical);
+    expect(options.namingConvention, NamingConvention.camel);
+    expect(options.enabledRules, {
+      RuleKey.sanityCheck,
+      RuleKey.allCaps,
+      RuleKey.stringType,
+      RuleKey.atKeyType,
+      RuleKey.duplicatedKeys,
+      RuleKey.emptyAtKey,
+      RuleKey.localeDefinition,
+      RuleKey.missingPlaceholders,
+      RuleKey.missingPlurals,
+      RuleKey.missingTranslations,
+      RuleKey.redundantAtKey,
+      RuleKey.redundantTranslations,
+      RuleKey.unusedAtKey,
+      RuleKey.namingConvention,
+    });
 
     tester.setConfigFile('''
 rules:
@@ -73,10 +93,10 @@ options:
   sorting: follow-main-file
 ''');
     options = RebellionOptions.loadYaml();
-    expect(options.allCapsRuleEnabled, isFalse);
-    expect(options.stringTypeRuleEnabled, isFalse);
-    expect(options.atKeyTypeRuleEnabled, isTrue);
-    expect(options.unusedAtKeyRuleEnabled, isFalse);
-    expect(options.missingPluralsRuleEnabled, isFalse);
+    expect(options.enabledRules.contains(RuleKey.allCaps), isFalse);
+    expect(options.enabledRules.contains(RuleKey.stringType), isFalse);
+    expect(options.enabledRules.contains(RuleKey.atKeyType), isTrue);
+    expect(options.enabledRules.contains(RuleKey.unusedAtKey), isFalse);
+    expect(options.enabledRules.contains(RuleKey.missingPlurals), isFalse);
   });
 }
