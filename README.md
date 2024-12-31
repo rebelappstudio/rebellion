@@ -154,9 +154,17 @@ If this YAML file could not be found, default set of options is used. Consider c
 
   There's no need for ARB files
 
-* ### `locale_definition` 
+* ### `locale_definition_presence`
   
   Check that ARB file has locale definition key (`@@locale`)
+
+* ### `locale_definition_allowlist`
+
+  Check that locale is in the list of locales supported by Flutter's `intl` package
+
+* ### `locale_definition_match`
+
+  Check that locale in the filename and `@@locale` value match
 
 * ### `mandatory_at_key_description` 
   

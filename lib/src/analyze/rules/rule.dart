@@ -4,7 +4,9 @@ import 'package:rebellion/src/analyze/rules/all_caps.dart';
 import 'package:rebellion/src/analyze/rules/at_key_type.dart';
 import 'package:rebellion/src/analyze/rules/duplicate_keys.dart';
 import 'package:rebellion/src/analyze/rules/empty_at_key.dart';
-import 'package:rebellion/src/analyze/rules/locale_definition.dart';
+import 'package:rebellion/src/analyze/rules/locale_definition_allowlist.dart';
+import 'package:rebellion/src/analyze/rules/locale_definition_match.dart';
+import 'package:rebellion/src/analyze/rules/locale_definition_presence.dart';
 import 'package:rebellion/src/analyze/rules/mandatory_key_description.dart';
 import 'package:rebellion/src/analyze/rules/missing_placeholders.dart';
 import 'package:rebellion/src/analyze/rules/missing_plurals.dart';
@@ -47,7 +49,14 @@ enum RuleKey {
   emptyAtKey('empty_at_key', true),
 
   /// Check that all files have a locale definition
-  localeDefinition('locale_definition', true),
+  localeDefinitionPresent('locale_definition_presence', true),
+
+  /// Check that the locale in the filename and in the @@locale key can be
+  /// recognized by intl
+  localeDefinitionAllowList('locale_definition_allowlist', true),
+
+  /// Check that the locale in the filename and in the @@locale key match
+  localeDefinitionMatch('locale_definition_match', true),
 
   /// Check that all @-keys have a description
   mandatoryAtKeyDescription('mandatory_at_key_description', false),
@@ -92,7 +101,9 @@ enum RuleKey {
       RuleKey.atKeyType => AtKeyType(),
       RuleKey.duplicatedKeys => DuplicatedKeys(),
       RuleKey.emptyAtKey => EmptyAtKeys(),
-      RuleKey.localeDefinition => LocaleDefinitionPresent(),
+      RuleKey.localeDefinitionPresent => LocaleDefinitionPresence(),
+      RuleKey.localeDefinitionAllowList => LocaleDefinitionAllowlist(),
+      RuleKey.localeDefinitionMatch => LocaleDefinitionMatch(),
       RuleKey.mandatoryAtKeyDescription => MandatoryKeyDescription(),
       RuleKey.missingPlaceholders => MissingPlaceholders(),
       RuleKey.missingPlurals => MissingPlurals(),

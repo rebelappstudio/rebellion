@@ -4,9 +4,9 @@ import 'package:rebellion/src/utils/arb_parser/parsed_arb_file.dart';
 import 'package:rebellion/src/utils/logger.dart';
 
 /// Translation file contains @@locale key with locale definition
-class LocaleDefinitionPresent extends Rule {
+class LocaleDefinitionPresence extends Rule {
   /// Default constructor
-  const LocaleDefinitionPresent();
+  const LocaleDefinitionPresence();
 
   @override
   int run(List<ParsedArbFile> files, AnalyzerOptions options) {
