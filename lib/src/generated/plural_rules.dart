@@ -222,7 +222,7 @@ class PluralRules {
     "kw": ["zero", "one", "two", "few", "many", "other"],
     "ar": ["zero", "one", "two", "few", "many", "other"],
     "ars": ["zero", "one", "two", "few", "many", "other"],
-    "cy": ["zero", "one", "two", "few", "many", "other"]
+    "cy": ["zero", "one", "two", "few", "many", "other"],
   };
 
   List<String> operator [](String locale) => _rules[locale] ?? [];
