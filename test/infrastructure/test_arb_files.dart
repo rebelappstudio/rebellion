@@ -19,7 +19,7 @@ ParsedArbFile createFile({
   return ParsedArbFile(
     file: ArbFile(
       filepath: filepath,
-      locale: locale,
+      filenameLocale: locale,
       isMainFile: isMainFile,
     ),
     content: values,

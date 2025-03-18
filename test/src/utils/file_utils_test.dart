@@ -21,7 +21,7 @@ void main() {
     expect(files.length, 1);
     expect(files.first.isMainFile, isTrue);
     expect(files.first.filepath, './strings_en.arb');
-    expect(files.first.locale, 'en');
+    expect(files.first.filenameLocale, 'en');
 
     files = getArbFiles(['./strings_en.arb', './strings_fi.arb'], 'en');
     expect(files.length, 2);
@@ -30,9 +30,9 @@ void main() {
     files = getArbFiles(['.'], 'en');
     expect(files.length, 2);
     expect(files[0].isMainFile, isTrue);
-    expect(files[0].locale, 'en');
+    expect(files[0].filenameLocale, 'en');
     expect(files[1].isMainFile, isFalse);
-    expect(files[1].locale, 'fi');
+    expect(files[1].filenameLocale, 'fi');
   });
 
   test('Writing ARB file writes valid JSON file', () {
@@ -47,7 +47,7 @@ void main() {
     expect(files.length, equals(1));
     expect(files.first.isMainFile, isTrue);
     expect(files.first.filepath, './strings_en.arb');
-    expect(files.first.locale, 'en');
+    expect(files.first.filenameLocale, 'en');
 
     final readFileContent = fileReader.readFile('./strings_en.arb');
     final readFile = json.decode(readFileContent);
@@ -64,8 +64,9 @@ void main() {
     expect(getLocaleFromFilepath('strings_fi_diff.arb'), null);
     expect(getLocaleFromFilepath('strings.yaml'), null);
     expect(getLocaleFromFilepath('strings_en.yaml'), null);
-    expect(getLocaleFromFilepath('strings_en_uk.arb'), 'en');
     expect(getLocaleFromFilepath('strings_en_US.arb'), 'en');
+    expect(getLocaleFromFilepath('strings_fil.arb'), 'fil');
+    expect(getLocaleFromFilepath('strings_gsw.arb'), 'gsw');
 
     expect(
       () => getLocaleFromFilepath('strings.arb'),

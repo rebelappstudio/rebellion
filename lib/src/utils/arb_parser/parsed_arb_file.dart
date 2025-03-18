@@ -35,4 +35,10 @@ class ParsedArbFile with EquatableMixin {
   @override
   List<Object?> get props => [file, content, rawKeys];
   // coverage:ignore-end
+
+  /// Get locale of the file (@@locale or locale parsed from filename)
+  String get locale {
+    final arbLocale = content['@@locale'];
+    return arbLocale is String ? arbLocale : file.filenameLocale;
+  }
 }

@@ -12,7 +12,7 @@ class LocaleDefinitionAllowlist extends Rule {
     int issues = 0;
 
     for (final file in files) {
-      final filenameLocale = file.file.locale.toLowerCase();
+      final filenameLocale = file.file.filenameLocale.toLowerCase();
       final contentLocale = file.content['@@locale']?.toLowerCase();
 
       if (!localesAllowlist.contains(filenameLocale)) {

@@ -12,6 +12,15 @@ import 'package:rebellion/src/utils/file_reader.dart';
 import 'package:rebellion/src/utils/logger.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
 
+/// Regular expression to match language name in ARB filename:
+///
+/// 'strings_en' -> 'en'
+/// 'strings_en_US' -> 'en'
+/// 'app_strings_en' -> 'en'
+/// 'app_strings_fil' -> 'fil'
+/// 'strings_en_us' -> not supported, returns 'uk'
+final _arbFilenameLangCodeRegexp = RegExp(r'_([a-z]{2,3})(?:_[A-Z]{2})?$');
+
 /// Get list of all .arb files except the main file
 /// Returns list of tuples (Target language, ARB filename)
 List<ArbFile> getArbFiles(List<String> filesAndFolders, String mainLocale) {
@@ -23,7 +32,7 @@ List<ArbFile> getArbFiles(List<String> filesAndFolders, String mainLocale) {
 
         return ArbFile(
           filepath: file.path,
-          locale: locale,
+          filenameLocale: locale,
           isMainFile: locale == mainLocale,
         );
       })
@@ -31,7 +40,7 @@ List<ArbFile> getArbFiles(List<String> filesAndFolders, String mainLocale) {
       .toList();
 }
 
-/// Parse ARB file name and extract locale
+/// Parse ARB file name and extract locale code
 ///
 /// E.g. "strings_fi.arb" returns "fi"
 String? getLocaleFromFilepath(String filepath) {
@@ -43,17 +52,13 @@ String? getLocaleFromFilepath(String filepath) {
   // Ignore diff files
   if (filename.endsWith('_diff')) return null;
 
-  final codes = filename
-      .split('_')
-      .where((e) => e.length == 2)
-      .toList()
-      .reversed
-      .toList();
+  final languageCodeMatch = _arbFilenameLangCodeRegexp.firstMatch(filename);
   final String locale;
-  if (codes.length == 2) {
-    locale = codes[1];
-  } else if (codes.length == 1) {
-    locale = codes[0];
+  if (languageCodeMatch != null) {
+    locale = languageCodeMatch.group(1)!;
+  } else if (!filename.contains('_') && filename.length == 2) {
+    // Special case for filenames like "en.arb"
+    locale = filename;
   } else {
     logError('Cannot parse locale from $filepath');
     throw Exception("Filename can't be parsed");

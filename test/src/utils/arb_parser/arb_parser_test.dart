@@ -19,7 +19,7 @@ void main() {
       () => parseArbFile(
         ArbFile(
           filepath: 'strings_en.arb',
-          locale: 'en',
+          filenameLocale: 'en',
           isMainFile: true,
         ),
       ),
@@ -41,7 +41,7 @@ void main() {
       () => parseArbFile(
         ArbFile(
           filepath: 'strings_en.arb',
-          locale: 'en',
+          filenameLocale: 'en',
           isMainFile: true,
         ),
       ),
@@ -76,7 +76,7 @@ void main() {
     final parsedFile = parseArbFile(
       ArbFile(
         filepath: 'strings_en.arb',
-        locale: 'en',
+        filenameLocale: 'en',
         isMainFile: true,
       ),
     );
@@ -122,7 +122,7 @@ void main() {
 
     final arbFile = ArbFile(
       filepath: 'strings_en.arb',
-      locale: 'en',
+      filenameLocale: 'en',
       isMainFile: true,
     );
     final parsedArbFile = parseArbFile(arbFile);
@@ -166,7 +166,7 @@ void main() {
 
     final arbFile = ArbFile(
       filepath: 'strings_en.arb',
-      locale: 'en',
+      filenameLocale: 'en',
       isMainFile: true,
     );
     final parsedArbFile = parseArbFile(arbFile);
@@ -189,7 +189,7 @@ void main() {
 
     final arbFile = ArbFile(
       filepath: 'intl_en.arb',
-      locale: 'en',
+      filenameLocale: 'en',
       isMainFile: true,
     );
     final parsedArbFile = parseArbFile(arbFile);
@@ -215,7 +215,7 @@ void main() {
 
     final arbFile = ArbFile(
       filepath: 'intl_en.arb',
-      locale: 'en',
+      filenameLocale: 'en',
       isMainFile: true,
     );
     final parsedArbFile = parseArbFile(arbFile);
