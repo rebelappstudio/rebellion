@@ -1,3 +1,7 @@
+## 0.1.1
+
+- Fix parsing of 3-letter locale names
+
 ## 0.1.0
 
 - New feature: ignore some rules for specific keys in ARB files
