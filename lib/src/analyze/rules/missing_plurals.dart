@@ -37,10 +37,10 @@ class MissingPlurals extends Rule {
         final result = MessageParser(value).pluralGenderSelectParse();
         if (result is! Plural) continue;
 
-        final pluralRulesForLocale = pluralRules[file.file.locale];
+        final pluralRulesForLocale = pluralRules[file.locale];
         if (pluralRulesForLocale.isEmpty) {
           throw Exception(
-            'Failed to find plural rules for ${file.file.locale}',
+            'Failed to find plural rules for ${file.locale}',
           );
         }
 

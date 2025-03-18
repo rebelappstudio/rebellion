@@ -30,7 +30,7 @@ void main() {
         ParsedArbFile(
           file: ArbFile(
             filepath: 'filepath',
-            locale: 'en',
+            filenameLocale: 'en',
             isMainFile: true,
           ),
           content: {
@@ -56,7 +56,7 @@ void main() {
         ParsedArbFile(
           file: ArbFile(
             filepath: 'filepath',
-            locale: 'en',
+            filenameLocale: 'en',
             isMainFile: true,
           ),
           content: {

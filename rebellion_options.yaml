@@ -4,7 +4,6 @@ rules:
   - at_key_type
   - duplicated_keys
   - empty_at_key
-  - locale_definition
   - mandatory_at_key_description
   - missing_placeholders
   - missing_plurals
@@ -13,6 +12,9 @@ rules:
   - redundant_at_key
   - redundant_translations
   - unused_at_key
+  - locale_definition_presence
+  - locale_definition_allowlist
+  - locale_definition_match
 
 options:
   main_locale: en

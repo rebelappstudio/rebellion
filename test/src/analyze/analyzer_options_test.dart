@@ -18,7 +18,7 @@ void main() {
     options = AnalyzerOptions.fromFiles(
       files: [
         ParsedArbFile(
-          file: ArbFile(filepath: '', locale: 'fi', isMainFile: false),
+          file: ArbFile(filepath: '', filenameLocale: 'fi', isMainFile: false),
           content: {},
           rawKeys: [],
         ),
@@ -32,7 +32,7 @@ void main() {
     options = AnalyzerOptions.fromFiles(
       files: [
         ParsedArbFile(
-          file: ArbFile(filepath: '', locale: 'en', isMainFile: true),
+          file: ArbFile(filepath: '', filenameLocale: 'en', isMainFile: true),
           content: {},
           rawKeys: [],
         ),
@@ -46,12 +46,12 @@ void main() {
     options = AnalyzerOptions.fromFiles(
       files: [
         ParsedArbFile(
-          file: ArbFile(filepath: '', locale: 'en', isMainFile: true),
+          file: ArbFile(filepath: '', filenameLocale: 'en', isMainFile: true),
           content: {},
           rawKeys: [],
         ),
         ParsedArbFile(
-          file: ArbFile(filepath: '', locale: 'fi', isMainFile: false),
+          file: ArbFile(filepath: '', filenameLocale: 'fi', isMainFile: false),
           content: {},
           rawKeys: [],
         ),
