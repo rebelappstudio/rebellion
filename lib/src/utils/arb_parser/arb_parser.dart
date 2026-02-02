@@ -149,8 +149,9 @@ ParsedArbFile parseArbFile(ArbFile file) {
           if (atKeyName == _ignorePropertyName) {
             // Save ignored rules if it's a simple string
             atKeyMeta = atKeyMeta?.copyWith(
-              ignoredRulesRaw:
-                  e.value is String ? [e.value as String] : const <String>[],
+              ignoredRulesRaw: e.value is String
+                  ? [e.value as String]
+                  : const <String>[],
             );
           }
         }
@@ -166,9 +167,5 @@ ParsedArbFile parseArbFile(ArbFile file) {
     }
   }
 
-  return ParsedArbFile(
-    file: file,
-    content: content,
-    rawKeys: rawKeys,
-  );
+  return ParsedArbFile(file: file, content: content, rawKeys: rawKeys);
 }

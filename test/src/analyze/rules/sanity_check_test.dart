@@ -21,41 +21,35 @@ void main() {
   });
 
   test("SanityCheck doesn't report known rule names", () {
-    final issues = SanityCheck().run(
-      [
-        createFile(
-          values: {
-            'key': 'value',
-            '@key': AtKeyMeta(
-              description: null,
-              placeholders: [],
-              ignoredRulesRaw: [RuleKey.allCaps.key],
-            ),
-          },
-        ),
-      ],
-      analyzerOptions,
-    );
+    final issues = SanityCheck().run([
+      createFile(
+        values: {
+          'key': 'value',
+          '@key': AtKeyMeta(
+            description: null,
+            placeholders: [],
+            ignoredRulesRaw: [RuleKey.allCaps.key],
+          ),
+        },
+      ),
+    ], analyzerOptions);
     expect(issues, isZero);
     expect(inMemoryLogger.output, isEmpty);
   });
 
   test('SanityCheck reports unknown ignored rules', () {
-    final issues = SanityCheck().run(
-      [
-        createFile(
-          values: {
-            'key': 'value',
-            '@key': AtKeyMeta(
-              description: null,
-              placeholders: [],
-              ignoredRulesRaw: ['something-something'],
-            ),
-          },
-        ),
-      ],
-      analyzerOptions,
-    );
+    final issues = SanityCheck().run([
+      createFile(
+        values: {
+          'key': 'value',
+          '@key': AtKeyMeta(
+            description: null,
+            placeholders: [],
+            ignoredRulesRaw: ['something-something'],
+          ),
+        },
+      ),
+    ], analyzerOptions);
 
     expect(issues, 1);
     expect(

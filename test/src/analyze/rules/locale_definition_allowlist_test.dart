@@ -20,13 +20,14 @@ void main() {
       throwsA(isA<ExitException>()),
     );
     expect(
-        inMemoryLogger.output,
-        '''
+      inMemoryLogger.output,
+      '''
 ./intl_xx.arb: no @@locale key found
 ./intl_xx.arb: filename locale "xx" is not in the allowlist
 
 2 issues found'''
-            .trim());
+          .trim(),
+    );
   });
 
   test('ARB file @@locale is checked agains the allowlist', () {
@@ -36,7 +37,7 @@ void main() {
 {
   "@@locale": "xx"
 }
-'''
+''',
     });
 
     expect(
@@ -44,12 +45,13 @@ void main() {
       throwsA(isA<ExitException>()),
     );
     expect(
-        inMemoryLogger.output,
-        '''
+      inMemoryLogger.output,
+      '''
 ./intl_en.arb: @@locale value "xx" is not in the allowlist
 ./intl_en.arb: filename locale "en" does not match @@locale value "xx"
 
 2 issues found'''
-            .trim());
+          .trim(),
+    );
   });
 }

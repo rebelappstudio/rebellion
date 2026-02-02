@@ -19,46 +19,33 @@ void main() {
     );
 
     // No duplicates
-    var issues = DuplicatedKeys().run(
-      [
-        ParsedArbFile(
-          file: ArbFile(
-            filepath: 'filepath',
-            filenameLocale: 'en',
-            isMainFile: true,
-          ),
-          content: {
-            'key': 'value',
-            '@key': 'value',
-          },
-          rawKeys: ['key', '@key'],
-        )
-      ],
-      analyzerOptions,
-    );
+    var issues = DuplicatedKeys().run([
+      ParsedArbFile(
+        file: ArbFile(
+          filepath: 'filepath',
+          filenameLocale: 'en',
+          isMainFile: true,
+        ),
+        content: {'key': 'value', '@key': 'value'},
+        rawKeys: ['key', '@key'],
+      ),
+    ], analyzerOptions);
     expect(issues, 0);
     expect(inMemoryLogger.output, isEmpty);
 
     // Duplicated keys found
     inMemoryLogger.clear();
-    issues = DuplicatedKeys().run(
-      [
-        ParsedArbFile(
-          file: ArbFile(
-            filepath: 'filepath',
-            filenameLocale: 'en',
-            isMainFile: true,
-          ),
-          content: {
-            'key': 'value',
-            '@key': 'value',
-            'key2': 'value2',
-          },
-          rawKeys: ['key', 'key2', '@key', 'key', '@key'],
-        )
-      ],
-      analyzerOptions,
-    );
+    issues = DuplicatedKeys().run([
+      ParsedArbFile(
+        file: ArbFile(
+          filepath: 'filepath',
+          filenameLocale: 'en',
+          isMainFile: true,
+        ),
+        content: {'key': 'value', '@key': 'value', 'key2': 'value2'},
+        rawKeys: ['key', 'key2', '@key', 'key', '@key'],
+      ),
+    ], analyzerOptions);
     expect(issues, 2);
     expect(
       inMemoryLogger.output,

@@ -6,12 +6,12 @@ import '../../infrastructure/logger.dart';
 import '../../infrastructure/test_arb_files.dart';
 
 void main() {
-  test('getMissingTranslations returns empty list when no main locale found',
-      () {
-    AppTester.create();
-    expect(
-      getMissingTranslations(
-        [
+  test(
+    'getMissingTranslations returns empty list when no main locale found',
+    () {
+      AppTester.create();
+      expect(
+        getMissingTranslations([
           createFile(
             isMainFile: false,
             locale: 'en',
@@ -22,22 +22,19 @@ void main() {
             locale: 'es',
             values: {'key1': 'value1'},
           ),
-        ],
-      ),
-      isEmpty,
-    );
-    expect(inMemoryLogger.output, isEmpty);
-  });
+        ]),
+        isEmpty,
+      );
+      expect(inMemoryLogger.output, isEmpty);
+    },
+  );
 
   test('getMissingTranslations produces lists of diff files', () {
     AppTester.create();
     final en = createFile(
       isMainFile: true,
       locale: 'en',
-      values: {
-        'key1': 'value1',
-        'key2': 'value2',
-      },
+      values: {'key1': 'value1', 'key2': 'value2'},
     );
     final es = createFile(
       isMainFile: false,

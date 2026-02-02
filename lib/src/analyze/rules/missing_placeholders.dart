@@ -55,8 +55,9 @@ class MissingPlaceholders extends Rule {
         }
 
         // Placeholders actually used in the string
-        final mainKeyUsedPlaceholders =
-            getAllVariableSubstitutions(mainFileContent).toSet();
+        final mainKeyUsedPlaceholders = getAllVariableSubstitutions(
+          mainFileContent,
+        ).toSet();
 
         // Placeholders defined in the main file (may or may not be used in
         // the string as variables)
@@ -114,13 +115,15 @@ class MissingPlaceholders extends Rule {
           };
           // Placeholders present in translation but not defined or used in the
           // main file
-          final extraPlaceholders =
-              keyPlaceholders.where((v) => !allDefinedVariables.contains(v));
+          final extraPlaceholders = keyPlaceholders.where(
+            (v) => !allDefinedVariables.contains(v),
+          );
 
           // Placeholders defined in the main file but not used in the
           // translation
-          final missingPlaceholders =
-              allDefinedVariables.where((v) => !keyPlaceholders.contains(v));
+          final missingPlaceholders = allDefinedVariables.where(
+            (v) => !keyPlaceholders.contains(v),
+          );
 
           if (missingPlaceholders.isNotEmpty) {
             issues++;

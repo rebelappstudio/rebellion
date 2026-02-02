@@ -37,9 +37,7 @@ class RedundantTranslations extends Rule {
         }
 
         issues++;
-        logError(
-          '${file.file.filepath}: redundant translation "$key"',
-        );
+        logError('${file.file.filepath}: redundant translation "$key"');
       }
     }
 

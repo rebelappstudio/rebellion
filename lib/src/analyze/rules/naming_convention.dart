@@ -29,8 +29,9 @@ enum NamingConvention {
 
   /// Returns the naming convention from the CLI option name
   static NamingConvention? fromOptionName(String? optionName) {
-    return NamingConvention.values
-        .firstWhereOrNull((e) => e.optionName == optionName);
+    return NamingConvention.values.firstWhereOrNull(
+      (e) => e.optionName == optionName,
+    );
   }
 
   /// Returns true if [input] matches the naming convention

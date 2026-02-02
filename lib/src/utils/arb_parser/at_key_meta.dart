@@ -36,11 +36,8 @@ class AtKeyMeta with EquatableMixin {
   }) : ignoredRules = ignoredRulesRaw.map(RuleKey.fromKey).nonNulls.toList();
 
   /// Default empty constructor
-  factory AtKeyMeta.empty() => AtKeyMeta(
-        description: null,
-        placeholders: [],
-        ignoredRulesRaw: [],
-      );
+  factory AtKeyMeta.empty() =>
+      AtKeyMeta(description: null, placeholders: [], ignoredRulesRaw: []);
 
   /// Copy the object with new values
   AtKeyMeta copyWith({
@@ -63,7 +60,7 @@ class AtKeyMeta with EquatableMixin {
   // coverage:ignore-start
   @override
   List<Object?> get props => [description, placeholders, ignoredRulesRaw];
-// coverage:ignore-end
+  // coverage:ignore-end
 }
 
 /// One ARB placeholder. E.g.

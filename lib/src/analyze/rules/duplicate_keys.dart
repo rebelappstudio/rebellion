@@ -22,9 +22,7 @@ class DuplicatedKeys extends Rule {
 
       for (final duplicate in allKeys) {
         issues++;
-        logError(
-          '${file.file.filepath}: file has duplicate key "$duplicate"',
-        );
+        logError('${file.file.filepath}: file has duplicate key "$duplicate"');
       }
     }
 

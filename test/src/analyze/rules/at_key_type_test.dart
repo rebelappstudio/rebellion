@@ -29,10 +29,7 @@ void main() {
 
     // At key type is incorrect
     files = [
-      createFile(values: {
-        'key': 'value',
-        '@key': 'value',
-      }),
+      createFile(values: {'key': 'value', '@key': 'value'}),
     ];
     issues = AtKeyType().run(
       files,

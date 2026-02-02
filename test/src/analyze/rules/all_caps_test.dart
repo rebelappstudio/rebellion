@@ -30,10 +30,7 @@ void main() {
   });
 
   test('AllCaps checks string with variables', () {
-    var issues = AllCaps().run(
-      oneKeyFile('Issues: {count}'),
-      options,
-    );
+    var issues = AllCaps().run(oneKeyFile('Issues: {count}'), options);
     expect(issues, 0);
     expect(inMemoryLogger.output, isEmpty);
 
@@ -43,10 +40,7 @@ void main() {
   });
 
   test('AllCaps ignores single letter strings with placeholders', () {
-    var issues = AllCaps().run(
-      oneKeyFile('A {placeholder}'),
-      options,
-    );
+    var issues = AllCaps().run(oneKeyFile('A {placeholder}'), options);
     expect(issues, 0);
     expect(inMemoryLogger.output, isEmpty);
   });
@@ -67,8 +61,8 @@ void main() {
     );
     expect(issues, 6);
     expect(
-        inMemoryLogger.output,
-        '''
+      inMemoryLogger.output,
+      '''
 filepath key key: all caps string in case "zero"
 filepath key key: all caps string in case "one"
 filepath key key: all caps string in case "two"
@@ -76,7 +70,8 @@ filepath key key: all caps string in case "few"
 filepath key key: all caps string in case "many"
 filepath key key: all caps string in case "other"
 '''
-            .trim());
+          .trim(),
+    );
   });
 
   test('AllCaps checks gender', () {
@@ -88,9 +83,7 @@ filepath key key: all caps string in case "other"
     expect(inMemoryLogger.output, isEmpty);
 
     issues = AllCaps().run(
-      oneKeyFile(
-        '{sex, select, male{HIS} female{HER} other{THEIR}}',
-      ),
+      oneKeyFile('{sex, select, male{HIS} female{HER} other{THEIR}}'),
       options,
     );
     expect(issues, 3);
@@ -151,28 +144,26 @@ filepath key key: all caps string in case "other"
   });
 
   test('Rule can be ignored', () {
-    var issues = AllCaps().run(
-      [
-        createFile(
-          values: {
-            'key1': 'ABC',
-            'key2': 'DEF',
-            '@key2': AtKeyMeta(
-              description: null,
-              placeholders: [],
-              ignoredRulesRaw: ['all_caps'],
-            ),
-          },
-        ),
-      ],
-      options,
-    );
+    var issues = AllCaps().run([
+      createFile(
+        values: {
+          'key1': 'ABC',
+          'key2': 'DEF',
+          '@key2': AtKeyMeta(
+            description: null,
+            placeholders: [],
+            ignoredRulesRaw: ['all_caps'],
+          ),
+        },
+      ),
+    ], options);
     expect(issues, 1);
     expect(
-        inMemoryLogger.output,
-        '''
+      inMemoryLogger.output,
+      '''
 filepath: all caps string key "key1"
 '''
-            .trim());
+          .trim(),
+    );
   });
 }

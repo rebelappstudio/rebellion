@@ -2,6 +2,9 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+// This package is copied from the Dart SDK as is
+// ignore_for_file: public_member_api_docs
+
 import '../message.dart';
 import 'submessage.dart';
 
@@ -24,8 +27,14 @@ class Plural extends SubMessage {
   @override
   List<String> get attributeNames => ['=0', '=1', '=2', 'few', 'many', 'other'];
   @override
-  List<String> get codeAttributeNames =>
-      ['zero', 'one', 'two', 'few', 'many', 'other'];
+  List<String> get codeAttributeNames => [
+    'zero',
+    'one',
+    'two',
+    'few',
+    'many',
+    'other',
+  ];
 
   /// The node will have the attribute names as strings, so we translate
   /// between those and the fields of the class.

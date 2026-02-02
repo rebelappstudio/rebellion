@@ -2,6 +2,9 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+// This package is copied from the Dart SDK as is
+// ignore_for_file: public_member_api_docs
+
 import 'message.dart';
 
 /// Represents an interpolation of a variable value in a message. We expect
@@ -9,6 +12,7 @@ import 'message.dart';
 /// as the name of a variable that exists in [arguments] and we will
 /// compute the variable name or the index based on the value of the other.
 class VariableSubstitution extends Message {
+  /// Default constructor
   VariableSubstitution(this._index, [Message? parent]) : super(parent);
 
   /// Create a substitution based on the name rather than the index. The name
@@ -33,9 +37,10 @@ class VariableSubstitution extends Message {
         .indexOf(_variableNameUpper!);
     if (_index == -1) {
       throw ArgumentError(
-          "Cannot find parameter named '$_variableNameUpper' in "
-          "message named '$name'. Available "
-          'parameters are $arguments');
+        "Cannot find parameter named '$_variableNameUpper' in "
+        "message named '$name'. Available "
+        'parameters are $arguments',
+      );
     }
     return _index;
   }
@@ -61,7 +66,7 @@ class VariableSubstitution extends Message {
   @override
   String toString() => 'VariableSubstitution(${index ?? _variableName})';
   @override
-  String expanded(
-          [String Function(dynamic, dynamic) transform = nullTransform]) =>
-      transform(this, index);
+  String expanded([
+    String Function(dynamic, dynamic) transform = nullTransform,
+  ]) => transform(this, index);
 }

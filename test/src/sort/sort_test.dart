@@ -50,9 +50,7 @@ void main() {
     final tester = AppTester.create();
     tester.populateFileSystem(testFiles);
 
-    await commandRunner.run(
-      ['sort', '.', '--sorting', 'alphabetical-reverse'],
-    );
+    await commandRunner.run(['sort', '.', '--sorting', 'alphabetical-reverse']);
     expect(inMemoryLogger.output, isEmpty);
 
     expect(
@@ -100,8 +98,8 @@ void main() {
     expect(inMemoryLogger.output, isEmpty);
 
     expect(
-        tester.getFileContent('intl_en.arb'),
-        '''
+      tester.getFileContent('intl_en.arb'),
+      '''
 {
   "aaa": "value",
   "ccc": "value",
@@ -109,28 +107,31 @@ void main() {
   "bbb": "value"
 }
 '''
-            .trim());
+          .trim(),
+    );
 
     expect(
-        tester.getFileContent('intl_es.arb'),
-        '''
+      tester.getFileContent('intl_es.arb'),
+      '''
 {
   "aaa": "value",
   "bbb": "value"
 }
 '''
-            .trim());
+          .trim(),
+    );
 
     expect(
-        tester.getFileContent('intl_fr.arb'),
-        '''
+      tester.getFileContent('intl_fr.arb'),
+      '''
 {
   "aaa": "value",
   "ccc": "value",
   "bbb": "value"
 }
 '''
-            .trim());
+          .trim(),
+    );
   });
 }
 

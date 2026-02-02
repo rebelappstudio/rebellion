@@ -42,8 +42,8 @@ void main() {
 
     await commandRunner.run(['diff', '.']);
     expect(
-        inMemoryLogger.output,
-        '''
+      inMemoryLogger.output,
+      '''
 ./intl_es.arb: 1 missing translations:
  - key3
 ./intl_fr.arb: 3 missing translations:
@@ -51,7 +51,8 @@ void main() {
  - key2
  - key3
 '''
-            .trim());
+          .trim(),
+    );
   });
 
   test('Missing translations are written to diff files', () async {
@@ -73,22 +74,24 @@ void main() {
     await commandRunner.run(['diff', '.', '--output', 'file']);
     expect(inMemoryLogger.output, isEmpty);
     expect(
-        tester.getFileContent('intl_es_diff.arb'),
-        '''
+      tester.getFileContent('intl_es_diff.arb'),
+      '''
 {
   "key3": ""
 }
 '''
-            .trim());
+          .trim(),
+    );
     expect(
-        tester.getFileContent('intl_fr_diff.arb'),
-        '''
+      tester.getFileContent('intl_fr_diff.arb'),
+      '''
 {
   "key1": "",
   "key2": "",
   "key3": ""
 }
 '''
-            .trim());
+          .trim(),
+    );
   });
 }

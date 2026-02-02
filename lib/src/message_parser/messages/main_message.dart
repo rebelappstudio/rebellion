@@ -2,18 +2,18 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+// This package is copied from the Dart SDK as is
+// ignore_for_file: public_member_api_docs
+
 import 'package:analyzer/dart/ast/ast.dart';
 import 'complex_message.dart';
 import 'message.dart';
 import 'message_extraction_exception.dart';
 
 class MainMessage extends ComplexMessage {
-  MainMessage({
-    this.sourcePosition,
-    this.endPosition,
-    required this.arguments,
-  })  : examples = {},
-        super(null);
+  MainMessage({this.sourcePosition, this.endPosition, required this.arguments})
+    : examples = {},
+      super(null);
 
   /// All the pieces of the message. When we go to print, these will
   /// all be expanded appropriately. The exact form depends on what we're
@@ -40,7 +40,8 @@ class MainMessage extends ComplexMessage {
   }) {
     if (arguments.first is! StringLiteral) {
       throw MessageExtractionException(
-          'Intl.message messages must be string literals');
+        'Intl.message messages must be string literals',
+      );
     }
 
     Message.checkValidity(
@@ -53,12 +54,14 @@ class MainMessage extends ComplexMessage {
     );
   }
 
+  /// Add pieces to the message
   void addPieces(List<Object> messages) {
     for (var each in messages) {
       messagePieces.add(Message.from(each, this));
     }
   }
 
+  /// Validate the description
   void validateDescription() {
     if (description == null || description == '') {
       throw MessageExtractionException('Missing description for message $this');
@@ -120,9 +123,9 @@ class MainMessage extends ComplexMessage {
   /// message entity.
   /// See [messagePieces].
   @override
-  String expanded(
-          [String Function(Message, dynamic) transform = nullTransform]) =>
-      messagePieces.map((chunk) => transform(this, chunk)).join('');
+  String expanded([
+    String Function(Message, dynamic) transform = nullTransform,
+  ]) => messagePieces.map((chunk) => transform(this, chunk)).join('');
 
   /// Record the translation for this message in the given locale, after
   /// suitably escaping it.
@@ -171,26 +174,30 @@ class MainMessage extends ComplexMessage {
 
   /// Create a string that will recreate this message, optionally
   /// including the compile-time only information desc and examples.
-  String toOriginalCode(
-      {bool includeDesc = true, bool includeExamples = true}) {
+  String toOriginalCode({
+    bool includeDesc = true,
+    bool includeExamples = true,
+  }) {
     var out = StringBuffer()..write("Intl.message('");
     out.write(expanded(turnInterpolationBackIntoStringForm));
     out.write("', ");
     out.write("name: '$name', ");
     out.write(locale == null ? '' : "locale: '$locale', ");
     if (includeDesc) {
-      out.write(description == null
-          ? ''
-          : "desc: '${Message.escapeString(description!)}', ");
+      out.write(
+        description == null
+            ? ''
+            : "desc: '${Message.escapeString(description!)}', ",
+      );
     }
     if (includeExamples) {
       // json is already mostly-escaped, but we need to handle interpolations.
       var json = jsonEncoder.encode(examples).replaceAll(r'$', r'\$');
       out.write(examples.isEmpty ? '' : 'examples: const $json, ');
     }
-    out.write(meaning == null
-        ? ''
-        : "meaning: '${Message.escapeString(meaning!)}', ");
+    out.write(
+      meaning == null ? '' : "meaning: '${Message.escapeString(meaning!)}', ",
+    );
     out.write("args: [${arguments.join(', ')}]");
     out.write(')');
     return out.toString();
@@ -261,8 +268,14 @@ class MainMessage extends ComplexMessage {
 
   /// The parameters that the Intl.message call may provide.
   @override
-  List<String> get attributeNames =>
-      const ['name', 'desc', 'examples', 'args', 'meaning', 'skip'];
+  List<String> get attributeNames => const [
+    'name',
+    'desc',
+    'examples',
+    'args',
+    'meaning',
+    'skip',
+  ];
 
   @override
   String toString() =>

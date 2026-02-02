@@ -24,11 +24,7 @@ class ParsedArbFile with EquatableMixin {
 
   /// Copy with new content
   ParsedArbFile copyWithContent(Map<String, dynamic> content) {
-    return ParsedArbFile(
-      file: file,
-      rawKeys: rawKeys,
-      content: content,
-    );
+    return ParsedArbFile(file: file, rawKeys: rawKeys, content: content);
   }
 
   // coverage:ignore-start

@@ -36,10 +36,10 @@ class RebellionOptions with EquatableMixin {
     required String? mainLocale,
     required NamingConvention? namingConvention,
     required Sorting? sorting,
-  })  : enabledRules = enabledRules ?? RuleKey.defaultRules,
-        mainLocale = mainLocale ?? defaultMainLocale,
-        namingConvention = namingConvention ?? NamingConvention.camel,
-        sorting = sorting ?? Sorting.alphabetical;
+  }) : enabledRules = enabledRules ?? RuleKey.defaultRules,
+       mainLocale = mainLocale ?? defaultMainLocale,
+       namingConvention = namingConvention ?? NamingConvention.camel,
+       sorting = sorting ?? Sorting.alphabetical;
 
   /// Default empty constructor
   factory RebellionOptions.empty() {
@@ -92,11 +92,11 @@ class RebellionOptions with EquatableMixin {
 
   @override
   List<Object?> get props => [
-        enabledRules,
-        mainLocale,
-        namingConvention,
-        sorting,
-      ];
+    enabledRules,
+    mainLocale,
+    namingConvention,
+    sorting,
+  ];
 
   /// Apply CLI arguments [RebellionOptions] to the current options
   ///

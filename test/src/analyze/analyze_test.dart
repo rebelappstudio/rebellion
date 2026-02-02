@@ -109,24 +109,22 @@ void main() {
 
   test('Console value is preferred over YAML config', () {
     final tester = AppTester.create();
-    tester.populateFileSystem({
-      'strings_fi.arb': '{}',
-      'strings_sv.arb': '{}',
-    });
+    tester.populateFileSystem({'strings_fi.arb': '{}', 'strings_sv.arb': '{}'});
     expect(defaultMainLocale, 'en');
     expect(
       () async => await commandRunner.run(['analyze', '.', '--main-locale=fi']),
       throwsA(isA<ExitException>()),
     );
     expect(
-        inMemoryLogger.output,
-        // Has no warning about main file
-        '''
+      inMemoryLogger.output,
+      // Has no warning about main file
+      '''
 ./strings_fi.arb: no @@locale key found
 ./strings_sv.arb: no @@locale key found
 
 2 issues found
 '''
-            .trim());
+          .trim(),
+    );
   });
 }

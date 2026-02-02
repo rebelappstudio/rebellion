@@ -30,7 +30,8 @@ abstract class SubMessage extends ComplexMessage {
         value = second is CompositeMessage ? second.pieces : [second];
       } else {
         throw Exception(
-            'The clauses argument supplied must be a list of pairs, i.e. list of lists of length 2 or PairMessages.');
+          'The clauses argument supplied must be a list of pairs, i.e. list of lists of length 2 or PairMessages.',
+        );
       }
       this[key] = value;
     }
@@ -58,8 +59,9 @@ abstract class SubMessage extends ComplexMessage {
   List<String> get codeAttributeNames;
 
   @override
-  String expanded(
-      [String Function(dynamic, dynamic) transform = nullTransform]) {
+  String expanded([
+    String Function(dynamic, dynamic) transform = nullTransform,
+  ]) {
     String fullMessageForClause(String key) =>
         '$key{${transform(parent, this[key])}}';
     var clauses = attributeNames
@@ -78,9 +80,10 @@ abstract class SubMessage extends ComplexMessage {
     out.write(mainArgument);
     var args = codeAttributeNames.where((attribute) => this[attribute] != null);
     args.fold<StringBuffer>(
-        out,
-        (buffer, arg) =>
-            buffer..write(", $arg: '${(this[arg] as Message).toCode()}'"));
+      out,
+      (buffer, arg) =>
+          buffer..write(", $arg: '${(this[arg] as Message).toCode()}'"),
+    );
     out.write(')}');
     return out.toString();
   }

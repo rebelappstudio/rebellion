@@ -39,15 +39,14 @@ class MissingPlurals extends Rule {
 
         final pluralRulesForLocale = pluralRules[file.locale];
         if (pluralRulesForLocale.isEmpty) {
-          throw Exception(
-            'Failed to find plural rules for ${file.locale}',
-          );
+          throw Exception('Failed to find plural rules for ${file.locale}');
         }
 
         // Check missing plurals (plurals that are in plural rules but
         // not in the file)
-        final missingPlurals = pluralRulesForLocale
-            .where((e) => !result.allPluralAttributes.contains(e));
+        final missingPlurals = pluralRulesForLocale.where(
+          (e) => !result.allPluralAttributes.contains(e),
+        );
         for (final plural in missingPlurals) {
           issues++;
           logError(
@@ -57,8 +56,9 @@ class MissingPlurals extends Rule {
 
         // Check redundant plurals (plurals that are in the file but
         // not in plural rules)
-        final redundantPlurals = result.allPluralAttributes
-            .where((e) => !pluralRulesForLocale.contains(e));
+        final redundantPlurals = result.allPluralAttributes.where(
+          (e) => !pluralRulesForLocale.contains(e),
+        );
         for (final plural in redundantPlurals) {
           issues++;
           logError(

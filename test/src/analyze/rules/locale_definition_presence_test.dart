@@ -18,32 +18,17 @@ void main() {
     );
 
     // No error when @@locale is present
-    var issues = LocaleDefinitionPresence().run(
-      [
-        createFile(
-          values: {
-            '@@locale': 'en',
-            'key': 'value',
-          },
-        ),
-      ],
-      analyzerOptions,
-    );
+    var issues = LocaleDefinitionPresence().run([
+      createFile(values: {'@@locale': 'en', 'key': 'value'}),
+    ], analyzerOptions);
     expect(issues, 0);
     expect(inMemoryLogger.output, isEmpty);
 
     // Error when @@locale is missing
     inMemoryLogger.clear();
-    issues = LocaleDefinitionPresence().run(
-      [
-        createFile(
-          values: {
-            'key': 'value',
-          },
-        ),
-      ],
-      analyzerOptions,
-    );
+    issues = LocaleDefinitionPresence().run([
+      createFile(values: {'key': 'value'}),
+    ], analyzerOptions);
     expect(issues, 1);
     expect(inMemoryLogger.output, 'filepath: no @@locale key found');
   });

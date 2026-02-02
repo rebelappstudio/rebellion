@@ -4,9 +4,7 @@ import 'package:rebellion/src/utils/arb_parser/parsed_arb_file.dart';
 /// Creates a list of [ParsedArbFile] with just one file containing a single key
 List<ParsedArbFile> oneKeyFile(String string) {
   return [
-    createFile(
-      values: {'key': string},
-    ),
+    createFile(values: {'key': string}),
   ];
 }
 

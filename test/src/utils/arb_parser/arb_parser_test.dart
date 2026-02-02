@@ -8,34 +8,32 @@ import '../../../infrastructure/app_tester.dart';
 import '../../../infrastructure/logger.dart';
 
 void main() {
-  test('parseArbFile throws an exception when ARB is not a valid JSON',
-      () async {
-    final tester = AppTester.create();
-    tester.populateFileSystem({
-      'strings_en.arb': '{;}',
-    });
+  test(
+    'parseArbFile throws an exception when ARB is not a valid JSON',
+    () async {
+      final tester = AppTester.create();
+      tester.populateFileSystem({'strings_en.arb': '{;}'});
 
-    expect(
-      () => parseArbFile(
-        ArbFile(
-          filepath: 'strings_en.arb',
-          filenameLocale: 'en',
-          isMainFile: true,
+      expect(
+        () => parseArbFile(
+          ArbFile(
+            filepath: 'strings_en.arb',
+            filenameLocale: 'en',
+            isMainFile: true,
+          ),
         ),
-      ),
-      throwsA(isA<FormatException>()),
-    );
-    expect(
-      inMemoryLogger.output,
-      'strings_en.arb: file content is not a valid JSON',
-    );
-  });
+        throwsA(isA<FormatException>()),
+      );
+      expect(
+        inMemoryLogger.output,
+        'strings_en.arb: file content is not a valid JSON',
+      );
+    },
+  );
 
   test('parseArbFile throws an exception when JSON contains an array', () {
     final tester = AppTester.create();
-    tester.populateFileSystem({
-      'strings_en.arb': '{"key": []}',
-    });
+    tester.populateFileSystem({'strings_en.arb': '{"key": []}'});
 
     expect(
       () => parseArbFile(
@@ -80,23 +78,16 @@ void main() {
         isMainFile: true,
       ),
     );
-    expect(
-      parsedFile.content,
-      {
-        'key': 'Hi, {name}',
-        '@key': AtKeyMeta(
-          description: 'Greeting',
-          ignoredRulesRaw: [],
-          placeholders: [
-            AtKeyPlaceholder(
-              name: 'name',
-              type: 'String',
-              example: 'Hi, John',
-            ),
-          ],
-        ),
-      },
-    );
+    expect(parsedFile.content, {
+      'key': 'Hi, {name}',
+      '@key': AtKeyMeta(
+        description: 'Greeting',
+        ignoredRulesRaw: [],
+        placeholders: [
+          AtKeyPlaceholder(name: 'name', type: 'String', example: 'Hi, John'),
+        ],
+      ),
+    });
     expect(inMemoryLogger.output, isEmpty);
   });
 
@@ -137,16 +128,8 @@ void main() {
         description: 'Number of cars',
         ignoredRulesRaw: [],
         placeholders: [
-          AtKeyPlaceholder(
-            name: 'count',
-            type: 'int',
-            example: 'Count: 2',
-          ),
-          AtKeyPlaceholder(
-            name: 'color',
-            type: null,
-            example: null,
-          ),
+          AtKeyPlaceholder(name: 'count', type: 'int', example: 'Count: 2'),
+          AtKeyPlaceholder(name: 'color', type: null, example: null),
         ],
       ),
     );

@@ -46,13 +46,13 @@ extension StringX on String {
 extension PluralX on Plural {
   /// Get a list of all plural attributes available in this plural
   List<String> get allPluralAttributes => [
-        if (zero != null) 'zero',
-        if (one != null) 'one',
-        if (two != null) 'two',
-        if (few != null) 'few',
-        if (many != null) 'many',
-        if (other != null) 'other',
-      ];
+    if (zero != null) 'zero',
+    if (one != null) 'one',
+    if (two != null) 'two',
+    if (few != null) 'few',
+    if (many != null) 'many',
+    if (other != null) 'other',
+  ];
 
   /// Get a list of all submessages available in this plural
   List<Message> get allSubmessages =>

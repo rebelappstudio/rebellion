@@ -14,40 +14,33 @@ void main() {
   });
 
   test(
-      'RedundantTranslations reports no issue when there are no redundant translations',
-      () {
-    final issues = RedundantTranslations().run(
-      [
-        createFile(
-          filepath: 'strings_en.arb',
-          locale: 'en',
-          isMainFile: true,
-          values: {
-            'key1': 'value',
-            'key2': 'value',
-            'key3': 'value',
-          },
+    'RedundantTranslations reports no issue when there are no redundant translations',
+    () {
+      final issues = RedundantTranslations().run(
+        [
+          createFile(
+            filepath: 'strings_en.arb',
+            locale: 'en',
+            isMainFile: true,
+            values: {'key1': 'value', 'key2': 'value', 'key3': 'value'},
+          ),
+          createFile(
+            filepath: 'strings_es.arb',
+            locale: 'es',
+            isMainFile: false,
+            values: {'key1': 'valor', 'key2': 'valor', 'key3': 'valor'},
+          ),
+        ],
+        AnalyzerOptions(
+          rebellionOptions: RebellionOptions.empty(),
+          isSingleFile: false,
+          containsMainFile: true,
         ),
-        createFile(
-          filepath: 'strings_es.arb',
-          locale: 'es',
-          isMainFile: false,
-          values: {
-            'key1': 'valor',
-            'key2': 'valor',
-            'key3': 'valor',
-          },
-        ),
-      ],
-      AnalyzerOptions(
-        rebellionOptions: RebellionOptions.empty(),
-        isSingleFile: false,
-        containsMainFile: true,
-      ),
-    );
-    expect(issues, isZero);
-    expect(inMemoryLogger.output, isEmpty);
-  });
+      );
+      expect(issues, isZero);
+      expect(inMemoryLogger.output, isEmpty);
+    },
+  );
 
   test('RedundantTranslations lists all redundant translations', () {
     final issues = RedundantTranslations().run(
@@ -56,11 +49,7 @@ void main() {
           filepath: 'strings_en.arb',
           locale: 'en',
           isMainFile: true,
-          values: {
-            'key1': 'value',
-            'key2': 'value',
-            'key3': 'value',
-          },
+          values: {'key1': 'value', 'key2': 'value', 'key3': 'value'},
         ),
         createFile(
           filepath: 'strings_es.arb',
@@ -83,12 +72,13 @@ void main() {
     );
     expect(issues, 2);
     expect(
-        inMemoryLogger.output,
-        '''
+      inMemoryLogger.output,
+      '''
 strings_es.arb: redundant translation "key4"
 strings_es.arb: redundant translation "key5"
 '''
-            .trim());
+          .trim(),
+    );
   });
 
   test('RedundantTranslations reports no errors when no main file found', () {
@@ -104,10 +94,7 @@ strings_es.arb: redundant translation "key5"
           filepath: 'strings_es.arb',
           locale: 'es',
           isMainFile: false,
-          values: {
-            'key1': 'valor',
-            'key2': 'valor',
-          },
+          values: {'key1': 'valor', 'key2': 'valor'},
         ),
       ],
       AnalyzerOptions(

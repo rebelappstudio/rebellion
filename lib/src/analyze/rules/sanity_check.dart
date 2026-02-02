@@ -19,8 +19,9 @@ class SanityCheck extends Rule {
           final atKeyContent = file.content[key];
           if (atKeyContent is AtKeyMeta) {
             // Check misspelled and unknown ignored rule names
-            final unknownIgnoredRules = atKeyContent.ignoredRulesRaw
-                .where((key) => RuleKey.fromKey(key) == null);
+            final unknownIgnoredRules = atKeyContent.ignoredRulesRaw.where(
+              (key) => RuleKey.fromKey(key) == null,
+            );
             if (unknownIgnoredRules.isNotEmpty) {
               for (final rule in unknownIgnoredRules) {
                 issues++;
