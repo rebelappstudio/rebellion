@@ -12,7 +12,6 @@ import 'message.dart';
 /// as the name of a variable that exists in [arguments] and we will
 /// compute the variable name or the index based on the value of the other.
 class VariableSubstitution extends Message {
-  /// Default constructor
   VariableSubstitution(this._index, [Message? parent]) : super(parent);
 
   /// Create a substitution based on the name rather than the index. The name
@@ -67,6 +66,6 @@ class VariableSubstitution extends Message {
   String toString() => 'VariableSubstitution(${index ?? _variableName})';
   @override
   String expanded([
-    String Function(dynamic, dynamic) transform = nullTransform,
-  ]) => transform(this, index);
+    String Function(Message, Object) transform = nullTransform,
+  ]) => transform(this, index!);
 }

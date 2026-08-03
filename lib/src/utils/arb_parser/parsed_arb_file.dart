@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:rebellion/src/utils/arb_parser/arb_file.dart';
 
 /// Parsed ARB file content
-class ParsedArbFile with EquatableMixin {
+class ParsedArbFile with Equatable {
   /// ARB file
   final ArbFile file;
 

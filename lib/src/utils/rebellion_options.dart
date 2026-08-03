@@ -16,7 +16,7 @@ const configFilename = 'rebellion_options.yaml';
 /// naming convention and sorting of keys.
 ///
 /// This class represents the YAML configuration file and CLI arguments.
-class RebellionOptions with EquatableMixin {
+class RebellionOptions with Equatable {
   /// List of enabled rules
   final Set<RuleKey> enabledRules;
 

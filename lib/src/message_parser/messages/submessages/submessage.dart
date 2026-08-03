@@ -2,7 +2,11 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+// This package is copied from the Dart SDK as is
+// ignore_for_file: public_member_api_docs
+
 import 'package:analyzer/dart/ast/ast.dart';
+
 import '../complex_message.dart';
 import '../composite_message.dart';
 import '../literal_string_message.dart';
@@ -48,8 +52,8 @@ abstract class SubMessage extends ComplexMessage {
   /// argument names and values.
   static Map<String, Expression> argumentsOfInterestFor(MethodInvocation node) {
     return {
-      for (var node in node.argumentList.arguments.whereType<NamedExpression>())
-        node.name.label.token.value() as String: node.expression,
+      for (var node in node.argumentList.arguments.whereType<NamedArgument>())
+        node.name.lexeme: node.argumentExpression,
     };
   }
 
@@ -60,10 +64,10 @@ abstract class SubMessage extends ComplexMessage {
 
   @override
   String expanded([
-    String Function(dynamic, dynamic) transform = nullTransform,
+    String Function(Message, Object) transform = nullTransform,
   ]) {
     String fullMessageForClause(String key) =>
-        '$key{${transform(parent, this[key])}}';
+        '$key{${transform(parent!, this[key])}}';
     var clauses = attributeNames
         .where((key) => this[key] != null)
         .map(fullMessageForClause)

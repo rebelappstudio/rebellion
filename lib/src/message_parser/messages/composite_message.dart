@@ -13,7 +13,6 @@ class CompositeMessage extends Message {
   List<Message> pieces;
 
   CompositeMessage.withParent(super.parent) : pieces = const [];
-
   CompositeMessage(this.pieces, [super.parent]) {
     for (var x in pieces) {
       x.parent = this;
@@ -27,6 +26,6 @@ class CompositeMessage extends Message {
   String toString() => 'CompositeMessage($pieces)';
   @override
   String expanded([
-    String Function(dynamic, dynamic) transform = nullTransform,
+    String Function(Message, Object) transform = nullTransform,
   ]) => pieces.map((chunk) => transform(this, chunk)).join('');
 }

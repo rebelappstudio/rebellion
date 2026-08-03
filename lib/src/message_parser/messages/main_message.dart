@@ -6,6 +6,7 @@
 // ignore_for_file: public_member_api_docs
 
 import 'package:analyzer/dart/ast/ast.dart';
+
 import 'complex_message.dart';
 import 'message.dart';
 import 'message_extraction_exception.dart';
@@ -32,7 +33,7 @@ class MainMessage extends ComplexMessage {
   /// Verify that this looks like a correct Intl.message invocation.
   static void checkValidity(
     MethodInvocation node,
-    List arguments,
+    List<Argument> arguments,
     String? outerName,
     List<FormalParameter> outerArgs, {
     bool nameAndArgsGenerated = false,
@@ -54,14 +55,12 @@ class MainMessage extends ComplexMessage {
     );
   }
 
-  /// Add pieces to the message
   void addPieces(List<Object> messages) {
     for (var each in messages) {
       messagePieces.add(Message.from(each, this));
     }
   }
 
-  /// Validate the description
   void validateDescription() {
     if (description == null || description == '') {
       throw MessageExtractionException('Missing description for message $this');
@@ -124,7 +123,7 @@ class MainMessage extends ComplexMessage {
   /// See [messagePieces].
   @override
   String expanded([
-    String Function(Message, dynamic) transform = nullTransform,
+    String Function(Message, Object) transform = nullTransform,
   ]) => messagePieces.map((chunk) => transform(this, chunk)).join('');
 
   /// Record the translation for this message in the given locale, after

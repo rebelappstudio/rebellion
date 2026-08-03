@@ -15,7 +15,7 @@ import 'package:rebellion/src/analyze/rules/rule.dart';
 /// "@myKey": {
 ///   "@@x-ignore": "all_caps",
 /// }
-class AtKeyMeta with EquatableMixin {
+class AtKeyMeta with Equatable {
   /// 'description' field of the @-key
   final String? description;
 
@@ -69,7 +69,7 @@ class AtKeyMeta with EquatableMixin {
 ///     "type": "int",
 ///     "example": "42"
 ///   },
-class AtKeyPlaceholder with EquatableMixin {
+class AtKeyPlaceholder with Equatable {
   /// Placeholder name
   final String? name;
 

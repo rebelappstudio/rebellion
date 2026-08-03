@@ -4,7 +4,7 @@ import 'package:rebellion/src/utils/arb_parser/parsed_arb_file.dart';
 import 'package:rebellion/src/utils/extensions.dart';
 
 /// A class that represents a diff between two ARB files
-class DiffArbFile with EquatableMixin {
+class DiffArbFile with Equatable {
   /// The source ARB file
   final ParsedArbFile sourceFile;
 

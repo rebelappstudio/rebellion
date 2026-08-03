@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 /// Represents an ARB file on disk
-class ArbFile with EquatableMixin {
+class ArbFile with Equatable {
   /// Path to the ARB file
   final String filepath;
 

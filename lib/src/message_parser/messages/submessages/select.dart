@@ -75,7 +75,7 @@ class Select extends SubMessage {
   // something else, in which case we convert it to a string
   // and take the portion after the period, if present.
   // This is to handle enums as select keys.
-  static String _keyForm(dynamic key) {
+  static String _keyForm(Object? key) {
     return (key is SimpleStringLiteral) ? key.value : '$key'.split('.').last;
   }
 
