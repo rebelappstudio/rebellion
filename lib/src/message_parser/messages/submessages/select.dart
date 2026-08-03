@@ -2,6 +2,9 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+// This package is copied from the Dart SDK as is
+// ignore_for_file: public_member_api_docs
+
 import 'package:analyzer/dart/ast/ast.dart';
 import '../message.dart';
 import '../message_extraction_exception.dart';
@@ -43,8 +46,9 @@ class Select extends SubMessage {
       cases[attributeName] = value;
     } else {
       throw MessageExtractionException(
-          "Invalid select keyword: '$attributeName', must "
-          "match '$selectPattern'");
+        "Invalid select keyword: '$attributeName', must "
+        "match '$selectPattern'",
+      );
     }
   }
 
@@ -71,7 +75,7 @@ class Select extends SubMessage {
   // something else, in which case we convert it to a string
   // and take the portion after the period, if present.
   // This is to handle enums as select keys.
-  static String _keyForm(key) {
+  static String _keyForm(Object? key) {
     return (key is SimpleStringLiteral) ? key.value : '$key'.split('.').last;
   }
 
@@ -79,7 +83,8 @@ class Select extends SubMessage {
   void validate() {
     if (this['other'] == null) {
       throw MessageExtractionException(
-          'Missing keyword other for Intl.select $this');
+        'Missing keyword other for Intl.select $this',
+      );
     }
   }
 
@@ -95,8 +100,10 @@ class Select extends SubMessage {
     out.write(mainArgument);
     var args = codeAttributeNames;
     out.write(', {');
-    args.fold<StringBuffer>(out,
-        (buffer, arg) => buffer..write("'$arg': '${this[arg]!.toCode()}', "));
+    args.fold<StringBuffer>(
+      out,
+      (buffer, arg) => buffer..write("'$arg': '${this[arg]!.toCode()}', "),
+    );
     out.write('})}');
     return out.toString();
   }
@@ -111,7 +118,8 @@ class Select extends SubMessage {
     var indexOfArgument = arguments.indexOf(mainArgument);
     if (indexOfArgument == -1) {
       throw ArgumentError(
-          'The select message $dartMessageName is being passed the argument $mainArgument, which does not occur in the list of arguments $arguments.');
+        'The select message $dartMessageName is being passed the argument $mainArgument, which does not occur in the list of arguments $arguments.',
+      );
     }
     json.add(indexOfArgument);
     var attributes = {};

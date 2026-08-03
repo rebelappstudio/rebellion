@@ -13,7 +13,7 @@ void main() {
 {
   "@@locale": "fi"
 }
-'''
+''',
     });
 
     commandRunner.run(['analyze', '.', '--main-locale=fi']);
@@ -27,7 +27,7 @@ void main() {
 {
   "@@locale": "en"
 }
-'''
+''',
     });
 
     expect(
@@ -35,11 +35,12 @@ void main() {
       throwsA(isA<ExitException>()),
     );
     expect(
-        inMemoryLogger.output,
-        '''
+      inMemoryLogger.output,
+      '''
 ./intl_fi.arb: filename locale "fi" does not match @@locale value "en"
 
 1 issue found'''
-            .trim());
+          .trim(),
+    );
   });
 }

@@ -24,33 +24,22 @@ void main() {
       containsMainFile: true,
     );
 
-    var issues = NamingConventionRule().run(
-      [
-        createFile(
-          values: {
-            'key': 'value',
-            'camelCaseKey': 'value',
-          },
-        ),
-      ],
-      analyzerOptions,
-    );
+    var issues = NamingConventionRule().run([
+      createFile(values: {'key': 'value', 'camelCaseKey': 'value'}),
+    ], analyzerOptions);
     expect(issues, 0);
     expect(inMemoryLogger.output, isEmpty);
 
     inMemoryLogger.clear();
-    issues = NamingConventionRule().run(
-      [
-        createFile(
-          values: {
-            'key': 'value',
-            'snake_case_key': 'value',
-            'kebab-case-key': 'value',
-          },
-        ),
-      ],
-      analyzerOptions,
-    );
+    issues = NamingConventionRule().run([
+      createFile(
+        values: {
+          'key': 'value',
+          'snake_case_key': 'value',
+          'kebab-case-key': 'value',
+        },
+      ),
+    ], analyzerOptions);
     expect(issues, 2);
     expect(
       inMemoryLogger.output,
@@ -98,22 +87,19 @@ filepath: key "kebab-case-key" does not match selected naming convention (camel 
       containsMainFile: true,
     );
 
-    var issues = NamingConventionRule().run(
-      [
-        createFile(
-          values: {
-            'camelCaseKey': 'value',
-            'snake_case_key': 'value',
-            "@snake_case_key": AtKeyMeta(
-              description: null,
-              placeholders: [],
-              ignoredRulesRaw: ['naming_convention'],
-            ),
-          },
-        ),
-      ],
-      analyzerOptions,
-    );
+    var issues = NamingConventionRule().run([
+      createFile(
+        values: {
+          'camelCaseKey': 'value',
+          'snake_case_key': 'value',
+          "@snake_case_key": AtKeyMeta(
+            description: null,
+            placeholders: [],
+            ignoredRulesRaw: ['naming_convention'],
+          ),
+        },
+      ),
+    ], analyzerOptions);
     expect(issues, 0);
     expect(inMemoryLogger.output, isEmpty);
   });

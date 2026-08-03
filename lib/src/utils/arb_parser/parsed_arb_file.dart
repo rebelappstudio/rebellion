@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:rebellion/src/utils/arb_parser/arb_file.dart';
 
 /// Parsed ARB file content
-class ParsedArbFile with EquatableMixin {
+class ParsedArbFile with Equatable {
   /// ARB file
   final ArbFile file;
 
@@ -24,11 +24,7 @@ class ParsedArbFile with EquatableMixin {
 
   /// Copy with new content
   ParsedArbFile copyWithContent(Map<String, dynamic> content) {
-    return ParsedArbFile(
-      file: file,
-      rawKeys: rawKeys,
-      content: content,
-    );
+    return ParsedArbFile(file: file, rawKeys: rawKeys, content: content);
   }
 
   // coverage:ignore-start

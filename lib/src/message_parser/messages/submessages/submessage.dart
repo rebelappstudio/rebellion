@@ -2,7 +2,11 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+// This package is copied from the Dart SDK as is
+// ignore_for_file: public_member_api_docs
+
 import 'package:analyzer/dart/ast/ast.dart';
+
 import '../complex_message.dart';
 import '../composite_message.dart';
 import '../literal_string_message.dart';
@@ -30,7 +34,8 @@ abstract class SubMessage extends ComplexMessage {
         value = second is CompositeMessage ? second.pieces : [second];
       } else {
         throw Exception(
-            'The clauses argument supplied must be a list of pairs, i.e. list of lists of length 2 or PairMessages.');
+          'The clauses argument supplied must be a list of pairs, i.e. list of lists of length 2 or PairMessages.',
+        );
       }
       this[key] = value;
     }
@@ -47,8 +52,8 @@ abstract class SubMessage extends ComplexMessage {
   /// argument names and values.
   static Map<String, Expression> argumentsOfInterestFor(MethodInvocation node) {
     return {
-      for (var node in node.argumentList.arguments.whereType<NamedExpression>())
-        node.name.label.token.value() as String: node.expression,
+      for (var node in node.argumentList.arguments.whereType<NamedArgument>())
+        node.name.lexeme: node.argumentExpression,
     };
   }
 
@@ -58,10 +63,11 @@ abstract class SubMessage extends ComplexMessage {
   List<String> get codeAttributeNames;
 
   @override
-  String expanded(
-      [String Function(dynamic, dynamic) transform = nullTransform]) {
+  String expanded([
+    String Function(Message, Object) transform = nullTransform,
+  ]) {
     String fullMessageForClause(String key) =>
-        '$key{${transform(parent, this[key])}}';
+        '$key{${transform(parent!, this[key])}}';
     var clauses = attributeNames
         .where((key) => this[key] != null)
         .map(fullMessageForClause)
@@ -78,9 +84,10 @@ abstract class SubMessage extends ComplexMessage {
     out.write(mainArgument);
     var args = codeAttributeNames.where((attribute) => this[attribute] != null);
     args.fold<StringBuffer>(
-        out,
-        (buffer, arg) =>
-            buffer..write(", $arg: '${(this[arg] as Message).toCode()}'"));
+      out,
+      (buffer, arg) =>
+          buffer..write(", $arg: '${(this[arg] as Message).toCode()}'"),
+    );
     out.write(')}');
     return out.toString();
   }

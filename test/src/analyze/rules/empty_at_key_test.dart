@@ -19,124 +19,96 @@ void main() {
     AppTester.create();
 
     // No @-keys - no error
-    var issues = EmptyAtKeys().run(
-      [
-        createFile(values: {'key': 'value'}),
-      ],
-      analyzerOptions,
-    );
+    var issues = EmptyAtKeys().run([
+      createFile(values: {'key': 'value'}),
+    ], analyzerOptions);
     expect(issues, 0);
     expect(inMemoryLogger.output, isEmpty);
 
     // @-key with description - no error
     inMemoryLogger.clear();
-    issues = EmptyAtKeys().run(
-      [
-        createFile(
-          values: {
-            'key': 'value',
-            '@key': AtKeyMeta(
-              description: 'Key description',
-              placeholders: [],
-              ignoredRulesRaw: [],
-            ),
-          },
-        ),
-      ],
-      analyzerOptions,
-    );
+    issues = EmptyAtKeys().run([
+      createFile(
+        values: {
+          'key': 'value',
+          '@key': AtKeyMeta(
+            description: 'Key description',
+            placeholders: [],
+            ignoredRulesRaw: [],
+          ),
+        },
+      ),
+    ], analyzerOptions);
     expect(issues, 0);
     expect(inMemoryLogger.output, isEmpty);
 
     // No description, no placeholders - error
     inMemoryLogger.clear();
-    issues = EmptyAtKeys().run(
-      [
-        createFile(
-          values: {
-            'key': 'value',
-            '@key': AtKeyMeta(
-              description: null,
-              placeholders: [],
-              ignoredRulesRaw: [],
-            ),
-          },
-        ),
-      ],
-      analyzerOptions,
-    );
+    issues = EmptyAtKeys().run([
+      createFile(
+        values: {
+          'key': 'value',
+          '@key': AtKeyMeta(
+            description: null,
+            placeholders: [],
+            ignoredRulesRaw: [],
+          ),
+        },
+      ),
+    ], analyzerOptions);
     expect(issues, 1);
-    expect(
-      inMemoryLogger.output,
-      'filepath: empty @-key "@key"',
-    );
+    expect(inMemoryLogger.output, 'filepath: empty @-key "@key"');
 
     // Empty description, no placeholders - error
     inMemoryLogger.clear();
-    issues = EmptyAtKeys().run(
-      [
-        createFile(
-          values: {
-            'key': 'value',
-            '@key': AtKeyMeta(
-              description: '',
-              placeholders: [],
-              ignoredRulesRaw: [],
-            ),
-          },
-        ),
-      ],
-      analyzerOptions,
-    );
+    issues = EmptyAtKeys().run([
+      createFile(
+        values: {
+          'key': 'value',
+          '@key': AtKeyMeta(
+            description: '',
+            placeholders: [],
+            ignoredRulesRaw: [],
+          ),
+        },
+      ),
+    ], analyzerOptions);
     expect(issues, 1);
-    expect(
-      inMemoryLogger.output,
-      'filepath: empty @-key "@key"',
-    );
+    expect(inMemoryLogger.output, 'filepath: empty @-key "@key"');
 
     // No description but placeholders - no error
     inMemoryLogger.clear();
-    issues = EmptyAtKeys().run(
-      [
-        createFile(
-          values: {
-            'key': 'Issues: {count}',
-            '@key': AtKeyMeta(
-              description: null,
-              ignoredRulesRaw: [],
-              placeholders: [
-                AtKeyPlaceholder(
-                  name: 'count',
-                  type: null,
-                  example: null,
-                ),
-              ],
-            ),
-          },
-        ),
-      ],
-      analyzerOptions,
-    );
+    issues = EmptyAtKeys().run([
+      createFile(
+        values: {
+          'key': 'Issues: {count}',
+          '@key': AtKeyMeta(
+            description: null,
+            ignoredRulesRaw: [],
+            placeholders: [
+              AtKeyPlaceholder(name: 'count', type: null, example: null),
+            ],
+          ),
+        },
+      ),
+    ], analyzerOptions);
     expect(issues, 0);
     expect(inMemoryLogger.output, isEmpty);
   });
 
   test('Rule can be ignored', () {
-    var issues = EmptyAtKeys().run(
-      [
-        createFile(
-          values: {
-            'key': 'Abc',
-            '@key': AtKeyMeta(
-              description: null,
-              placeholders: [],
-              ignoredRulesRaw: ['empty_at_key'],
-            ),
-          },
-        ),
-      ],
-      analyzerOptions,
-    );
+    var issues = EmptyAtKeys().run([
+      createFile(
+        values: {
+          'key': 'Abc',
+          '@key': AtKeyMeta(
+            description: null,
+            placeholders: [],
+            ignoredRulesRaw: ['empty_at_key'],
+          ),
+        },
+      ),
+    ], analyzerOptions);
     expect(issues, 0);
     expect(inMemoryLogger.output, isEmpty);
   });

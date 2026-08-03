@@ -37,10 +37,7 @@ void main() {
 
   test('Writing ARB file writes valid JSON file', () {
     AppTester.create();
-    final content = {
-      '@@locale': 'en',
-      '@key': 'value',
-    };
+    final content = {'@@locale': 'en', '@key': 'value'};
     writeArbFile(content, 'strings_en.arb');
 
     final files = getArbFiles(['./strings_en.arb'], 'en');

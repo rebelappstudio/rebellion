@@ -73,9 +73,7 @@ class DiffCommand extends Command {
   }
 
   void _writeDiffArbFile(DiffArbFile file) {
-    final fileContent = {
-      for (final key in file.untranslatedKeys) key: '',
-    };
+    final fileContent = {for (final key in file.untranslatedKeys) key: ''};
     final outputFile = file.sourceFile.file.filepath.replaceAll(
       '.arb',
       '_diff.arb',

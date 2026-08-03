@@ -21,61 +21,48 @@ void main() {
 
   test('UnusedAtKey checks that @-keys have corresponding keys', () async {
     // No unused @-keys
-    var issues = UnusedAtKey().run(
-      [
-        createFile(
-          values: {
-            'key': 'value',
-            '@key': 'value',
-          },
-        )
-      ],
-      analyzerOptions,
-    );
+    var issues = UnusedAtKey().run([
+      createFile(values: {'key': 'value', '@key': 'value'}),
+    ], analyzerOptions);
     expect(issues, 0);
     expect(inMemoryLogger.output, isEmpty);
 
     // Two unused @-keys
-    issues = UnusedAtKey().run(
-      [
-        createFile(
-          values: {
-            'key': 'value',
-            '@key': 'value',
-            '@key2': 'value',
-            '@key3': 'value',
-          },
-        )
-      ],
-      analyzerOptions,
-    );
+    issues = UnusedAtKey().run([
+      createFile(
+        values: {
+          'key': 'value',
+          '@key': 'value',
+          '@key2': 'value',
+          '@key3': 'value',
+        },
+      ),
+    ], analyzerOptions);
     expect(issues, 2);
     expect(
-        inMemoryLogger.output,
-        '''
+      inMemoryLogger.output,
+      '''
 filepath: @-key "@key2" without corresponding key "key2"
 filepath: @-key "@key3" without corresponding key "key3"
 '''
-            .trim());
+          .trim(),
+    );
   });
 
   test('Rule can be ignored', () {
-    var issues = UnusedAtKey().run(
-      [
-        createFile(
-          values: {
-            'key': 'value',
-            '@key': 'value',
-            '@unusedKey': AtKeyMeta(
-              description: null,
-              placeholders: [],
-              ignoredRulesRaw: ['unused_at_key'],
-            ),
-          },
-        )
-      ],
-      analyzerOptions,
-    );
+    var issues = UnusedAtKey().run([
+      createFile(
+        values: {
+          'key': 'value',
+          '@key': 'value',
+          '@unusedKey': AtKeyMeta(
+            description: null,
+            placeholders: [],
+            ignoredRulesRaw: ['unused_at_key'],
+          ),
+        },
+      ),
+    ], analyzerOptions);
     expect(issues, 0);
     expect(inMemoryLogger.output, isEmpty);
   });

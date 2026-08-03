@@ -65,8 +65,10 @@ class SortCommand extends Command {
     final parsedFiles = getFilesAndFolders(options, argResults);
     final sortedFiles = switch (sorting) {
       Sorting.alphabetical => _sortAlphabetically(parsedFiles, reverse: false),
-      Sorting.alphabeticalReverse =>
-        _sortAlphabetically(parsedFiles, reverse: true),
+      Sorting.alphabeticalReverse => _sortAlphabetically(
+        parsedFiles,
+        reverse: true,
+      ),
       Sorting.followMainFile => _sortFollowingMainFile(parsedFiles),
     };
     for (final file in sortedFiles) {
@@ -95,9 +97,7 @@ class SortCommand extends Command {
       final fileContent = {
         for (final key in sortedKeys) key: file.content[key],
       };
-      result.add(
-        file.copyWithContent(fileContent),
-      );
+      result.add(file.copyWithContent(fileContent));
     }
 
     return result;
@@ -118,9 +118,7 @@ class SortCommand extends Command {
         for (final key in mainKeys)
           if (file.keys.contains(key)) key: file.content[key],
       };
-      result.add(
-        file.copyWithContent(fileContent),
-      );
+      result.add(file.copyWithContent(fileContent));
     }
 
     return result;

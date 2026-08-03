@@ -10,9 +10,7 @@ void main() {
         filenameLocale: 'en',
         isMainFile: true,
       ),
-      content: {
-        '@@locale': 'en',
-      },
+      content: {'@@locale': 'en'},
       rawKeys: [],
     );
     expect(parsedArbFile.locale, 'en');
@@ -23,9 +21,7 @@ void main() {
         filenameLocale: 'fi',
         isMainFile: true,
       ),
-      content: {
-        '@@locale': 'en',
-      },
+      content: {'@@locale': 'en'},
       rawKeys: [],
     );
     expect(parsedArbFile.locale, 'en');

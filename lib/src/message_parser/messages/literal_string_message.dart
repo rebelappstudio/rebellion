@@ -2,6 +2,9 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+// This package is copied from the Dart SDK as is
+// ignore_for_file: public_member_api_docs
+
 import 'message.dart';
 
 /// Represents a simple constant string with no dynamic elements.
@@ -15,7 +18,7 @@ class LiteralString extends Message {
   @override
   String toString() => 'Literal($string)';
   @override
-  String expanded(
-          [String Function(dynamic, dynamic) transform = nullTransform]) =>
-      transform(this, string);
+  String expanded([
+    String Function(Message, Object) transform = nullTransform,
+  ]) => transform(this, string);
 }

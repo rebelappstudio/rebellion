@@ -17,53 +17,37 @@ void main() {
       containsMainFile: true,
     );
 
-    var issues = MissingTranslations().run(
-      [
-        createFile(
-          filepath: 'strings_en.arb',
-          locale: 'en',
-          isMainFile: true,
-          values: {
-            'key1': 'value1',
-          },
-        ),
-        createFile(
-          filepath: 'strings_es.arb',
-          locale: 'es',
-          isMainFile: false,
-          values: {
-            'key1': 'valor',
-          },
-        ),
-      ],
-      analyzerOptions,
-    );
+    var issues = MissingTranslations().run([
+      createFile(
+        filepath: 'strings_en.arb',
+        locale: 'en',
+        isMainFile: true,
+        values: {'key1': 'value1'},
+      ),
+      createFile(
+        filepath: 'strings_es.arb',
+        locale: 'es',
+        isMainFile: false,
+        values: {'key1': 'valor'},
+      ),
+    ], analyzerOptions);
     expect(issues, 0);
     expect(inMemoryLogger.output, isEmpty);
 
-    issues = MissingTranslations().run(
-      [
-        createFile(
-          filepath: 'strings_en.arb',
-          locale: 'en',
-          isMainFile: true,
-          values: {
-            'key1': 'value1',
-            'key2': 'value2',
-            'key3': 'value3',
-          },
-        ),
-        createFile(
-          filepath: 'strings_es.arb',
-          locale: 'es',
-          isMainFile: false,
-          values: {
-            'key1': 'valor',
-          },
-        ),
-      ],
-      analyzerOptions,
-    );
+    issues = MissingTranslations().run([
+      createFile(
+        filepath: 'strings_en.arb',
+        locale: 'en',
+        isMainFile: true,
+        values: {'key1': 'value1', 'key2': 'value2', 'key3': 'value3'},
+      ),
+      createFile(
+        filepath: 'strings_es.arb',
+        locale: 'es',
+        isMainFile: false,
+        values: {'key1': 'valor'},
+      ),
+    ], analyzerOptions);
     expect(issues, 2);
     expect(
       inMemoryLogger.output,

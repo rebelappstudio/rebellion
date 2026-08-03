@@ -25,53 +25,47 @@ void main() {
     AppTester.create();
 
     // Key description is present
-    var issues = MandatoryKeyDescription().run(
-      [
-        ParsedArbFile(
-          file: ArbFile(
-            filepath: 'filepath',
-            filenameLocale: 'en',
-            isMainFile: true,
+    var issues = MandatoryKeyDescription().run([
+      ParsedArbFile(
+        file: ArbFile(
+          filepath: 'filepath',
+          filenameLocale: 'en',
+          isMainFile: true,
+        ),
+        content: {
+          'key': 'value',
+          '@key': AtKeyMeta(
+            description: 'Key description',
+            placeholders: [],
+            ignoredRulesRaw: [],
           ),
-          content: {
-            'key': 'value',
-            '@key': AtKeyMeta(
-              description: 'Key description',
-              placeholders: [],
-              ignoredRulesRaw: [],
-            ),
-          },
-          rawKeys: ['key', '@key'],
-        )
-      ],
-      analyzerOptions,
-    );
+        },
+        rawKeys: ['key', '@key'],
+      ),
+    ], analyzerOptions);
     expect(issues, 0);
     expect(inMemoryLogger.output, isEmpty);
 
     // No key description
     inMemoryLogger.clear();
-    issues = MandatoryKeyDescription().run(
-      [
-        ParsedArbFile(
-          file: ArbFile(
-            filepath: 'filepath',
-            filenameLocale: 'en',
-            isMainFile: true,
+    issues = MandatoryKeyDescription().run([
+      ParsedArbFile(
+        file: ArbFile(
+          filepath: 'filepath',
+          filenameLocale: 'en',
+          isMainFile: true,
+        ),
+        content: {
+          'key': 'value',
+          '@key': AtKeyMeta(
+            description: null,
+            placeholders: [],
+            ignoredRulesRaw: [],
           ),
-          content: {
-            'key': 'value',
-            '@key': AtKeyMeta(
-              description: null,
-              placeholders: [],
-              ignoredRulesRaw: [],
-            ),
-          },
-          rawKeys: ['key', '@key'],
-        )
-      ],
-      analyzerOptions,
-    );
+        },
+        rawKeys: ['key', '@key'],
+      ),
+    ], analyzerOptions);
     expect(issues, 1);
     expect(
       inMemoryLogger.output,
@@ -80,21 +74,18 @@ void main() {
   });
 
   test('Rule can be ignored', () {
-    var issues = MandatoryKeyDescription().run(
-      [
-        createFile(
-          values: {
-            'key': 'Abc',
-            '@key': AtKeyMeta(
-              description: null,
-              placeholders: [],
-              ignoredRulesRaw: ['mandatory_at_key_description'],
-            ),
-          },
-        ),
-      ],
-      analyzerOptions,
-    );
+    var issues = MandatoryKeyDescription().run([
+      createFile(
+        values: {
+          'key': 'Abc',
+          '@key': AtKeyMeta(
+            description: null,
+            placeholders: [],
+            ignoredRulesRaw: ['mandatory_at_key_description'],
+          ),
+        },
+      ),
+    ], analyzerOptions);
     expect(issues, 0);
     expect(inMemoryLogger.output, isEmpty);
   });

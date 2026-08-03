@@ -63,8 +63,9 @@ class AnalyzeCommand extends Command {
       }
     }
 
-    final issuesFound =
-        enabledRules.map((rule) => rule.run(parsedFiles, analyzerOptions)).sum;
+    final issuesFound = enabledRules
+        .map((rule) => rule.run(parsedFiles, analyzerOptions))
+        .sum;
 
     if (issuesFound > 0) {
       logMessage('');

@@ -19,95 +19,77 @@ void main() {
     AppTester.create();
   });
 
-  test('RedundantAtKey checks that @-keys are only present in the main file',
-      () {
-    var issues = RedundantAtKey().run(
-      [
+  test(
+    'RedundantAtKey checks that @-keys are only present in the main file',
+    () {
+      var issues = RedundantAtKey().run([
         createFile(
           filepath: 'strings_en.arb',
           locale: 'en',
           isMainFile: true,
-          values: {
-            'key': 'value',
-            '@key': 'value',
-          },
+          values: {'key': 'value', '@key': 'value'},
         ),
         createFile(
           filepath: 'strings_es.arb',
           locale: 'es',
           isMainFile: false,
-          values: {
-            'key': 'valor',
-          },
+          values: {'key': 'valor'},
         ),
-      ],
-      analyzerOptions,
-    );
-    expect(issues, 0);
-    expect(inMemoryLogger.output, isEmpty);
+      ], analyzerOptions);
+      expect(issues, 0);
+      expect(inMemoryLogger.output, isEmpty);
 
-    issues = RedundantAtKey().run(
-      [
+      issues = RedundantAtKey().run([
         createFile(
           filepath: 'strings_en.arb',
           locale: 'en',
           isMainFile: true,
-          values: {
-            'key': 'value',
-            '@key': 'value',
-          },
+          values: {'key': 'value', '@key': 'value'},
         ),
         createFile(
           filepath: 'strings_es.arb',
           locale: 'es',
           isMainFile: false,
-          values: {
-            'key': 'valor',
-            '@key': 'valor',
-          },
+          values: {'key': 'valor', '@key': 'valor'},
         ),
-      ],
-      analyzerOptions,
-    );
-    expect(issues, 1);
-    expect(
-      inMemoryLogger.output,
-      'strings_es.arb: @-key "@key" should only be present in the main file',
-    );
-  });
+      ], analyzerOptions);
+      expect(issues, 1);
+      expect(
+        inMemoryLogger.output,
+        'strings_es.arb: @-key "@key" should only be present in the main file',
+      );
+    },
+  );
 
   test('Rule can be ignored', () {
-    final issues = RedundantAtKey().run(
-      [
-        createFile(
-          filepath: 'strings_en.arb',
-          locale: 'en',
-          isMainFile: true,
-          values: {
-            'key': 'value',
-            '@key': AtKeyMeta(
-              description: 'description',
-              placeholders: [],
-              ignoredRulesRaw: [],
-            ),
-          },
-        ),
-        createFile(
-          filepath: 'strings_es.arb',
-          locale: 'es',
-          isMainFile: false,
-          values: {
-            'key': 'valor',
-            '@key': AtKeyMeta(
-              description: 'description',
-              placeholders: [],
-              ignoredRulesRaw: ['redundant_at_key'],
-            ),
-          },
-        ),
-      ],
-      analyzerOptions,
-    );
+    final issues = RedundantAtKey().run([
+      createFile(
+        filepath: 'strings_en.arb',
+        locale: 'en',
+        isMainFile: true,
+        values: {
+          'key': 'value',
+          '@key': AtKeyMeta(
+            description: 'description',
+            placeholders: [],
+            ignoredRulesRaw: [],
+          ),
+        },
+      ),
+      createFile(
+        filepath: 'strings_es.arb',
+        locale: 'es',
+        isMainFile: false,
+        values: {
+          'key': 'valor',
+          '@key': AtKeyMeta(
+            description: 'description',
+            placeholders: [],
+            ignoredRulesRaw: ['redundant_at_key'],
+          ),
+        },
+      ),
+    ], analyzerOptions);
     expect(issues, 0);
     expect(inMemoryLogger.output, isEmpty);
   });

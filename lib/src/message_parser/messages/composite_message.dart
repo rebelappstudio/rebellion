@@ -2,6 +2,9 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+// This package is copied from the Dart SDK as is
+// ignore_for_file: public_member_api_docs
+
 import 'message.dart';
 
 /// This represents a message chunk that is a list of multiple sub-pieces,
@@ -22,7 +25,7 @@ class CompositeMessage extends Message {
   @override
   String toString() => 'CompositeMessage($pieces)';
   @override
-  String expanded(
-          [String Function(dynamic, dynamic) transform = nullTransform]) =>
-      pieces.map((chunk) => transform(this, chunk)).join('');
+  String expanded([
+    String Function(Message, Object) transform = nullTransform,
+  ]) => pieces.map((chunk) => transform(this, chunk)).join('');
 }

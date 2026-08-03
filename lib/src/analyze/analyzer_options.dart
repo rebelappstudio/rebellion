@@ -3,7 +3,7 @@ import 'package:rebellion/src/utils/arb_parser/parsed_arb_file.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
 
 /// Options for the `analyze` command
-class AnalyzerOptions with EquatableMixin {
+class AnalyzerOptions with Equatable {
   /// Options to configure the analyzer
   final RebellionOptions rebellionOptions;
 

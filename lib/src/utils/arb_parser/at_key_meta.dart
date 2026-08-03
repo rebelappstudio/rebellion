@@ -15,7 +15,7 @@ import 'package:rebellion/src/analyze/rules/rule.dart';
 /// "@myKey": {
 ///   "@@x-ignore": "all_caps",
 /// }
-class AtKeyMeta with EquatableMixin {
+class AtKeyMeta with Equatable {
   /// 'description' field of the @-key
   final String? description;
 
@@ -36,11 +36,8 @@ class AtKeyMeta with EquatableMixin {
   }) : ignoredRules = ignoredRulesRaw.map(RuleKey.fromKey).nonNulls.toList();
 
   /// Default empty constructor
-  factory AtKeyMeta.empty() => AtKeyMeta(
-        description: null,
-        placeholders: [],
-        ignoredRulesRaw: [],
-      );
+  factory AtKeyMeta.empty() =>
+      AtKeyMeta(description: null, placeholders: [], ignoredRulesRaw: []);
 
   /// Copy the object with new values
   AtKeyMeta copyWith({
@@ -63,7 +60,7 @@ class AtKeyMeta with EquatableMixin {
   // coverage:ignore-start
   @override
   List<Object?> get props => [description, placeholders, ignoredRulesRaw];
-// coverage:ignore-end
+  // coverage:ignore-end
 }
 
 /// One ARB placeholder. E.g.
@@ -72,7 +69,7 @@ class AtKeyMeta with EquatableMixin {
 ///     "type": "int",
 ///     "example": "42"
 ///   },
-class AtKeyPlaceholder with EquatableMixin {
+class AtKeyPlaceholder with Equatable {
   /// Placeholder name
   final String? name;
 
