@@ -1,6 +1,6 @@
 import 'package:args/command_runner.dart';
-import 'package:collection/collection.dart';
 import 'package:rebellion/src/analyze/analyzer_options.dart';
+import 'package:rebellion/src/utils/arb_parser/parsed_arb_file.dart';
 import 'package:rebellion/src/utils/file_utils.dart';
 import 'package:rebellion/src/utils/logger.dart';
 import 'package:rebellion/src/utils/exit_exception.dart';
@@ -22,10 +22,14 @@ class AnalyzeCommand extends Command {
   }
 
   @override
-  String get description => 'Analyze ARB file(s)';
+  String get description => CliArgs.analyzeDescription;
 
   @override
   String get name => 'analyze';
+
+  @override
+  String get invocation =>
+      CliArgs.commandInvocation(runner!.executableName, name);
 
   @override
   List<String> get aliases => ['analyse'];
@@ -37,25 +41,25 @@ class AnalyzeCommand extends Command {
     final cliOptions = RebellionOptions.fromCliArguments(argResults);
     final options = yamlOptions.applyCliArguments(cliOptions);
 
-    // final options = RebellionOptions.fromYaml(argResults, yamlOptions);
     final parsedFiles = getFilesAndFolders(options, argResults);
-    final enabledRules = options.enabledRules.map((r) => r.rule);
     final analyzerOptions = AnalyzerOptions.fromFiles(
       rebellionOptions: options,
       files: parsedFiles,
     );
 
+    _logVerbosePipeline(options, parsedFiles);
+
     // Check if main file is available
     if (!analyzerOptions.containsMainFile) {
       if (analyzerOptions.isSingleFile) {
-        logMessage(
+        logWarning(
           '⚠️ Looks like a single file is being analyzed but it\'s not '
           'marked as the main file. Some checks may not work. '
           'Use the `${CliArgs.mainLocaleParam}` option '
           'to specify the main locale',
         );
       } else {
-        logMessage(
+        logWarning(
           '⚠️ No main file found, some checks may not work. '
           'Use the `${CliArgs.mainLocaleParam}` option '
           'to specify the main locale',
@@ -63,9 +67,11 @@ class AnalyzeCommand extends Command {
       }
     }
 
-    final issuesFound = enabledRules
-        .map((rule) => rule.run(parsedFiles, analyzerOptions))
-        .sum;
+    var issuesFound = 0;
+    for (final ruleKey in options.enabledRules) {
+      logVerbose('Checking ${ruleKey.key}');
+      issuesFound += ruleKey.rule.run(parsedFiles, analyzerOptions);
+    }
 
     if (issuesFound > 0) {
       logMessage('');
@@ -74,7 +80,23 @@ class AnalyzeCommand extends Command {
       );
       throw ExitException();
     } else {
-      logMessage('No issues found');
+      logSuccess('No issues found');
+    }
+  }
+
+  void _logVerbosePipeline(
+    RebellionOptions options,
+    List<ParsedArbFile> parsedFiles,
+  ) {
+    logVerbose('Main locale: ${options.mainLocale}');
+    logVerbose('Naming convention: ${options.namingConvention.optionName}');
+    logVerbose(
+      'Enabled rules: ${options.enabledRules.map((r) => r.key).join(', ')}',
+    );
+    logVerbose('Analyzing ${parsedFiles.length} files');
+    for (final file in parsedFiles) {
+      final mainLabel = file.file.isMainFile ? ' (main)' : '';
+      logVerbose('Found ${file.file.filepath}$mainLabel');
     }
   }
 }

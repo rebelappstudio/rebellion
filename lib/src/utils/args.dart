@@ -16,6 +16,46 @@ abstract class CliArgs {
 
   /// Sorting parameter
   static const sortingParam = 'sorting';
+
+  /// Sorting help message printed in the console
+  static const sortingCliHelp =
+      'How to order keys: alphabetical, alphabetical-reverse, or follow the main locale file';
+
+  /// Diff output parameter
+  static const outputParam = 'output';
+
+  /// Diff output help message printed in the console
+  static const outputCliHelp =
+      'Where to write missing translations: console or file (*_diff.arb)';
+
+  /// Verbose logging flag
+  static const verboseParam = 'verbose';
+
+  /// Verbose logging help message
+  static const verboseCliHelp =
+      'Print additional pipeline information for debugging';
+
+  /// Positional arguments placeholder shown in command usage
+  static const filesOrFoldersInvocation = '<files-or-folders>';
+
+  /// Analyze command description
+  static const analyzeDescription =
+      'Analyze ARB file(s) and report issues\n\n'
+      'Pass one or more ARB files or directories as arguments.';
+
+  /// Diff command description
+  static const diffDescription =
+      'Find keys present in the main locale file but missing from other ARB files\n\n'
+      'Pass one or more ARB files or directories as arguments.';
+
+  /// Sort command description
+  static const sortDescription =
+      'Sort keys in ARB files\n\n'
+      'Pass one or more ARB files or directories as arguments.';
+
+  /// Build a command invocation line for usage output
+  static String commandInvocation(String executableName, String commandName) =>
+      '$executableName $commandName $filesOrFoldersInvocation';
 }
 
 /// List of all available YAML options
