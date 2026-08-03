@@ -16,6 +16,13 @@ abstract class CliArgs {
 
   /// Sorting parameter
   static const sortingParam = 'sorting';
+
+  /// Verbose logging flag
+  static const verboseParam = 'verbose';
+
+  /// Verbose logging help message
+  static const verboseCliHelp =
+      'Print additional pipeline information for debugging';
 }
 
 /// List of all available YAML options

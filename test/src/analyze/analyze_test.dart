@@ -127,4 +127,37 @@ void main() {
           .trim(),
     );
   });
+
+  test('Verbose flag prints pipeline details', () async {
+    final tester = AppTester.create();
+    tester.populateFileSystem({
+      'strings_en.arb': '''
+{
+  "@@locale": "en"
+}
+''',
+    });
+
+    await commandRunner.run(['--verbose', 'analyze', '.']);
+    expect(
+      inMemoryLogger.output,
+      contains('Main locale: en'),
+    );
+    expect(
+      inMemoryLogger.output,
+      contains('Analyzing 1 files'),
+    );
+    expect(
+      inMemoryLogger.output,
+      contains('Found ./strings_en.arb (main)'),
+    );
+    expect(
+      inMemoryLogger.output,
+      contains('Checking'),
+    );
+    expect(
+      inMemoryLogger.output,
+      contains('No issues found'),
+    );
+  });
 }

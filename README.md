@@ -48,6 +48,8 @@ rebellion analyze ./lib/l10n/
 
 See Configuration section below to customize the set of rules.
 
+Use `--verbose` / `-v` on any command for pipeline details (resolved options, discovered files, rules checked, files written). Output is colored when writing to a terminal.
+
 ## Diff
 
 Find missing translations:

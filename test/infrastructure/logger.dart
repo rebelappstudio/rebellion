@@ -7,17 +7,34 @@ class InMemoryLogger extends Logger {
 
   @override
   void logMessage(String message) {
-    super.logMessage(message);
     _log.add(message);
   }
 
   @override
   void logError(String message) {
-    super.logError(message);
+    _log.add(message);
+  }
+
+  @override
+  void logSuccess(String message) {
+    _log.add(message);
+  }
+
+  @override
+  void logWarning(String message) {
+    _log.add(message);
+  }
+
+  @override
+  void logVerbose(String message) {
+    if (!verbose) return;
     _log.add(message);
   }
 
   String get output => _log.join('\n');
 
-  void clear() => _log.clear();
+  void clear() {
+    _log.clear();
+    verbose = false;
+  }
 }

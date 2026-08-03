@@ -26,6 +26,7 @@ dependencies:
   file: ^7.0.1
   meta: ^1.19.0
   equatable: ^2.1.0
+  io: ^1.0.5
 
 dev_dependencies:
   lints: ^6.1.0

@@ -56,9 +56,17 @@ class DiffCommand extends Command {
       (e) => e.optionName == argResults?[_outputType] as String?,
     );
 
+    logVerbose('Main locale: ${options.mainLocale}');
+    logVerbose('Output: ${outputType.optionName}');
+    logVerbose('Diffing ${parsedFiles.length} files');
+    for (final file in parsedFiles) {
+      final mainLabel = file.file.isMainFile ? ' (main)' : '';
+      logVerbose('Found ${file.file.filepath}$mainLabel');
+    }
+
     final missingTranslations = getMissingTranslations(parsedFiles);
     if (missingTranslations.isEmpty) {
-      logMessage('No missing translations found');
+      logSuccess('No missing translations found');
       return;
     }
 
@@ -78,6 +86,7 @@ class DiffCommand extends Command {
       '.arb',
       '_diff.arb',
     );
+    logVerbose('Writing $outputFile');
     writeArbFile(fileContent, outputFile);
   }
 
