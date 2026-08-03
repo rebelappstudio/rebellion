@@ -5,8 +5,6 @@ import 'package:rebellion/src/utils/logger.dart';
 import 'package:rebellion/src/utils/args.dart';
 import 'package:rebellion/src/utils/rebellion_options.dart';
 
-const _outputType = 'output';
-
 /// Output type for the diff command
 enum OutputType {
   /// Crate a "diff" ARB file with missing translations
@@ -33,9 +31,10 @@ class DiffCommand extends Command {
         help: CliArgs.mainLocaleCliHelp,
       )
       ..addOption(
-        _outputType,
+        CliArgs.outputParam,
         defaultsTo: OutputType.printToConsole.optionName,
         allowed: OutputType.values.map((e) => e.optionName),
+        help: CliArgs.outputCliHelp,
       );
   }
 
@@ -43,7 +42,11 @@ class DiffCommand extends Command {
   String get name => 'diff';
 
   @override
-  String get description => 'Collect missing translations';
+  String get description => CliArgs.diffDescription;
+
+  @override
+  String get invocation =>
+      CliArgs.commandInvocation(runner!.executableName, name);
 
   @override
   void run() {
@@ -53,7 +56,7 @@ class DiffCommand extends Command {
     final options = yamlOptions.applyCliArguments(cliOptions);
     final parsedFiles = getFilesAndFolders(options, argResults);
     final outputType = OutputType.values.firstWhere(
-      (e) => e.optionName == argResults?[_outputType] as String?,
+      (e) => e.optionName == argResults?[CliArgs.outputParam] as String?,
     );
 
     logVerbose('Main locale: ${options.mainLocale}');

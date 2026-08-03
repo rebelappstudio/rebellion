@@ -44,6 +44,7 @@ class SortCommand extends Command {
         CliArgs.sortingParam,
         defaultsTo: Sorting.alphabetical.optionName,
         allowed: Sorting.values.map((e) => e.optionName),
+        help: CliArgs.sortingCliHelp,
       );
   }
 
@@ -51,7 +52,11 @@ class SortCommand extends Command {
   String get name => 'sort';
 
   @override
-  String get description => 'Sort keys of ARB files';
+  String get description => CliArgs.sortDescription;
+
+  @override
+  String get invocation =>
+      CliArgs.commandInvocation(runner!.executableName, name);
 
   @override
   void run() {

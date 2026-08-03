@@ -22,10 +22,14 @@ class AnalyzeCommand extends Command {
   }
 
   @override
-  String get description => 'Analyze ARB file(s)';
+  String get description => CliArgs.analyzeDescription;
 
   @override
   String get name => 'analyze';
+
+  @override
+  String get invocation =>
+      CliArgs.commandInvocation(runner!.executableName, name);
 
   @override
   List<String> get aliases => ['analyse'];

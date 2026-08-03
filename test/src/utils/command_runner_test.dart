@@ -22,9 +22,11 @@ void main() {
     expect(
       log,
       '''
-Analyze ARB file(s)
+Analyze ARB file(s) and report issues
 
-Usage: rebellion analyze [arguments]
+Pass one or more ARB files or directories as arguments.
+
+Usage: rebellion analyze <files-or-folders>
 -h, --help                Print this usage information.
     --main-locale=<en>    Set the main locale. All localization files are compared to the main locale file for some of the checks
                           (defaults to "en")
@@ -51,13 +53,16 @@ Run "rebellion help" to see global options.
     expect(
       log,
       '''
-Sort keys of ARB files
+Sort keys in ARB files
 
-Usage: rebellion sort [arguments]
+Pass one or more ARB files or directories as arguments.
+
+Usage: rebellion sort <files-or-folders>
 -h, --help                Print this usage information.
     --main-locale=<en>    Set the main locale. All localization files are compared to the main locale file for some of the checks
                           (defaults to "en")
-    --sorting             [alphabetical (default), alphabetical-reverse, follow-main-file]
+    --sorting             How to order keys: alphabetical, alphabetical-reverse, or follow the main locale file
+                          [alphabetical (default), alphabetical-reverse, follow-main-file]
 
 Run "rebellion help" to see global options.
 '''
@@ -81,13 +86,16 @@ Run "rebellion help" to see global options.
     expect(
       log,
       '''
-Collect missing translations
+Find keys present in the main locale file but missing from other ARB files
 
-Usage: rebellion diff [arguments]
+Pass one or more ARB files or directories as arguments.
+
+Usage: rebellion diff <files-or-folders>
 -h, --help                Print this usage information.
     --main-locale=<en>    Set the main locale. All localization files are compared to the main locale file for some of the checks
                           (defaults to "en")
-    --output              [file, console (default)]
+    --output              Where to write missing translations: console or file (*_diff.arb)
+                          [file, console (default)]
 
 Run "rebellion help" to see global options.
 '''
