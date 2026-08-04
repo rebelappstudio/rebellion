@@ -98,6 +98,56 @@ void main() {
     );
   });
 
+  test('@@-keys are sorted alphabetically', () async {
+    final tester = AppTester.create();
+    tester.populateFileSystem({
+      'intl_en.arb': '''
+{
+  "bbb": "value",
+  "@@locale": "en",
+  "@@example": "value"
+}''',
+    });
+
+    await commandRunner.run(['sort', '.', '--sorting', 'alphabetical']);
+
+    expect(
+      tester.getFileContent('intl_en.arb'),
+      '''
+{
+  "@@example": "value",
+  "@@locale": "en",
+  "bbb": "value"
+}'''
+          .trim(),
+    );
+  });
+
+  test('@@-keys are sorted alphabetically when sorting in reverse', () async {
+    final tester = AppTester.create();
+    tester.populateFileSystem({
+      'intl_en.arb': '''
+{
+  "bbb": "value",
+  "@@locale": "en",
+  "@@example": "value"
+}''',
+    });
+
+    await commandRunner.run(['sort', '.', '--sorting', 'alphabetical-reverse']);
+
+    expect(
+      tester.getFileContent('intl_en.arb'),
+      '''
+{
+  "@@example": "value",
+  "@@locale": "en",
+  "bbb": "value"
+}'''
+          .trim(),
+    );
+  });
+
   test('Reverse alphabetical sort keeps @@ attributes at the top', () async {
     final tester = AppTester.create();
     tester.populateFileSystem({
