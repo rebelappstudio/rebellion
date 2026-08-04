@@ -261,17 +261,19 @@ void main() {
     );
   });
 
-  test('Follow-main-file leaves main unchanged and mirrors its key order', () async {
-    final tester = AppTester.create();
-    tester.populateFileSystem({
-      'intl_en.arb': '''
+  test(
+    'Follow-main-file leaves main unchanged and mirrors its key order',
+    () async {
+      final tester = AppTester.create();
+      tester.populateFileSystem({
+        'intl_en.arb': '''
 {
   "zzz": "value",
   "@aaa": "meta",
   "aaa": "value",
   "@@locale": "en"
 }''',
-      'intl_es.arb': '''
+        'intl_es.arb': '''
 {
   "extra_b": "x",
   "aaa": "valor",
@@ -279,27 +281,27 @@ void main() {
   "@@locale": "es",
   "extra_a": "y"
 }''',
-    });
+      });
 
-    await commandRunner.run(['sort', '.', '--sorting', 'follow-main-file']);
+      await commandRunner.run(['sort', '.', '--sorting', 'follow-main-file']);
 
-    // Main file order is preserved as-is (including @ before key and @@ at end).
-    expect(
-      tester.getFileContent('intl_en.arb'),
-      '''
+      // Main file order is preserved as-is (including @ before key and @@ at end).
+      expect(
+        tester.getFileContent('intl_en.arb'),
+        '''
 {
   "zzz": "value",
   "@aaa": "meta",
   "aaa": "value",
   "@@locale": "en"
 }'''
-          .trim(),
-    );
+            .trim(),
+      );
 
-    // Translation follows main key sequence; extras keep original relative order.
-    expect(
-      tester.getFileContent('intl_es.arb'),
-      '''
+      // Translation follows main key sequence; extras keep original relative order.
+      expect(
+        tester.getFileContent('intl_es.arb'),
+        '''
 {
   "zzz": "valor",
   "aaa": "valor",
@@ -307,9 +309,10 @@ void main() {
   "extra_b": "x",
   "extra_a": "y"
 }'''
-          .trim(),
-    );
-  });
+            .trim(),
+      );
+    },
+  );
 }
 
 const testFiles = {

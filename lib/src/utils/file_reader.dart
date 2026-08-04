@@ -15,7 +15,7 @@ class FileReader {
   final FileSystem _fileSystem;
 
   /// Default constructor
-  const FileReader({required FileSystem fileSystem}) : _fileSystem = fileSystem;
+  const FileReader({required this._fileSystem});
 
   /// Read file content
   String readFile(String path) {

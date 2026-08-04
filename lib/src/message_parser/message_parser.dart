@@ -6,7 +6,6 @@
 /// messages. See extract_to_arb.dart and make_hardcoded_translation.dart.
 library;
 
-
 // This package is copied from the Dart SDK as is
 // ignore_for_file: public_member_api_docs
 
