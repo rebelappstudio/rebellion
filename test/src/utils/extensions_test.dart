@@ -14,6 +14,15 @@ void main() {
     expect('@key'.isAtKey, isTrue);
     expect('key'.isAtKey, isFalse);
     expect('@@locale'.isAtKey, isFalse);
+    expect('@@last_modified'.isAtKey, isFalse);
+  });
+
+  test('isGlobalKey detects top-level @@ attributes', () {
+    expect('@@locale'.isGlobalKey, isTrue);
+    expect('@@last_modified'.isGlobalKey, isTrue);
+    expect('@key'.isGlobalKey, isFalse);
+    expect('key'.isGlobalKey, isFalse);
+    expect('@'.isGlobalKey, isFalse);
   });
 
   test('At key can be converted to a regular key', () {

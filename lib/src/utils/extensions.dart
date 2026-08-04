@@ -6,8 +6,12 @@ extension StringX on String {
   /// Return true if the string is a locale definition
   bool get isLocaleDefinition => toLowerCase() == '@@locale';
 
+  /// Return true if the string is a top-level ARB global attribute,
+  /// e.g. "@@locale"
+  bool get isGlobalKey => startsWith('@@');
+
   /// Return true if the string is an at-key, e.g. "@homePageTitle"
-  bool get isAtKey => startsWith('@') && !isLocaleDefinition;
+  bool get isAtKey => startsWith('@') && !isGlobalKey;
 
   /// Return regular string key from an @-key,
   /// e.g. "@homePageTitle" -> "homePageTitle"
@@ -37,7 +41,7 @@ extension StringX on String {
   /// Covert a key to an @-key
   String get toAtKey {
     if (isAtKey) return this;
-    if (isLocaleDefinition) return this;
+    if (isGlobalKey) return this;
     return '@$this';
   }
 }
