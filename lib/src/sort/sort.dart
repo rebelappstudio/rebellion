@@ -99,17 +99,7 @@ class SortCommand extends Command {
     final result = <ParsedArbFile>[];
 
     for (final file in files) {
-      var sortedKeys = file.keys.sortedBy((e) {
-        // Place at-keys near the original string.
-        // This may not be ideal as it keeps the original order of at-keys, e.g.
-        // at-key is placed before the key if it's placed like that in the
-        // original unsorted file
-        if (e.isAtKey) return e.atKeyToRegularKey;
-
-        return e;
-      });
-      sortedKeys = reverse ? sortedKeys.reversed.toList() : sortedKeys;
-
+      final sortedKeys = _orderArbKeys(file.keys, reverse: reverse);
       final fileContent = {
         for (final key in sortedKeys) key: file.content[key],
       };
@@ -122,6 +112,7 @@ class SortCommand extends Command {
   List<ParsedArbFile> _sortFollowingMainFile(List<ParsedArbFile> files) {
     final mainFile = files.firstWhere((e) => e.file.isMainFile);
     final mainKeys = mainFile.keys;
+    final mainKeySet = mainKeys.toSet();
 
     final result = <ParsedArbFile>[];
     for (final file in files) {
@@ -130,13 +121,54 @@ class SortCommand extends Command {
         continue;
       }
 
-      final fileContent = {
+      final ordered = [
         for (final key in mainKeys)
-          if (file.keys.contains(key)) key: file.content[key],
-      };
-      result.add(file.copyWithContent(fileContent));
+          if (file.keys.contains(key)) key,
+      ];
+      final extras = [
+        for (final key in file.keys)
+          if (!mainKeySet.contains(key)) key,
+      ];
+      final sortedKeys = [...ordered, ...extras];
+      result.add(
+        file.copyWithContent({
+          for (final key in sortedKeys) key: file.content[key],
+        }),
+      );
     }
 
     return result;
   }
+}
+
+/// Orders ARB keys: @@-global-keys first, then message pairs as 'key' then '@key'.
+List<String> _orderArbKeys(Iterable<String> keys, {bool reverse = false}) {
+  final globals = <String>[];
+  final regularKeys = <String>{};
+  final atKeysByBase = <String, String>{};
+
+  for (final key in keys) {
+    if (key.isGlobalKey) {
+      globals.add(key);
+    } else if (key.isAtKey) {
+      atKeysByBase[key.atKeyToRegularKey] = key;
+    } else {
+      regularKeys.add(key);
+    }
+  }
+
+  globals.sort();
+
+  var bases = {...regularKeys, ...atKeysByBase.keys}.toList()..sort();
+  if (reverse) {
+    bases = bases.reversed.toList();
+  }
+
+  return [
+    ...globals,
+    for (final base in bases) ...[
+      if (regularKeys.contains(base)) base,
+      if (atKeysByBase.containsKey(base)) atKeysByBase[base]!,
+    ],
+  ];
 }
